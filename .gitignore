@@ -23,7 +23,7 @@
 !*/
 
 # But do ignore these directories
-# tmp/
+tmp/
 target/
 project/
 
