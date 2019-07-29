@@ -1,0 +1,14 @@
+name: debug
+    n: 0
+    type: int
+    help: Help text. It now can contain :.
+
+
+name: verbose
+    n: 0
+    type: int
+    help: Help text.
+
+name: help
+
+name: version
