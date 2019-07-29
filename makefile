@@ -87,7 +87,7 @@ dev:
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
 	cd ./scala_cli_parser && sbt assembly
-	find . -iname "*.jar" | head -n 1 | xargs -I % mv % $@
+	find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
 	touch --no-create -m $@
 
 test%.sh: .FORCE

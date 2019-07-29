@@ -28,8 +28,8 @@ version := IO.readLines(new File("./src/main/resources/version")).mkString("")
 resourceDirectory in Compile := file(".") / "./src/main/resources"
 resourceDirectory in Runtime := file(".") / "./src/main/resources"
 
-// coverageMinimum := 90
-// coverageFailOnMinimum := true
+coverageMinimum := 70
+coverageFailOnMinimum := true
 
 test in assembly := {}
 assemblyMergeStrategy in assembly := {

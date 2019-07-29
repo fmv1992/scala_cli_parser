@@ -1,3 +1,6 @@
+![Build status](https://travis-ci.org/fmv1992/scala_cli_parser.svg?branch=dev)
+[![codecov](https://codecov.io/gh/fmv1992/scala_cli_parser/branch/dev/graph/badge.svg)](https://codecov.io/gh/fmv1992/scala_cli_parser)
+
 # scala_cli_parser
 
 A library for parsing command line arguments.
