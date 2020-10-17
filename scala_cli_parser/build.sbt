@@ -18,6 +18,8 @@ enablePlugins(ScalaNativePlugin)
 nativeLinkStubs := true
 nativeLinkStubs in runMain := true
 Test / nativeLinkStubs := true
+// fmv1992_scala_utilities:33e41c7:fmv1992_scala_utilities/build.sbt:26
+sources in (Compile, doc) := Seq.empty
 
 // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 resolvers += Resolver.mavenLocal
