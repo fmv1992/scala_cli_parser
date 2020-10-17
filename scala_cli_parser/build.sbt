@@ -1,24 +1,28 @@
 // See:
 // `comm8deec70`:
 
-ThisBuild / scalaVersion     := "2.12.8"
+ThisBuild / scalaVersion := "2.11.12"
 organization := "fmv1992"
 name := "scala_cli_parser"
 // ThisBuild / organizationName := "example"
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5"
+libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
+
 // libraryDependencies += "io.github.fmv1992" %% "util" % "2.+"
-libraryDependencies += "io.github.fmv1992" %% "util" % "1.9.3"
-// libraryDependencies += "fmv1992" %% "fmv1992_scala_utilities" % "2.+"
+libraryDependencies += "fmv1992" %%% "fmv1992_scala_utilities" % "1.+"
+/* libraryDependencies += "fmv1992" %% "util" % "1.+"*/
+// libraryDependencies += "io.github.fmv1992" %% "util" % "1.9.3"
 // libraryDependencies += "fmv1992" %% "util" % "2.+"
 
-// resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+enablePlugins(ScalaNativePlugin)
+nativeLinkStubs := true
+nativeLinkStubs in runMain := true
+Test / nativeLinkStubs := true
 
-scalacOptions ++= (
-  Seq(
-    "-feature",
-    "-deprecation",
-    "-Xfatal-warnings")
+// resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+resolvers += Resolver.mavenLocal
+
+scalacOptions ++= (Seq("-feature", "-deprecation", "-Xfatal-warnings")
   ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq)
 
 licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
@@ -31,13 +35,11 @@ resourceDirectory in Runtime := file(".") / "./src/main/resources"
 coverageMinimum := 70
 coverageFailOnMinimum := true
 
+// fmv1992_scala_utilities:33e41c7:fmv1992_scala_utilities/build.sbt:29
 test in assembly := {}
 assemblyMergeStrategy in assembly := {
-  case "version" ⇒ MergeStrategy.first
-  case x ⇒ {
-  val oldStrategy = (assemblyMergeStrategy in assembly).value
-  oldStrategy(x)
-  }
+  case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.rename
+  case x                                   => MergeStrategy.first
 }
 
 lazy val scala_cli_parser = (project in file("."))

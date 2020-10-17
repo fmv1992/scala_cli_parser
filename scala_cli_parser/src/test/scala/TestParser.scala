@@ -1,8 +1,8 @@
 package fmv1992.scala_cli_parser
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestParser extends FunSuite {
+class TestParser extends AnyFunSuite {
 
   val comment = "# This is a comment."
   val nline = "\n"

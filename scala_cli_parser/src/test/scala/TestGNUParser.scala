@@ -1,8 +1,8 @@
 package fmv1992.scala_cli_parser
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestGNUParser extends FunSuite {
+class TestGNUParser extends AnyFunSuite {
 
   test("Test API.") {
     // Test valid instantiation.

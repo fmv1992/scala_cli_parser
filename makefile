@@ -2,6 +2,8 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+export TERM=xterm-color
+
 # Find all scala files.
 SBT_FILES := $(shell find ./ -iname "build.sbt")
 SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
@@ -10,7 +12,7 @@ SBT_FOLDERS := $(dir $(SBT_FILES))
 export SCALAC_OPTS := -Ywarn-dead-code -Xlint:unused
 
 # Build files.
-FINAL_TARGET := ./scala_cli_parser/target/scala-2.12/scala_cli_parser.jar
+FINAL_TARGET := ./scala_cli_parser/target/scala-2.11/scala_cli_parser.jar
 
 # Test files.
 BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -print)
@@ -104,7 +106,7 @@ tmp/scala_pandoc.jar:
 	}
 
 tmp/test_sum.scala:
-	echo -e '/*** scalaVersion := "2.12.8"\n     libraryDependencies += "fmv1992" %% "scala_cli_parser" % "0.+"\n*/' > $@
+	echo -e '/*** scalaVersion := "2.11.12"\n     libraryDependencies += "fmv1992" %% "scala_cli_parser" % "0.+"\n*/' > $@
 	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
 	tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
 	tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
