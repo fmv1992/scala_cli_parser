@@ -69,15 +69,18 @@ object ParserPrimitives {
 
   // This doesn't take type checking into account.
   def emptyLine: Parser = {
-    x ⇒ if (x == "\n" || x.isEmpty) Some(Map.empty) else None
+    x ⇒
+      if (x == "\n" || x.isEmpty) Some(Map.empty) else None
   }
 
   def commentLine: Parser = {
-    x ⇒ if (x.startsWith("#")) Some(Map.empty) else None
+    x ⇒
+      if (x.startsWith("#")) Some(Map.empty) else None
   }
 
   def nameContentLine: Parser = {
-    x ⇒ {
+    x ⇒
+      {
         val colonPos: Int = x.indexOf(':')
         val t: (String, String) = x.splitAt(colonPos)
         // `drop`: drop the (": ").
@@ -89,7 +92,8 @@ object ParserPrimitives {
   }
 
   def generalContentLine: Parser = {
-    x ⇒ nameContentLine(x.dropWhile(_.isSpaceChar))
+    x ⇒
+      nameContentLine(x.dropWhile(_.isSpaceChar))
   }
 
 }
@@ -97,7 +101,8 @@ object ParserPrimitives {
 object ParserCombinator {
 
   def or(a: Parser, b: Parser): Parser = {
-    x ⇒ a(x).orElse(b(x))
+    x ⇒
+      a(x).orElse(b(x))
   }
 
   def chain(a: Parser, b: Parser): Parser = ???
@@ -105,7 +110,8 @@ object ParserCombinator {
   def many(a: Parser): Parser = ???
 
   def requireSucessful(a: Parser): Parser = {
-    x ⇒ {
+    x ⇒
+      {
         val res = a(x)
         require(res.isDefined)
         res

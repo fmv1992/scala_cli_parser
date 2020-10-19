@@ -1,7 +1,7 @@
 // See:
 // `comm8deec70`:
 
-ThisBuild / scalaVersion     := "2.12.8"
+ThisBuild / scalaVersion := "2.12.8"
 organization := "fmv1992"
 name := "scala_cli_parser"
 // ThisBuild / organizationName := "example"
@@ -14,11 +14,7 @@ libraryDependencies += "io.github.fmv1992" %% "util" % "1.9.3"
 
 // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
-scalacOptions ++= (
-  Seq(
-    "-feature",
-    "-deprecation",
-    "-Xfatal-warnings")
+scalacOptions ++= (Seq("-feature", "-deprecation", "-Xfatal-warnings")
   ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq)
 
 licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
@@ -35,8 +31,8 @@ test in assembly := {}
 assemblyMergeStrategy in assembly := {
   case "version" ⇒ MergeStrategy.first
   case x ⇒ {
-  val oldStrategy = (assemblyMergeStrategy in assembly).value
-  oldStrategy(x)
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
   }
 }
 

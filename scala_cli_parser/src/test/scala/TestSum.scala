@@ -13,7 +13,7 @@ object TestSum extends CLIConfigTestableMain {
     val res = args.foldLeft(0)((l, x) ⇒ {
       x match {
         case y: Argument if y.longName == "sum" ⇒ x.value.map(_.toInt).sum + l
-        case _ ⇒ println(x) ; throw new Exception()
+        case _ ⇒ println(x); throw new Exception()
       }
     })
 
