@@ -13,8 +13,8 @@ before_install:
     - make publishlocal
 
 script:
-    - make
-    - make test
+    - make docker_build
+    - make docker_test
     - make coverage
 
 after_success:

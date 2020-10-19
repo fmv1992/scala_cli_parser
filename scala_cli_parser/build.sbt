@@ -8,7 +8,7 @@ name := "scala_cli_parser"
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5"
 // libraryDependencies += "io.github.fmv1992" %% "util" % "2.+"
-libraryDependencies += "io.github.fmv1992" %% "util" % "1.9.3"
+libraryDependencies += "io.github.fmv1992" %% "util" % "1.10.0"
 // libraryDependencies += "fmv1992" %% "fmv1992_scala_utilities" % "2.+"
 // libraryDependencies += "fmv1992" %% "util" % "2.+"
 

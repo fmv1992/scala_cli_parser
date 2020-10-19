@@ -2,6 +2,8 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
+export PROJECT_NAME := $(notdir $(ROOT_DIR))
+
 # Find all scala files.
 SBT_FILES := $(shell find ./ -iname "build.sbt")
 SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
@@ -128,6 +130,29 @@ readme.md: $(FINAL_TARGET) ./documentation/readme.md ./tmp/scala_pandoc.jar
 		<(echo ) \
 		/tmp/$(notdir $@) > $@
 	rm /tmp/$(notdir $@)
+
+# Docker actions. --- {{{
+
+docker_build:
+	docker build \
+        --file ./dockerfile \
+        --tag $(PROJECT_NAME) \
+        --build-arg project_name=$(PROJECT_NAME) \
+        -- . \
+        1>&2
+
+docker_run:
+	docker run \
+        --interactive \
+        --tty \
+        --entrypoint '' \
+        $(PROJECT_NAME) \
+        $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
+
+docker_test:
+	DOCKER_CMD='make test' make docker_run
+
+# --- }}}
 
 .FORCE:
 
