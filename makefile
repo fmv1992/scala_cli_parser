@@ -115,7 +115,7 @@ tmp/test_sum.scala:
 	tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
 	tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
 	echo -e '$(SCALA_CLI_ARGUMENTS)' >> $@
-	abspath=$(shell readlink -f $@) && cd ./scala_cli_parser && sbtx -script $$abspath
+	abspath=$(shell readlink -f $@) && cd ./scala_cli_parser && sbtx -q -script $$abspath
 
 readme.md: $(FINAL_TARGET) ./documentation/readme.md ./tmp/scala_pandoc.jar
 	pandoc2 --from markdown --to json ./documentation/readme.md \
