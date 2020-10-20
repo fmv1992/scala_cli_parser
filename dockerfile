@@ -12,7 +12,10 @@ RUN apt-get -y install openjdk-8-jdk
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV PATH $JAVA_HOME/bin:$PATH
 
+# Install support programs.
 RUN apt-get install --yes git make wget zip
+# Install Scala Native dependencies.
+RUN apt-get install --yes clang libgc-dev
 RUN rm -rf /var/lib/apt/lists/*
 
 # Install sbt.
