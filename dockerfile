@@ -35,7 +35,11 @@ RUN cd ./fmv1992_scala_utilities \
 RUN rm -rf ./fmv1992_scala_utilities
 
 WORKDIR /home/user/
-COPY . .
+# ???: How to speed up `sbt update`? Perhaps by copying only the `build.sbt`
+# file, and then the rest.
+# ???: Or maybe one could use a `git show` of a `build.sbt` file since
+# dependencies are rarely going to change.
+COPY ./${PROJECT_NAME}/build.sbt ./${PROJECT_NAME}/build.sbt
 RUN cd ./${PROJECT_NAME} && sbt update
 RUN make publishlocal
 
