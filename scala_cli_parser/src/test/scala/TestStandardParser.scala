@@ -4,7 +4,7 @@ import org.scalatest.FunSuite
 
 class TestSumAndMainExample01Parser extends FunSuite {
 
-  val defaultArgs = "--debug --verbose".split(" ").toList
+  val defaultArgs: List[String] = "--debug --verbose".split(" ").toList
 
   test("Most basic test: test the idea.") {
     val parsed = Example.cli01Parser.parse(defaultArgs)

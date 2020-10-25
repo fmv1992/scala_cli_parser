@@ -1,10 +1,22 @@
 // See:
 // `comm8deec70`:
 
-ThisBuild / scalaVersion := "2.12.8"
+// ThisBuild / scalaVersion := "2.12.8"
 organization := "fmv1992"
 name := "scala_cli_parser"
 // ThisBuild / organizationName := "example"
+
+inThisBuild(
+  List(
+    scalaVersion := "2.12.12", // 2.11.12, or 2.13.3
+    semanticdbEnabled := true, // enable SemanticDB
+    semanticdbVersion := scalafixSemanticdb.revision // use Scalafix compatible version
+  )
+)
+
+lazy val myproject = project.settings(
+  scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
+)
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5"
 // libraryDependencies += "io.github.fmv1992" %% "util" % "2.+"

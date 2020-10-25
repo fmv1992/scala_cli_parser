@@ -7,7 +7,7 @@ class TestParser extends FunSuite {
   val comment = "# This is a comment."
   val nline = "\n"
   val cline = "version: 2.27."
-  val cliConfig = List(comment, nline, cline).mkString("\n")
+  val cliConfig: String = List(comment, nline, cline).mkString("\n")
 
   test("Test parser primitives.") {
     assert(ParserPrimitives.emptyLine(nline).isDefined)

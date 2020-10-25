@@ -7,7 +7,7 @@ object Main extends CLIConfigTestableMain {
   // ???: Grab those from somewhere else.
   lazy val programName = "scala_cli_parser"
   lazy val CLIConfigPath = "src/main/resources/scala_cli_parser_config.conf"
-  lazy val version =
+  lazy val version: String =
     Reader.readLines("./src/main/resources/version").mkString("")
 
   def testableMain(args: Seq[Argument]): Seq[String] = {
