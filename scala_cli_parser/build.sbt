@@ -15,7 +15,7 @@ inThisBuild(
 )
 
 lazy val myproject = project.settings(
-  scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
+  scalacOptions += "" // required by `RemoveUnused` rule
 )
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5"
@@ -23,6 +23,11 @@ libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5"
 libraryDependencies += "io.github.fmv1992" %% "util" % "1.10.0"
 // libraryDependencies += "fmv1992" %% "fmv1992_scala_utilities" % "2.+"
 // libraryDependencies += "fmv1992" %% "util" % "2.+"
+
+libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0"
+scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.2.0"
+addCompilerPlugin(scalafixSemanticdb)
+scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
 
 // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
