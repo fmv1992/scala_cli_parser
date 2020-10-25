@@ -10,10 +10,10 @@ object TestSum extends CLIConfigTestableMain {
 
   def testableMain(args: Seq[Argument]): List[String] = {
 
-    val res = args.foldLeft(0)((l, x) ⇒ {
+    val res = args.foldLeft(0)((l, x) => {
       x match {
-        case y: Argument if y.longName == "sum" ⇒ x.value.map(_.toInt).sum + l
-        case _ ⇒ println(x); throw new Exception()
+        case y: Argument if y.longName == "sum" => x.value.map(_.toInt).sum + l
+        case _                                  => println(x); throw new Exception()
       }
     })
 

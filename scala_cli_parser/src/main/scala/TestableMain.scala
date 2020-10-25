@@ -29,10 +29,10 @@ trait CLIConfigTestableMain extends TestableMain {
     */
   def printHelp(format: Map[String, Map[String, String]]): Seq[String] = {
     val usage: String = s"$programName " + format.keys.toList.sorted
-      .map(x ⇒ "--" + x.format("name"))
+      .map(x => "--" + x.format("name"))
       .mkString(" ")
     val description: String = format.keys.toList.sorted
-      .map(x ⇒ " " * 4 + "--" + x + ": " + format(x)("help"))
+      .map(x => " " * 4 + "--" + x + ": " + format(x)("help"))
       .mkString("\n")
     Seq(usage, description)
   }
@@ -102,7 +102,7 @@ trait TestableMain {
     if (!a.isEmpty && a(0).value(0) != "null") {
       Reader.readLines(a(0).value(0))
     } else {
-      scala.io.Source.stdin.getLines.toSeq
+      scala.io.Source.stdin.getLines().toSeq
     }
   }
 

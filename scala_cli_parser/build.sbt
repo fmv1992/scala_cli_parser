@@ -1,32 +1,52 @@
 // See:
 // `comm8deec70`:
 
-// ThisBuild / scalaVersion := "2.12.8"
+lazy val scala211 = "2.11.12"
+lazy val scala212 = "2.12.8"
+lazy val scala213 = "2.13.3"
+
+lazy val supportedScalaVersions = List(
+  scala211,
+  scala212,
+  scala213
+)
+ThisBuild / scalaVersion := scala212
+scalaVersion := scala212
+
 organization := "fmv1992"
 name := "scala_cli_parser"
 // ThisBuild / organizationName := "example"
 
 inThisBuild(
   List(
-    scalaVersion := "2.12.12", // 2.11.12, or 2.13.3
-    semanticdbEnabled := true, // enable SemanticDB
-    semanticdbVersion := scalafixSemanticdb.revision // use Scalafix compatible version
+    libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
+    semanticdbEnabled := true,
+    semanticdbOptions += "-P:semanticdb:synthetics:on",
+    semanticdbVersion := scalafixSemanticdb.revision,
+    scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
+      scalaVersion.value
+    ),
+    addCompilerPlugin(
+      "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
+    ),
+    addCompilerPlugin(scalafixSemanticdb)
   )
 )
 
 lazy val myproject = project.settings(
-  scalacOptions += "" // required by `RemoveUnused` rule
+  scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
 )
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5"
+libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0" % Test
 // libraryDependencies += "io.github.fmv1992" %% "util" % "2.+"
-libraryDependencies += "io.github.fmv1992" %% "util" % "1.10.0"
+libraryDependencies += "io.github.fmv1992" %% "util" % "1.+"
 // libraryDependencies += "fmv1992" %% "fmv1992_scala_utilities" % "2.+"
 // libraryDependencies += "fmv1992" %% "util" % "2.+"
+libraryDependencies += "com.sandinh" %% "scala-rewrites" % "1.0.0"
 
+// https://scalacenter.github.io/scalafix/
 libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0"
 scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.2.0"
-addCompilerPlugin(scalafixSemanticdb)
 scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
 
 // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"

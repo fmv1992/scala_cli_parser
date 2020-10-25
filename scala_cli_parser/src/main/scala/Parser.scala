@@ -23,7 +23,7 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
   * Abstraction:
   *
   * ```
-  * trait Parsers[Parser[+_]] { self ⇒ * // so inner classes may call methods of trait
+  * trait Parsers[Parser[+_]] { self => * // so inner classes may call methods of trait
   * def run[A](p: Parser[A])(input: String): Either[ParseError,A]
   *
   * ...
@@ -36,12 +36,11 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
   * object ReferenceTypes {
   *
   * \/\*\* A parser is a kind of state action that can fail. \*\/
-  * type Parser[+A] = ParseState ⇒ Result[A]
+  * type Parser[+A] = ParseState => Result[A]
   *
   * ...
   *
   * ```
-  *
   */
 /** New design of parsers:
   *
@@ -51,7 +50,7 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
   *
   * 1. Parsers must be able to be combined to form more advanced parsers.
   *
-  * 1. In this case a parser is a String ⇒ Option[Map[String, String]].
+  * 1. In this case a parser is a String => Option[Map[String, String]].
   *
   * 1. A parser can fail. Maybe Option[String] is a better approach.
   *
@@ -62,60 +61,52 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
   * b. Comment line (starts with a #).
   *
   * c. Sequence of non spaces terminated with ": " followed by a string.
-  *
   */
-
 object ParserPrimitives {
 
   // This doesn't take type checking into account.
-  def emptyLine: Parser = {
-    x ⇒
-      if (x == "\n" || x.isEmpty) Some(Map.empty) else None
+  def emptyLine: Parser = { x =>
+    if (x == "\n" || x.isEmpty) Some(Map.empty) else None
   }
 
-  def commentLine: Parser = {
-    x ⇒
-      if (x.startsWith("#")) Some(Map.empty) else None
+  def commentLine: Parser = { x =>
+    if (x.startsWith("#")) Some(Map.empty) else None
   }
 
-  def nameContentLine: Parser = {
-    x ⇒
-      {
-        val colonPos: Int = x.indexOf(':')
-        val t: (String, String) = x.splitAt(colonPos)
-        // `drop`: drop the (": ").
-        val (id, body): (String, String) = (t._1.trim, t._2.trim.drop(2))
-        require(!id.isEmpty, id)
-        require(!body.isEmpty, body)
-        Option(Map(id → body))
-      }
+  def nameContentLine: Parser = { x =>
+    {
+      val colonPos: Int = x.indexOf(':')
+      val t: (String, String) = x.splitAt(colonPos)
+      // `drop`: drop the (": ").
+      val (id, body): (String, String) = (t._1.trim, t._2.trim.drop(2))
+      require(!id.isEmpty, id)
+      require(!body.isEmpty, body)
+      Option(Map(id → body))
+    }
   }
 
-  def generalContentLine: Parser = {
-    x ⇒
-      nameContentLine(x.dropWhile(_.isSpaceChar))
+  def generalContentLine: Parser = { x =>
+    nameContentLine(x.dropWhile(_.isSpaceChar))
   }
 
 }
 
 object ParserCombinator {
 
-  def or(a: Parser, b: Parser): Parser = {
-    x ⇒
-      a(x).orElse(b(x))
+  def or(a: Parser, b: Parser): Parser = { x =>
+    a(x).orElse(b(x))
   }
 
   def chain(a: Parser, b: Parser): Parser = ???
 
   def many(a: Parser): Parser = ???
 
-  def requireSucessful(a: Parser): Parser = {
-    x ⇒
-      {
-        val res = a(x)
-        require(res.isDefined)
-        res
-      }
+  def requireSucessful(a: Parser): Parser = { x =>
+    {
+      val res = a(x)
+      require(res.isDefined)
+      res
+    }
   }
 
 }
@@ -134,7 +125,7 @@ object ConfCLIParser {
         ParserPrimitives.generalContentLine
       )
     )
-    s.lines.foldLeft(Option(mEmpty))((om, s) ⇒ {
+    s.lines.foldLeft(Option(mEmpty))((om, s) => {
       val oPMap = definedLineParser(s)
       val keyIntersection = om
         .getOrElse(mEmpty)
@@ -142,7 +133,7 @@ object ConfCLIParser {
         .toSet
         .intersect(oPMap.getOrElse(mEmpty).keys.toSet)
       require(keyIntersection.isEmpty, keyIntersection)
-      om.flatMap(x ⇒ oPMap.map(y ⇒ y ++ x))
+      om.flatMap(x => oPMap.map(y => y ++ x))
     })
   }
 
@@ -153,10 +144,10 @@ object ConfCLIParser {
     val lines = s.lines.toList
     val i = Utilities.getContiguousElementsIndexes(lines.map(_.isEmpty))
     val blocks: List[List[String]] =
-      i.flatMap(x ⇒ List(lines.slice(x._1, x._2)))
+      i.flatMap(x => List(lines.slice(x._1, x._2)))
     // ???: Single reponsibility.
     val cleanedBlocks = blocks
-      .map(ls ⇒ ls.filterNot(x ⇒ x.isEmpty || x.trim.startsWith("#")))
+      .map(ls => ls.filterNot(x => x.isEmpty || x.trim.startsWith("#")))
       .filterNot(_.isEmpty)
     cleanedBlocks
   }
@@ -164,7 +155,7 @@ object ConfCLIParser {
   def nestConfigMaps(
       lm: List[Map[String, String]]
   ): Map[String, Map[String, String]] = {
-    require(lm.length == lm.map(x ⇒ x.keys.toSet).reduce(_ ++ _).size, lm)
+    require(lm.length == lm.map(x => x.keys.toSet).reduce(_ ++ _).size, lm)
     val flattenedM = lm.reduce(_ ++ _)
     val key = flattenedM("name")
     val others: Map[String, String] = flattenedM - "name"
@@ -174,7 +165,7 @@ object ConfCLIParser {
   def parseConf(s: String): Map[String, Map[String, String]] = {
     val blocks: List[List[String]] = groupContiguousText(s)
     val mapsFromBlocks: List[List[Map[String, String]]] =
-      blocks.map(x ⇒ x.map(parseString))
+      blocks.map(x => x.map(parseString))
     val listNestedMap: List[Map[String, Map[String, String]]] =
       mapsFromBlocks.map(nestConfigMaps)
     val nestedMap: Map[String, Map[String, String]] =

@@ -1,8 +1,8 @@
 package fmv1992.scala_cli_parser
 
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
-class TestSumAndMainExample01Parser extends FunSuite {
+class TestSumAndMainExample01Parser extends AnyFunSuite {
 
   val defaultArgs: List[String] = "--debug --verbose".split(" ").toList
 
@@ -32,7 +32,7 @@ class TestSumAndMainExample01Parser extends FunSuite {
 
 }
 
-class TestStandardParser extends FunSuite {
+class TestStandardParser extends AnyFunSuite {
 
   test("Test API.") {
 

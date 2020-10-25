@@ -29,7 +29,7 @@ format:
 	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 | xargs --verbose -0 scalafmt --config .scalafmt.conf
 
 doc:
-	cd $(dir $(firstword $(SBT_FILES))) && sbt doc
+	cd $(PROJECT_NAME) && sbt '+ doc'
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
@@ -65,14 +65,12 @@ test: test_sbt test_bash
 
 test_bash: $(FINAL_TARGET) $(BASH_TEST_FILES)
 
-test_sbt: $(SBT_FILES)
+test_sbt: .FORCE
+	cd $(PROJECT_NAME) && sbt '+ test'
 
 compile: $(SBT_FILES) $(SCALA_FILES)
-	cd $(dir $@) && sbt compile
+	cd $(PROJECT_NAME) && sbt '+ compile'
 
-$(SBT_FILES): .FORCE
-	cd $(dir $@) && sbt test assembly
-	touch --no-create -m $@
 
 # --- }}}
 
@@ -82,7 +80,7 @@ assembly: $(FINAL_TARGET)
 publishlocal: .FORCE
 	# sbt "clean" "set offline := true" "clean" 'publishLocal'
 	# test -e $(HOME)/.ivy2/local/fmv1992.org
-	cd ./scala_cli_parser && sbt clean update publishLocal
+	cd ./scala_cli_parser && sbt clean update '+ publishLocal'
 
 dev:
 	cp -f ./other/git_hooks/git_pre_commit_hook.sh ./.git/hooks/pre-commit || true
@@ -91,7 +89,7 @@ dev:
 	chmod a+x ./.git/hooks/pre-push
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
-	cd ./scala_cli_parser && sbt assembly
+	cd ./scala_cli_parser && sbt '+ assembly'
 	find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
 	touch --no-create -m $@
 
