@@ -9,7 +9,7 @@ SBT_FILES := $(shell find ./ -iname "build.sbt")
 SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
-export SCALAC_OPTS := -Ywarn-dead-code -Xlint:unused
+export SCALAC_OPTS := -Ywarn-dead-code
 
 # Build files.
 FINAL_TARGET := ./scala_cli_parser/target/scala-2.12/scala_cli_parser.jar
@@ -26,7 +26,7 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 all: dev test assembly publishlocal doc coverage
 
 format:
-	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 | xargs --verbose -0 scalafmt --config .scalafmt.conf
+	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 | xargs --verbose -0 scalafmt --config ./scala_cli_parser/.scalafmt.conf
 
 doc:
 	cd $(PROJECT_NAME) && sbt '+ doc'
@@ -148,7 +148,7 @@ docker_run:
         $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
 
 docker_test:
-	DOCKER_CMD='make test' make docker_run
+	DOCKER_CMD='make "+ test"' make docker_run
 
 # --- }}}
 

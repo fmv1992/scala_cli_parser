@@ -33,26 +33,42 @@ inThisBuild(
   )
 )
 
-lazy val myproject = project.settings(
-  scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
+scalacOptions ++= (Seq(
+  "-feature",
+  "-deprecation"
+  // "-Xfatal-warnings", // Make `linesIterator` work.
 )
+  ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq)
+Compile / scalacOptions ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    // ???: -Ywarn-unused-import, -Xlint:unused
+    case Some((2, n)) if n == 11 => Nil
+    case Some((2, n)) if n == 12 => Nil
+    case Some((2, n)) if n == 13 => Nil
+  }
+}
 
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.0" % Test
-// libraryDependencies += "io.github.fmv1992" %% "util" % "2.+"
 libraryDependencies += "io.github.fmv1992" %% "util" % "1.+"
-// libraryDependencies += "fmv1992" %% "fmv1992_scala_utilities" % "2.+"
-// libraryDependencies += "fmv1992" %% "util" % "2.+"
-libraryDependencies += "com.sandinh" %% "scala-rewrites" % "1.0.0"
 
 // https://scalacenter.github.io/scalafix/
 libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0"
 scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.2.0"
 scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
 
-// resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+// https://index.scala-lang.org/ohze/scala-rewrites/scala-rewrites/1.0.0?target=_2.12
+libraryDependencies ++= {
+  CrossVersion.partialVersion(scalaVersion.value) match {
+    case Some((2, n)) if n == 11 => List()
+    case Some((2, n)) if n == 12 =>
+      List("com.sandinh" %% "scala-rewrites" % "1.0.0")
+    case Some((2, n)) if n == 13 =>
+      List("com.sandinh" %% "scala-rewrites" % "0.1.10-sd")
+    case _ => Nil
+  }
+}
 
-scalacOptions ++= (Seq("-feature", "-deprecation", "-Xfatal-warnings")
-  ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq)
+// resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
 licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html")
 version := IO.readLines(new File("./src/main/resources/version")).mkString("")
@@ -72,6 +88,8 @@ assemblyMergeStrategy in assembly := {
     oldStrategy(x)
   }
 }
+
+crossScalaVersions := supportedScalaVersions
 
 lazy val scala_cli_parser = (project in file("."))
 

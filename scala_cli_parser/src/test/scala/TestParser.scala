@@ -23,7 +23,7 @@ class TestParser extends AnyFunSuite {
     )
     assert(
       ConfCLIParser.parseStringOpt(cliConfig) == Option(
-        Map(("version" → "2.27."))
+        Map(("version" -> "2.27."))
       )
     )
   }

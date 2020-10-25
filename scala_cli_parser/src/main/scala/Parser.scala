@@ -2,6 +2,8 @@ package fmv1992.scala_cli_parser
 
 import fmv1992.fmv1992_scala_utilities.util.Utilities
 
+import scala.collection.compat._
+
 /** Parse a CLI config file. This file consists of:
   *
   * 1.  Empty lines.
@@ -65,48 +67,54 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
 object ParserPrimitives {
 
   // This doesn't take type checking into account.
-  def emptyLine: Parser = { x =>
-    if (x == "\n" || x.isEmpty) Some(Map.empty) else None
+  def emptyLine: Parser = {
+    x =>
+      if (x == "\n" || x.isEmpty) Some(Map.empty) else None
   }
 
-  def commentLine: Parser = { x =>
-    if (x.startsWith("#")) Some(Map.empty) else None
+  def commentLine: Parser = {
+    x =>
+      if (x.startsWith("#")) Some(Map.empty) else None
   }
 
-  def nameContentLine: Parser = { x =>
-    {
-      val colonPos: Int = x.indexOf(':')
-      val t: (String, String) = x.splitAt(colonPos)
-      // `drop`: drop the (": ").
-      val (id, body): (String, String) = (t._1.trim, t._2.trim.drop(2))
-      require(!id.isEmpty, id)
-      require(!body.isEmpty, body)
-      Option(Map(id → body))
-    }
+  def nameContentLine: Parser = {
+    x =>
+      {
+        val colonPos: Int = x.indexOf(':')
+        val t: (String, String) = x.splitAt(colonPos)
+        // `drop`: drop the (": ").
+        val (id, body): (String, String) = (t._1.trim, t._2.trim.drop(2))
+        require(!id.isEmpty, id)
+        require(!body.isEmpty, body)
+        Option(Map(id -> body))
+      }
   }
 
-  def generalContentLine: Parser = { x =>
-    nameContentLine(x.dropWhile(_.isSpaceChar))
+  def generalContentLine: Parser = {
+    x =>
+      nameContentLine(x.dropWhile(_.isSpaceChar))
   }
 
 }
 
 object ParserCombinator {
 
-  def or(a: Parser, b: Parser): Parser = { x =>
-    a(x).orElse(b(x))
+  def or(a: Parser, b: Parser): Parser = {
+    x =>
+      a(x).orElse(b(x))
   }
 
   def chain(a: Parser, b: Parser): Parser = ???
 
   def many(a: Parser): Parser = ???
 
-  def requireSucessful(a: Parser): Parser = { x =>
-    {
-      val res = a(x)
-      require(res.isDefined)
-      res
-    }
+  def requireSucessful(a: Parser): Parser = {
+    x =>
+      {
+        val res = a(x)
+        require(res.isDefined)
+        res
+      }
   }
 
 }
@@ -141,7 +149,7 @@ object ConfCLIParser {
     parseStringOpt(s).getOrElse(throw new Exception())
 
   def groupContiguousText(s: String): List[List[String]] = {
-    val lines = s.lines.toList
+    val lines = s.linesIterator.toList
     val i = Utilities.getContiguousElementsIndexes(lines.map(_.isEmpty))
     val blocks: List[List[String]] =
       i.flatMap(x => List(lines.slice(x._1, x._2)))
@@ -159,7 +167,7 @@ object ConfCLIParser {
     val flattenedM = lm.reduce(_ ++ _)
     val key = flattenedM("name")
     val others: Map[String, String] = flattenedM - "name"
-    Map((key → others))
+    Map((key -> others))
   }
 
   def parseConf(s: String): Map[String, Map[String, String]] = {
