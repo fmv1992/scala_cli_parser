@@ -2,7 +2,7 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-export PROJECT_NAME := $(notdir $(ROOT_DIR))
+export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 
 # Find all scala files.
 SBT_FILES := $(shell find ./ -iname "build.sbt")
@@ -10,6 +10,7 @@ SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
 export SCALAC_OPTS := -Ywarn-dead-code
+export _JAVA_OPTIONS ?= -Xms3072m -Xmx6144m
 
 # Build files.
 FINAL_TARGET := ./scala_cli_parser/target/scala-2.12/scala_cli_parser.jar
@@ -26,7 +27,10 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 all: dev test assembly publishlocal doc coverage
 
 format:
-	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 | xargs --verbose -0 scalafmt --config ./scala_cli_parser/.scalafmt.conf
+	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
+        | xargs --verbose -0 \
+            scalafmt --config ./scala_cli_parser/.scalafmt.conf
+	cd $(PROJECT_NAME) && sbt 'scalafix'
 
 doc:
 	cd $(PROJECT_NAME) && sbt '+ doc'
@@ -65,12 +69,11 @@ test: test_sbt test_bash
 
 test_bash: $(FINAL_TARGET) $(BASH_TEST_FILES)
 
-test_sbt: .FORCE
+test_sbt:
 	cd $(PROJECT_NAME) && sbt '+ test'
 
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(PROJECT_NAME) && sbt '+ compile'
-
 
 # --- }}}
 
@@ -78,8 +81,6 @@ compile: $(SBT_FILES) $(SCALA_FILES)
 assembly: $(FINAL_TARGET)
 
 publishlocal: .FORCE
-	# sbt "clean" "set offline := true" "clean" 'publishLocal'
-	# test -e $(HOME)/.ivy2/local/fmv1992.org
 	cd ./scala_cli_parser && sbt clean update '+ publishLocal'
 
 dev:
@@ -148,7 +149,7 @@ docker_run:
         $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
 
 docker_test:
-	DOCKER_CMD='make "+ test"' make docker_run
+	DOCKER_CMD='make test' make docker_run
 
 # --- }}}
 
