@@ -44,52 +44,52 @@ lazy val commonSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  libraryDependencies += "org.scalatest" %% "scalatest" % "3.1.0" % Test,
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
   // libraryDependencies += "io.github.fmv1992" %% "fmv1992_scala_utilities" % "1.11.4"
-  libraryDependencies += "io.github.fmv1992" %% "util" % "1.11.4"
+  libraryDependencies += "io.github.fmv1992" %%% "util" % "1.11.4"
 )
 lazy val commonSettingsAndDependencies = commonSettings ++ commonDependencies
 
 lazy val scalaNativeSettings = Seq(
+  crossScalaVersions := versionsNative,
+  scalaVersion := scala211, // allows to compile if scalaVersion set not 2.11
   nativeLinkStubs := true,
   nativeLinkStubs in runMain := true,
+  nativeLinkStubs in Test := true,
   Test / nativeLinkStubs := true,
-  // fmv1992_scala_utilities:33e41c7:fmv1992_scala_utilities/build.sbt:26
   sources in (Compile, doc) := Seq.empty
 )
 
 lazy val scala_cli_parserCrossProject: sbtcrossproject.CrossProject =
-  crossProject(JVMPlatform)
+  crossProject(JVMPlatform, NativePlatform)
     .crossType(CrossType.Pure)
+    .in(file("."))
     .settings(
       commonSettingsAndDependencies
     )
     .jvmSettings(
       crossScalaVersions := versionsJVM
     )
-// .nativeSettings(
-//   scalaNativeSettings
-// )
+    .nativeSettings(
+      scalaNativeSettings
+    )
 
 lazy val scala_cli_parserJVM: sbt.Project = scala_cli_parserCrossProject.jvm
-  .in(file("."))
-  .settings(
-    crossScalaVersions := versionsJVM
-  )
-  .settings(
-    commonSettingsAndDependencies
-  )
 
-// lazy val scala_cli_parser: sbt.Project = (project in file("."))
-//   .aggregate(
-//     scala_cli_parserJVM
-//   )
-// .settings(
-//   publish / skip := true,
-//   doc / aggregate := false,
-//   crossScalaVersions := Nil,
-//   packageDoc / aggregate := false
-// )
+lazy val scala_cli_parserNative: sbt.Project =
+  scala_cli_parserCrossProject.native
+
+lazy val scala_cli_parser: sbt.Project = (project in file("."))
+  .aggregate(
+    scala_cli_parserJVM,
+    scala_cli_parserNative
+  )
+  .settings(
+    publish / skip := true,
+    doc / aggregate := false,
+    crossScalaVersions := Nil,
+    packageDoc / aggregate := false
+  )
 
 // s#import fmv1992.util#import fmv1992.util#g
 
