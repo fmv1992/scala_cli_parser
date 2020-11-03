@@ -15,6 +15,7 @@ scala:
 script:
     - make docker_build
     - make docker_test
+    - make format
 #   - make coverage
 
 after_success:
