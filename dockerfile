@@ -26,19 +26,13 @@ RUN unzip sbt.zip
 RUN rm sbt.zip
 ENV PATH $PATH:/home/user/bin/sbt/bin
 
-# Install commit `v1.8.5.dev.2.11.12` at `fmv1992_scala_utilities`.
-WORKDIR /tmp
-RUN git clone https://github.com/fmv1992/fmv1992_scala_utilities
-RUN cd ./fmv1992_scala_utilities \
-    && git reset --hard v1.11.0 \
-    && make publishlocal
-RUN rm -rf ./fmv1992_scala_utilities
-
 WORKDIR /home/user/
 RUN mkdir ./${PROJECT_NAME}
 COPY ./${PROJECT_NAME} ./${PROJECT_NAME}
 RUN find ${PROJECT_NAME} -regextype 'egrep' \( \! -iregex '.*(\.properties|\.sbt|/version)' \) -type f -print0 | xargs -0 rm --verbose -rf
+RUN find ${PROJECT_NAME} -type d -print0 | xargs -0 rmdir || true
 RUN find ${PROJECT_NAME} -type d -print0 | xargs -0 rmdir --parents || true
+RUN find ${PROJECT_NAME} | sort -u
 RUN cd ./${PROJECT_NAME} && sbt update
 RUN rm -rf ./${PROJECT_NAME}
 COPY . .

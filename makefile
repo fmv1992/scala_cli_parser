@@ -10,10 +10,10 @@ SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
 export SCALAC_OPTS := -Ywarn-dead-code
-export _JAVA_OPTIONS ?= -Xms3072m -Xmx6144m
+export _JAVA_OPTIONS ?= -Xms1024m -Xmx2048m
 
 # Build files.
-FINAL_TARGET := ./scala_cli_parser/target/scala-2.12/scala_cli_parser.jar
+FINAL_TARGET := ./scala_cli_parser/target/scala-2.11/scala_cli_parser.jar
 
 # Test files.
 BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -print)
@@ -30,7 +30,7 @@ format:
 	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
         | xargs --verbose -0 \
             scalafmt --config ./scala_cli_parser/.scalafmt.conf
-	cd $(PROJECT_NAME) && sbt 'scalafix'
+	cd $(PROJECT_NAME) && sbt 'scalafixAll'
 
 doc:
 	cd $(PROJECT_NAME) && sbt '+ doc'
@@ -39,6 +39,7 @@ clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
 	find . -path '*/project/*' -type d -prune -print0 | xargs -0 rm -rf
 	find . -iname '*.class' -print0 | xargs -0 rm -rf
+	find . -iname '*.hnir' -print0 | xargs -0 rm -rf
 	find . -type d -empty -delete
 
 coverage:
@@ -47,6 +48,7 @@ coverage:
 	echo "Report can be found on '$$(find . -iname "index.html")'."
 
 # Test actions. --- {{{
+
 # Killing a running process with:
 #
 #    SIGKILL                 → 137
@@ -72,6 +74,11 @@ test_bash: $(FINAL_TARGET) $(BASH_TEST_FILES)
 test_sbt:
 	cd $(PROJECT_NAME) && sbt '+ test'
 
+# ???: This tasks fails erratically but succeeds after a few retries.
+nativelink:
+	cd $(PROJECT_NAME) && sbt 'nativeLink'
+
+
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(PROJECT_NAME) && sbt '+ compile'
 
@@ -91,8 +98,8 @@ dev:
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
 	cd ./scala_cli_parser && sbt '+ assembly'
-	find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
-	touch --no-create -m $@
+	@# find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
+	@# touch --no-create -m $@
 
 test%.sh: .FORCE
 	bash -xv $@
@@ -108,7 +115,7 @@ tmp/scala_pandoc.jar:
 	}
 
 tmp/test_sum.scala:
-	echo -e '/*** scalaVersion := "2.12.8"\n     libraryDependencies += "fmv1992" %% "scala_cli_parser" % "0.+"\n*/' > $@
+	echo -e '/*** scalaVersion := "2.11.12"\n     libraryDependencies += "fmv1992" %% "scala_cli_parser" % "0.+"\n*/' > $@
 	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
 	tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
 	tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
@@ -150,6 +157,7 @@ docker_run:
 
 docker_test:
 	DOCKER_CMD='make test' make docker_run
+	DOCKER_CMD='make nativelink' make docker_run
 
 # --- }}}
 

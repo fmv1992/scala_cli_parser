@@ -2,8 +2,6 @@ package fmv1992.scala_cli_parser
 
 import fmv1992.fmv1992_scala_utilities.util.Utilities
 
-import scala.collection.compat._
-
 /** Parse a CLI config file. This file consists of:
   *
   * 1.  Empty lines.
@@ -149,7 +147,7 @@ object ConfCLIParser {
     parseStringOpt(s).getOrElse(throw new Exception())
 
   def groupContiguousText(s: String): List[List[String]] = {
-    val lines = s.linesIterator.toList
+    val lines = s.lines.toList
     val i = Utilities.getContiguousElementsIndexes(lines.map(_.isEmpty))
     val blocks: List[List[String]] =
       i.flatMap(x => List(lines.slice(x._1, x._2)))

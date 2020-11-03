@@ -1,7 +1,8 @@
 package fmv1992.scala_cli_parser
 
-import fmv1992.fmv1992_scala_utilities.util.Reader
 import scala.Iterable
+
+import fmv1992.fmv1992_scala_utilities.util.Reader
 
 /** Testable main trait with a configurable file CLI implementation.
   *

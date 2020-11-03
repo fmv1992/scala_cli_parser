@@ -15,7 +15,8 @@ before_install:
 script:
     - make docker_build
     - make docker_test
-    - make coverage
+    - make format
+# ???: #   - make coverage
 
 after_success:
   - export CODECOV_TOKEN="9837f692-ffac-46db-bc8e-01ef3b9b5b3c"
