@@ -1,6 +1,23 @@
 // See:
 // `comm8deec70`:
 
+// https://github.com/SemanticSugar/sconfig/blob/9623f8401321fe847a49aecb7cfd92be73872ff6/build.sbt#L52
+lazy val scala211 = "2.11.12"
+lazy val scala212 = "2.12.12"
+lazy val scala213 = "2.13.3"
+
+// val versionsJVM = Seq(scala211, scala212, scala213)
+val versionsJVM = Seq(scala211, scala212, scala213)
+val versionsNative = Seq(scala211)
+
+inThisBuild(
+    )
+
+lazy val commonSettings = Seq(
+    )
+lazy val scalaNativeSettings = Seq(
+    )
+
 ThisBuild / scalaVersion := "2.11.12"
 organization := "fmv1992"
 name := "scala_cli_parser"
@@ -9,12 +26,11 @@ name := "scala_cli_parser"
 libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
 
 // libraryDependencies += "io.github.fmv1992" %% "util" % "2.+"
-libraryDependencies += "fmv1992" %%% "fmv1992_scala_utilities" % "1.8.5.dev.2.11.12"
+libraryDependencies += "io.github.fmv1992" %% "fmv1992_scala_utilities" % "1.11.2"
 /* libraryDependencies += "fmv1992" %% "util" % "1.+"*/
 // libraryDependencies += "io.github.fmv1992" %% "util" % "1.9.3"
 // libraryDependencies += "fmv1992" %% "util" % "2.+"
 
-enablePlugins(ScalaNativePlugin)
 nativeLinkStubs := true
 nativeLinkStubs in runMain := true
 Test / nativeLinkStubs := true
@@ -43,6 +59,20 @@ assemblyMergeStrategy in assembly := {
   case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.rename
   case x                                   => MergeStrategy.first
 }
+
+
+lazy val scala_cli_parserCrossProject: sbtcrossproject.CrossProject =
+  crossProject(JVMPlatform, NativePlatform)
+    .crossType(CrossType.Pure)
+    .settings(
+        // commonSettingsAndDependencies
+    )
+    .jvmSettings(
+      // crossScalaVersions := versionsJVM
+    )
+    .nativeSettings(
+      // scalaNativeSettings
+    )
 
 lazy val scala_cli_parser = (project in file("."))
 
