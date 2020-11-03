@@ -7,7 +7,7 @@ class TestParser extends AnyFunSuite {
   val comment = "# This is a comment."
   val nline = "\n"
   val cline = "version: 2.27."
-  val cliConfig = List(comment, nline, cline).mkString("\n")
+  val cliConfig: String = List(comment, nline, cline).mkString("\n")
 
   test("Test parser primitives.") {
     assert(ParserPrimitives.emptyLine(nline).isDefined)
@@ -23,7 +23,7 @@ class TestParser extends AnyFunSuite {
     )
     assert(
       ConfCLIParser.parseStringOpt(cliConfig) == Option(
-        Map(("version" → "2.27."))
+        Map(("version" -> "2.27."))
       )
     )
   }

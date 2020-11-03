@@ -9,7 +9,7 @@ SBT_FILES := $(shell find ./ -iname "build.sbt")
 SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
-export SCALAC_OPTS := -Ywarn-dead-code -Xlint:unused
+export SCALAC_OPTS := -Ywarn-dead-code
 export _JAVA_OPTIONS ?= -Xms1024m -Xmx2048m
 
 # Build files.
@@ -30,7 +30,7 @@ format:
 	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
         | xargs --verbose -0 \
             scalafmt --config ./scala_cli_parser/.scalafmt.conf
-	@# ???: cd $(PROJECT_NAME) && sbt 'scalafix'
+	cd $(PROJECT_NAME) && sbt 'scalafix'
 
 doc:
 	cd $(PROJECT_NAME) && sbt '+ doc'
@@ -78,12 +78,9 @@ test_sbt:
 nativelink:
 	cd $(PROJECT_NAME) && sbt 'nativeLink'
 
-compile: $(SBT_FILES) $(SCALA_FILES)
-	cd $(dir $@) && sbt compile
 
-$(SBT_FILES): .FORCE
-	cd $(dir $@) && sbt test assembly
-	touch --no-create -m $@
+compile: $(SBT_FILES) $(SCALA_FILES)
+	cd $(PROJECT_NAME) && sbt '+ compile'
 
 # --- }}}
 
@@ -101,6 +98,7 @@ dev:
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
 	cd ./scala_cli_parser && sbt '+ assembly'
+	find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
 	touch --no-create -m $@
 
 test%.sh: .FORCE

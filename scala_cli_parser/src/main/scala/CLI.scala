@@ -53,10 +53,10 @@ class StandardParser(val format: Map[String, Map[String, String]])
     ): Seq[Argument] = {
 
       goArgs match {
-        case Nil ⇒ acc
-        case h :: t ⇒ {
+        case Nil => acc
+        case h :: t => {
           val name = h.stripPrefix("--")
-          require(format.contains(name), format.keys + name)
+          require(format.contains(name), String.valueOf(format.keys) + name)
           val n = format(name)("n").toInt
           val values = t.take(n)
           require(
@@ -75,14 +75,14 @@ class StandardParser(val format: Map[String, Map[String, String]])
 
     // Add default arguments if there is any.
     val defaultKeys: Seq[String] =
-      format.filter(x ⇒ x._2.contains("default")).keys.toSeq
+      format.filter(x => x._2.contains("default")).keys.toSeq
     val notIncludedDefaultKeys: Seq[String] = (defaultKeys diff argsLongNames)
     require(
       argsLongNames.intersect(notIncludedDefaultKeys).isEmpty,
-      argsLongNames + "|" + notIncludedDefaultKeys
+      String.valueOf(argsLongNames) + "|" + notIncludedDefaultKeys
     )
     val additionalArgs: Seq[Argument] = {
-      notIncludedDefaultKeys.map(x ⇒ Arg(x, List(format(x)("default"))))
+      notIncludedDefaultKeys.map(x => Arg(x, List(format(x)("default"))))
     }
 
     parsedArgs ++ additionalArgs
@@ -111,14 +111,17 @@ object StandardParser {
 case class GNUParser(override val format: Map[String, Map[String, String]])
     extends StandardParser(format) {
 
-  require(format.contains("help"), format + " has to contain entry 'help'.")
+  require(
+    format.contains("help"),
+    String.valueOf(format) + " has to contain entry 'help'."
+  )
   require(
     format.contains("version"),
-    format + " has to contain entry 'version'."
+    String.valueOf(format) + " has to contain entry 'version'."
   )
 
   override def parse(args: Seq[String]): Seq[GNUArg] = {
-    super.parse(args).map(x ⇒ GNUArg(x.longName, x.value))
+    super.parse(args).map(x => GNUArg(x.longName, x.value))
   }
 
 }
