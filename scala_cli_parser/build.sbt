@@ -13,23 +13,6 @@ ThisBuild / scalaVersion := scala213
 scalaVersion := scala213
 inThisBuild(
   List(
-    libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
-    semanticdbEnabled := true,
-    semanticdbOptions += "-P:semanticdb:synthetics:on",
-    semanticdbVersion := scalafixSemanticdb.revision,
-    scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
-      scalaVersion.value
-    ),
-    addCompilerPlugin(
-      "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
-    ),
-    addCompilerPlugin(scalafixSemanticdb),
-    //
-    // https://github.com/scala/scala-collection-compat
-    scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.2.0",
-    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0",
-    addCompilerPlugin(scalafixSemanticdb),
-    scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
   )
 )
 
@@ -89,10 +72,13 @@ lazy val commonSettings = Seq(
     }
   },
   //
-  scalaVersion := "2.13.3",
-  semanticdbEnabled := true, // enable SemanticDB
-  semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
-  addCompilerPlugin(scalafixSemanticdb),
+  libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
+  semanticdbEnabled := true,
+  semanticdbOptions += "-P:semanticdb:synthetics:on",
+  semanticdbVersion := scalafixSemanticdb.revision,
+  scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
+    scalaVersion.value
+  ),
   addCompilerPlugin(
     "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
   ),
