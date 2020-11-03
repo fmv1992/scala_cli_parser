@@ -12,9 +12,6 @@ SBT_FOLDERS := $(dir $(SBT_FILES))
 export SCALAC_OPTS := -Ywarn-dead-code -Xlint:unused
 export _JAVA_OPTIONS ?= -Xms1024m -Xmx2048m
 
-# Build files.
-FINAL_TARGET := ./scala_cli_parser/target/scala-2.11/scala_cli_parser.jar
-
 # Test files.
 BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -print)
 
@@ -69,7 +66,7 @@ coverage:
 # terminate with timeout (meaning it always timeouts).
 test: test_sbt test_bash
 
-test_bash: $(FINAL_TARGET) $(BASH_TEST_FILES)
+test_bash: $(BASH_TEST_FILES)
 
 test_sbt:
 	cd $(PROJECT_NAME) && sbt '+ test'
@@ -81,14 +78,7 @@ nativelink:
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(dir $@) && sbt compile
 
-$(SBT_FILES): .FORCE
-	cd $(dir $@) && sbt test assembly
-	touch --no-create -m $@
-
 # --- }}}
-
-# ???: make the assembly process general.
-assembly: $(FINAL_TARGET)
 
 publishlocal: .FORCE
 	cd ./scala_cli_parser && sbt clean update '+ publishLocal'
@@ -98,10 +88,6 @@ dev:
 	cp -f ./other/git_hooks/git_pre_push.sh ./.git/hooks/pre-push || true
 	chmod a+x ./.git/hooks/pre-commit
 	chmod a+x ./.git/hooks/pre-push
-
-$(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
-	cd ./fmv1992_scala_utilities && sbt '+ assembly'
-	touch --no-create -m $@
 
 test%.sh: .FORCE
 	bash -xv $@
@@ -124,7 +110,7 @@ tmp/test_sum.scala:
 	echo -e '$(SCALA_CLI_ARGUMENTS)' >> $@
 	abspath=$(shell readlink -f $@) && cd ./scala_cli_parser && sbtx -q -script $$abspath
 
-readme.md: $(FINAL_TARGET) ./documentation/readme.md ./tmp/scala_pandoc.jar
+readme.md: ./documentation/readme.md ./tmp/scala_pandoc.jar
 	pandoc2 --from markdown --to json ./documentation/readme.md \
 		| java -jar ./tmp/scala_pandoc.jar \
 				--evaluate \
@@ -167,7 +153,7 @@ docker_test:
 
 # .EXPORT_ALL_VARIABLES:
 
-.PRECIOUS: $(FINAL_TARGET) tmp/scala_pandoc.jar
+.PRECIOUS: tmp/scala_pandoc.jar
 
 .PHONY: all clean test doc test_sbt test_bash
 

@@ -10,21 +10,22 @@ lazy val scala213 = "2.13.3"
 val versionsJVM = Seq(scala211)
 val versionsNative = Seq(scala211)
 
-// inThisBuild(
-//   Seq(
-//   )
-// )
+inThisBuild(
+  Seq(
+    // scalaVersion := scala211
+  )
+)
 
 lazy val commonSettings = Seq(
   organization := "fmv1992",
   // scalaVersion := scala211,
-  // name := "scala_cli_parser",
+  name := "scala_cli_parser",
   //
   // coverageMinimum := 70
   // coverageFailOnMinimum := true
   //
   // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-  resolvers += Resolver.mavenLocal,
+  // resolvers += Resolver.mavenLocal,
   //
   scalacOptions ++= (Seq("-feature", "-deprecation", "-Xfatal-warnings")
     ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq),
@@ -79,7 +80,7 @@ lazy val scala_cli_parserJVM: sbt.Project = scala_cli_parserCrossProject.jvm
 lazy val scala_cli_parserNative: sbt.Project =
   scala_cli_parserCrossProject.native
 
-lazy val scala_cli_parser: sbt.Project = (project in file("."))
+lazy val root: sbt.Project = (project in file("."))
   .aggregate(
     scala_cli_parserJVM,
     scala_cli_parserNative
