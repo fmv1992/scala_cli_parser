@@ -10,18 +10,15 @@ lazy val scala213 = "2.13.3"
 val versionsJVM = Seq(scala211)
 val versionsNative = Seq(scala211)
 
-inThisBuild(
-  Seq(
-    scalaVersion := scala211,
-    crossScalaVersions := versionsJVM
-  )
-)
+// inThisBuild(
+//   Seq(
+//   )
+// )
 
 lazy val commonSettings = Seq(
   organization := "fmv1992",
   // scalaVersion := scala211,
   name := "scala_cli_parser",
-  crossScalaVersions := versionsJVM,
   //
   // coverageMinimum := 70
   // coverageFailOnMinimum := true
@@ -96,7 +93,5 @@ lazy val root: sbt.Project = (project in file("."))
     scala_cli_parserJVM,
     scala_cli_parserNative
   )
-
-// s#import fmv1992.util#import fmv1992.util#g
 
 // See https://www.scala-sbt.org/1.x/docs/Using-Sonatype.html for instructions on how to publish to Sonatype.
