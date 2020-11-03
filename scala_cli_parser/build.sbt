@@ -12,7 +12,8 @@ val versionsNative = Seq(scala211)
 
 inThisBuild(
   Seq(
-    // scalaVersion := scala211
+    scalaVersion := scala211,
+    crossScalaVersions := versionsJVM
   )
 )
 
@@ -20,6 +21,7 @@ lazy val commonSettings = Seq(
   organization := "fmv1992",
   // scalaVersion := scala211,
   name := "scala_cli_parser",
+  crossScalaVersions := versionsJVM,
   //
   // coverageMinimum := 70
   // coverageFailOnMinimum := true
@@ -81,15 +83,18 @@ lazy val scala_cli_parserNative: sbt.Project =
   scala_cli_parserCrossProject.native
 
 lazy val root: sbt.Project = (project in file("."))
-  .aggregate(
-    scala_cli_parserJVM,
-    scala_cli_parserNative
+  .settings(
+    commonSettingsAndDependencies
   )
   .settings(
     publish / skip := true,
     doc / aggregate := false,
     crossScalaVersions := Nil,
     packageDoc / aggregate := false
+  )
+  .aggregate(
+    scala_cli_parserJVM,
+    scala_cli_parserNative
   )
 
 // s#import fmv1992.util#import fmv1992.util#g
