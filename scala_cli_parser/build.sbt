@@ -1,19 +1,37 @@
 // See:
 // `comm8deec70`:
 
-// https://github.com/SemanticSugar/sconfig/blob/9623f8401321fe847a49aecb7cfd92be73872ff6/build.sbt#L52
 lazy val scala211 = "2.11.12"
-lazy val scala212 = "2.12.12"
+lazy val scala212 = "2.12.8"
 lazy val scala213 = "2.13.3"
 
 // val versionsJVM = Seq(scala211, scala212, scala213)
-val versionsJVM = Seq(scala211, scala212)
+val versionsJVM = Seq(scala211, scala212, scala213)
 val versionsNative = Seq(scala211)
 
-// inThisBuild(
-//   Seq(
-//   )
-// )
+ThisBuild / scalaVersion := scala213
+scalaVersion := scala213
+inThisBuild(
+  List(
+    libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
+    semanticdbEnabled := true,
+    semanticdbOptions += "-P:semanticdb:synthetics:on",
+    semanticdbVersion := scalafixSemanticdb.revision,
+    scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
+      scalaVersion.value
+    ),
+    addCompilerPlugin(
+      "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
+    ),
+    addCompilerPlugin(scalafixSemanticdb),
+    //
+    // https://github.com/scala/scala-collection-compat
+    scalafixDependencies in ThisBuild += "org.scala-lang.modules" %% "scala-collection-migrations" % "2.2.0",
+    libraryDependencies += "org.scala-lang.modules" %% "scala-collection-compat" % "2.2.0",
+    addCompilerPlugin(scalafixSemanticdb),
+    scalacOptions ++= List("-Yrangepos", "-P:semanticdb:synthetics:on")
+  )
+)
 
 lazy val commonSettings = Seq(
   organization := "fmv1992",
@@ -25,7 +43,17 @@ lazy val commonSettings = Seq(
   // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
   // resolvers += Resolver.mavenLocal,
   //
-  scalacOptions ++= (Seq("-feature", "-deprecation", "-Xfatal-warnings")
+  scalacOptions ++= (Seq("-feature", "-deprecation")
+    ++
+      Seq(
+        "-P:semanticdb:synthetics:on",
+        "-Yrangepos",
+        "-Ywarn-dead-code",
+        "-deprecation",
+        "-feature"
+        // "-Xfatal-warnings",
+        // "-Ywarn-unuse"
+      )
     ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq),
   licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html"),
   version := IO
@@ -39,14 +67,45 @@ lazy val commonSettings = Seq(
   assemblyMergeStrategy in assembly := {
     case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.rename
     case x                                   => MergeStrategy.first
-  }
+  },
+  //
+  Compile / scalacOptions ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      // ???: -Ywarn-unused-import, -Xlint:unused
+      case Some((2, n)) if n == 11 => Nil
+      case Some((2, n)) if n == 12 => Nil
+      case Some((2, n)) if n == 13 => Nil
+    }
+  },
+  //
+  libraryDependencies ++= {
+    CrossVersion.partialVersion(scalaVersion.value) match {
+      case Some((2, n)) if n == 11 => List()
+      case Some((2, n)) if n == 12 =>
+        List("com.sandinh" %% "scala-rewrites" % "1.0.0")
+      case Some((2, n)) if n == 13 =>
+        List("com.sandinh" %% "scala-rewrites" % "0.1.10-sd")
+      case _ => Nil
+    }
+  },
+  //
+  scalaVersion := "2.13.3",
+  semanticdbEnabled := true, // enable SemanticDB
+  semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
+  addCompilerPlugin(scalafixSemanticdb),
+  addCompilerPlugin(
+    "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
+  ),
+  addCompilerPlugin(scalafixSemanticdb)
+  // scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
 )
 
 lazy val commonDependencies = Seq(
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test,
-  // libraryDependencies += "io.github.fmv1992" %% "fmv1992_scala_utilities" % "1.11.4"
-  libraryDependencies += "io.github.fmv1992" %%% "util" % "1.11.4"
+  libraryDependencies += "io.github.fmv1992" %%% "util" % "1.11.4",
+  libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.2.0",
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
 )
+
 lazy val commonSettingsAndDependencies = commonSettings ++ commonDependencies
 
 lazy val scalaNativeSettings = Seq(

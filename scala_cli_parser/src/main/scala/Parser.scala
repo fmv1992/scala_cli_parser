@@ -149,7 +149,7 @@ object ConfCLIParser {
     parseStringOpt(s).getOrElse(throw new Exception())
 
   def groupContiguousText(s: String): List[List[String]] = {
-    val lines = s.linesIterator.toList
+    val lines = s.lines.toList
     val i = Utilities.getContiguousElementsIndexes(lines.map(_.isEmpty))
     val blocks: List[List[String]] =
       i.flatMap(x => List(lines.slice(x._1, x._2)))
