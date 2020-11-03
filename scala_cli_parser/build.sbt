@@ -7,7 +7,7 @@ lazy val scala212 = "2.12.12"
 lazy val scala213 = "2.13.3"
 
 // val versionsJVM = Seq(scala211, scala212, scala213)
-val versionsJVM = Seq(scala211)
+val versionsJVM = Seq(scala211, scala212)
 val versionsNative = Seq(scala211)
 
 // inThisBuild(
@@ -17,7 +17,6 @@ val versionsNative = Seq(scala211)
 
 lazy val commonSettings = Seq(
   organization := "fmv1992",
-  // scalaVersion := scala211,
   name := "scala_cli_parser",
   //
   // coverageMinimum := 70
