@@ -1,3 +1,6 @@
 **/.bloop
+**/.bsp
+**/*.hnir
 **/.metals
+**/metals.sbt
 **/target
