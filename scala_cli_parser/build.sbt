@@ -9,10 +9,9 @@ lazy val scala213 = "2.13.3"
 val versionsJVM = Seq(scala211, scala212, scala213)
 val versionsNative = Seq(scala211)
 
-ThisBuild / scalaVersion := scala213
-scalaVersion := scala213
 inThisBuild(
   List(
+    scalaVersion := scala213
   )
 )
 
