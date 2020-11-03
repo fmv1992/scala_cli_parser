@@ -41,7 +41,6 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
   * ...
   *
   * ```
-  *
   */
 /** New design of parsers:
   *
@@ -62,7 +61,6 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
   * b. Comment line (starts with a #).
   *
   * c. Sequence of non spaces terminated with ": " followed by a string.
-  *
   */
 object ParserPrimitives {
 

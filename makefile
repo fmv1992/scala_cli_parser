@@ -2,7 +2,7 @@
 SHELL := /bin/bash
 ROOT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
-export PROJECT_NAME := $(notdir $(ROOT_DIR))
+export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 
 # Find all scala files.
 SBT_FILES := $(shell find ./ -iname "build.sbt")
@@ -10,6 +10,7 @@ SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
 export SCALAC_OPTS := -Ywarn-dead-code -Xlint:unused
+export _JAVA_OPTIONS ?= -Xms1024m -Xmx2048m
 
 # Build files.
 FINAL_TARGET := ./scala_cli_parser/target/scala-2.11/scala_cli_parser.jar
@@ -26,10 +27,13 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 all: dev test assembly publishlocal doc coverage
 
 format:
-	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 | xargs --verbose -0 scalafmt --config ./scala_cli_parser/.scalafmt.conf
+	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
+        | xargs --verbose -0 \
+            scalafmt --config ./scala_cli_parser/.scalafmt.conf
+	@# ???: cd $(PROJECT_NAME) && sbt 'scalafix'
 
 doc:
-	cd $(dir $(firstword $(SBT_FILES))) && sbt doc
+	cd $(PROJECT_NAME) && sbt '+ doc'
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
@@ -44,6 +48,7 @@ coverage:
 	echo "Report can be found on '$$(find . -iname "index.html")'."
 
 # Test actions. --- {{{
+
 # Killing a running process with:
 #
 #    SIGKILL                 → 137
@@ -66,7 +71,12 @@ test: test_sbt test_bash
 
 test_bash: $(FINAL_TARGET) $(BASH_TEST_FILES)
 
-test_sbt: $(SBT_FILES)
+test_sbt:
+	cd $(PROJECT_NAME) && sbt '+ test'
+
+# ???: This tasks fails erratically but succeeds after a few retries.
+nativelink:
+	cd $(PROJECT_NAME) && sbt 'nativeLink'
 
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(dir $@) && sbt compile
@@ -81,9 +91,7 @@ $(SBT_FILES): .FORCE
 assembly: $(FINAL_TARGET)
 
 publishlocal: .FORCE
-	# sbt "clean" "set offline := true" "clean" 'publishLocal'
-	# test -e $(HOME)/.ivy2/local/fmv1992.org
-	cd ./scala_cli_parser && sbt clean update publishLocal
+	cd ./scala_cli_parser && sbt clean update '+ publishLocal'
 
 dev:
 	cp -f ./other/git_hooks/git_pre_commit_hook.sh ./.git/hooks/pre-commit || true
@@ -92,8 +100,7 @@ dev:
 	chmod a+x ./.git/hooks/pre-push
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
-	cd ./scala_cli_parser && sbt assembly
-	find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
+	cd ./fmv1992_scala_utilities && sbt '+ assembly'
 	touch --no-create -m $@
 
 test%.sh: .FORCE
@@ -152,6 +159,7 @@ docker_run:
 
 docker_test:
 	DOCKER_CMD='make test' make docker_run
+	DOCKER_CMD='make nativelink' make docker_run
 
 # --- }}}
 
