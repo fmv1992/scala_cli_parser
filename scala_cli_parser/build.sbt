@@ -1,23 +1,21 @@
-// See:
-// `comm8deec70`:
-
 lazy val scala211 = "2.11.12"
 lazy val scala212 = "2.12.8"
 lazy val scala213 = "2.13.3"
 
-// val versionsJVM = Seq(scala211, scala212, scala213)
 val versionsJVM = Seq(scala211, scala212, scala213)
 val versionsNative = Seq(scala211)
 
 inThisBuild(
   List(
-    scalaVersion := scala213
+    scalaVersion := scala213,
+    scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
   )
 )
 
 lazy val commonSettings = Seq(
   organization := "fmv1992",
   name := "scala_cli_parser",
+  scalaVersion := scala213,
   //
   // coverageMinimum := 70
   // coverageFailOnMinimum := true
@@ -54,9 +52,9 @@ lazy val commonSettings = Seq(
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
       // ???: -Ywarn-unused-import, -Xlint:unused
-      case Some((2, n)) if n == 11 => Nil
-      case Some((2, n)) if n == 12 => Nil
-      case Some((2, n)) if n == 13 => Nil
+      case Some((2, n)) if n == 11 => List("-Ywarn-unused-import")
+      case Some((2, n)) if n == 12 => List("-Ywarn-unused")
+      case Some((2, n)) if n == 13 => List("-Ywarn-unused")
     }
   },
   //
@@ -71,6 +69,7 @@ lazy val commonSettings = Seq(
     }
   },
   //
+  //
   libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
   semanticdbEnabled := true,
   semanticdbOptions += "-P:semanticdb:synthetics:on",
@@ -82,7 +81,6 @@ lazy val commonSettings = Seq(
     "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
   ),
   addCompilerPlugin(scalafixSemanticdb)
-  // scalacOptions += "-Ywarn-unused-import" // required by `RemoveUnused` rule
 )
 
 lazy val commonDependencies = Seq(

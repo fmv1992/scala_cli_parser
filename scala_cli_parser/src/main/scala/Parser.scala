@@ -2,8 +2,6 @@ package fmv1992.scala_cli_parser
 
 import fmv1992.fmv1992_scala_utilities.util.Utilities
 
-import scala.collection.compat._
-
 /** Parse a CLI config file. This file consists of:
   *
   * 1.  Empty lines.
