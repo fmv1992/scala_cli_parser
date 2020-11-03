@@ -30,7 +30,7 @@ format:
 	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
         | xargs --verbose -0 \
             scalafmt --config ./scala_cli_parser/.scalafmt.conf
-	cd $(PROJECT_NAME) && sbt ';project scala_cli_parserCrossProjectJVM;++ 2.13.3;scalafix;'
+	cd $(PROJECT_NAME) && sbt 'scalafixAll'
 
 doc:
 	cd $(PROJECT_NAME) && sbt '+ doc'
