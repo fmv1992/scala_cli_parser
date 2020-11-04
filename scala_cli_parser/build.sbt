@@ -1,3 +1,5 @@
+import xerial.sbt.Sonatype._
+
 lazy val scala211 = "2.11.12"
 lazy val scala212 = "2.12.8"
 lazy val scala213 = "2.13.3"
@@ -13,7 +15,8 @@ inThisBuild(
 )
 
 lazy val commonSettings = Seq(
-  organization := "fmv1992",
+  homepage := Some(url("https://github.com/fmv1992/fmv1992_scala_utilities")),
+  organization := "io.github.fmv1992",
   name := "scala_cli_parser",
   scalaVersion := scala213,
   //
@@ -48,6 +51,44 @@ lazy val commonSettings = Seq(
     case PathList("META-INF", "MANIFEST.MF") => MergeStrategy.rename
     case x                                   => MergeStrategy.first
   },
+  //
+  sonatypeProfileName := "io.github.fmv1992",
+  publishMavenStyle := true,
+  sonatypeProjectHosting := Some(
+    GitHubHosting("fmv1992", "scala_cli_parser", "fmv1992@gmail.com")
+  ),
+  // or if you want to set these fields manually.
+  scmInfo := Some(
+    ScmInfo(
+      url("https://github.com/fmv1992/scala_cli_parser"),
+      "scm:git@github.com:fmv1992/scala_cli_parser.git"
+    )
+  ),
+  developers := List(
+    Developer(
+      id = "fmv1992",
+      name = "Felipe Martins Vieira",
+      email = "fmv1992@gmail.com",
+      url = url("https://github.com/fmv1992/")
+    )
+  ),
+  publishConfiguration := publishConfiguration.value.withOverwrite(true),
+  publishLocalConfiguration := publishLocalConfiguration.value.withOverwrite(
+    true
+  ),
+  publishTo in ThisBuild := sonatypePublishTo.value,
+  credentials += Credentials(
+    file(
+      sys.env
+        .get("SBT_CREDENTIALS_PATH")
+        .getOrElse("")
+    )
+  ),
+  usePgpKeyHex(
+    sys.env
+      .get("SBT_PGP_KEY")
+      .getOrElse("B145230D09E5330C9A0ED5BC1FEB8CD8FBFDC1CB")
+  ),
   //
   Compile / scalacOptions ++= {
     CrossVersion.partialVersion(scalaVersion.value) match {
