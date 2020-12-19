@@ -10,6 +10,7 @@ scala:
 before_install:
     - cd $(mktemp -d) && curl -fLo ./coursier https://git.io/coursier-cli-linux && chmod +x ./coursier && sudo mv ./coursier /usr/local/bin/coursier && cd -
     - sudo coursier install scalafmt
+    - command -V scalafmt
     - cd $(mktemp -d) && wget --quiet https://git.io/sbt && sudo mv ./sbt /usr/local/bin/sbtx && cd -
     - sudo chmod 0755 /usr/local/bin/sbtx
     - make publishlocal
