@@ -1,0 +1,32 @@
+#! /bin/bash
+
+# Take from `scala_pandoc:1e6df68:other/bin/scala_script:1`.
+
+# Halt on error.
+set -euo pipefail
+
+# From:
+# https://stackoverflow.com/questions/185451/quick-and-dirty-way-to-ensure-only-one-instance-of-a-shell-script-is-running-at
+scala_tmp_script="$(mktemp "/tmp/scala_script_$(date '+%s').XXXXX.scala")"
+scala_captured_stdout_stderr="$(mktemp "/tmp/scala_captured_stdout_stderr_$(date '+%s').XXXXX.scala")"
+
+# make sure the lockfile is removed when we exit and then claim it
+trap "rm -f ${scala_tmp_script} "${scala_captured_stdout_stderr}"; exit" INT TERM EXIT
+
+contents="$(cat)"
+env CONTENTS="${contents}" envsubst < ./other/redirect_stdout_stderr.scala > "${scala_tmp_script}"
+
+###############################################################################
+############################## Put your code here #############################
+###############################################################################
+eval cd ./scala_cli_parser && cat "${scala_tmp_script}" \
+    | env SCALA_CONSOLE_TMP_FILE="${scala_captured_stdout_stderr}" sbt console > /dev/null 2>&1
+###############################################################################
+
+rm -f "${scala_tmp_script}"
+
+cat "${scala_captured_stdout_stderr}"
+
+rm -f "${scala_captured_stdout_stderr}"
+
+# vim: set filetype=sh fileformat=unix wrap spell spelllang=en:
