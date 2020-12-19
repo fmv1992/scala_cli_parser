@@ -37,10 +37,8 @@ cp -rf "$1" "$(basename $1)_temp"
 
 cd "$(basename $1)_temp"
 
-
 set +e
-for i in $(seq 0 "$2")
-do
+for i in $(seq 0 "$2"); do
     make clean | tee /dev/stderr
     # echo "Loop: $i"
     latest_commit=$(git rev-parse --verify "HEAD~$i")
@@ -49,11 +47,10 @@ do
     # ???: How to introduce a timeout?
     make test | tee /dev/stderr
     pipestatus="${PIPESTATUS[0]}"
-    if test "${pipestatus}" -eq 0
-    then
+    if test "${pipestatus}" -eq 0; then
         :
     else
-        echo "$(git rev-parse --verify "HEAD~$((i-1))")" | tee /dev/stderr
+        echo "$(git rev-parse --verify "HEAD~$((i - 1))")" | tee /dev/stderr
         exit "${pipestatus}"
     fi
 done

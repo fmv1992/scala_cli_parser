@@ -16,7 +16,7 @@ git diff --name-only --cached --diff-filter=ACMRTUXB \
     | parallel \
         -I % \
         --verbose \
-        --jobs $((2*$(nproc))) \
+        --jobs $((2 * $(nproc))) \
         "vim -i NONE -n -c 'VimScalafmt' -c 'noautocmd x!' %"
 git diff --name-only --cached --diff-filter=ACMRTUXB \
     | xargs --verbose git add --force
@@ -38,8 +38,7 @@ fileversion=$(find $versionfile -name 'version' -type f)
 # ???: Do not bump if version file is already added:
 # git diff --name-only --cached --diff-filter=AM
 tmpversion=$(mktemp)
-if verify_is_backwards_compatible.sh "$PWD" 0
-then
+if verify_is_backwards_compatible.sh "$PWD" 0; then
     # Bump patch version.
     cat "${fileversion}" | python3 -c "import sys ; i = sys.stdin.read(); j = i.split('.') ; j[2] = str(int(j[2]) + 1) ; print('.'.join(j), end='')" > "$tmpversion"
 else

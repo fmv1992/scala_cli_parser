@@ -43,9 +43,9 @@ And its usages are as follows:
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1.  ~~~~ {#mycode .default .numberLines startFrom="1"}
-    TestSum --sum 1 10
+    TestSum --sum 1992 1
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     ~~~~ {#mycode .default .numberLines pipe="bash" startFrom="1"}
-    make --quiet -B SCALA_CLI_ARGUMENTS='TestSum.main(Array("--sum", "1", "10"))' tmp/test_sum.scala
+    make --quiet -B SCALA_CLI_ARGUMENTS='TestSum.main(Array("--sum", "1992", "1"))' tmp/test_sum.scala
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

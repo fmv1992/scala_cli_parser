@@ -87,9 +87,9 @@ And its usages are as follows:
     ```
 
 3.  ``` default numberLines
-    TestSum --sum 1 10
+    TestSum --sum 1992 1
     ```
     
     ``` default numberLines
-    11
+    1993
     ```

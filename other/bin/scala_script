@@ -3,7 +3,7 @@
 # Take from `scala_pandoc:1e6df68:other/bin/scala_script:1`.
 
 # Halt on error.
-set -euo pipefail
+set -euxo pipefail
 
 # From:
 # https://stackoverflow.com/questions/185451/quick-and-dirty-way-to-ensure-only-one-instance-of-a-shell-script-is-running-at
@@ -11,10 +11,38 @@ scala_tmp_script="$(mktemp "/tmp/scala_script_$(date '+%s').XXXXX.scala")"
 scala_captured_stdout_stderr="$(mktemp "/tmp/scala_captured_stdout_stderr_$(date '+%s').XXXXX.scala")"
 
 # make sure the lockfile is removed when we exit and then claim it
-trap "rm -f ${scala_tmp_script} "${scala_captured_stdout_stderr}"; exit" INT TERM EXIT
+# trap "rm -f ${scala_tmp_script} "${scala_captured_stdout_stderr}"; exit" INT TERM EXIT
 
 contents="$(cat)"
-env CONTENTS="${contents}" envsubst < ./other/redirect_stdout_stderr.scala > "${scala_tmp_script}"
+HEREDOC_SCALA="$(
+    cat << 'EOF'
+object Main {
+  def main(): Unit = {
+
+    import java.io.ByteArrayOutputStream
+    import java.nio.file.Files
+    import java.nio.file.Paths
+
+    require(Files.exists(Paths.get(System.getenv("SCALA_CONSOLE_TMP_FILE"))))
+
+    val outCapture = new ByteArrayOutputStream
+
+    Console.withOut(outCapture) {
+      Console.withErr(outCapture) {
+${CONTENTS}
+      }
+    }
+
+    Files.write(Paths.get(System.getenv("SCALA_CONSOLE_TMP_FILE")), outCapture.toByteArray)
+  }
+}
+
+Main.main()
+EOF
+)"
+
+echo "${HEREDOC_SCALA}" \
+    | env CONTENTS="${contents}" envsubst > "${scala_tmp_script}"
 
 ###############################################################################
 ############################## Put your code here #############################
