@@ -6,15 +6,13 @@
 
     *   [![codecov](https://codecov.io/gh/fmv1992/scala_cli_parser/branch/dev/graph/badge.svg)](https://codecov.io/gh/fmv1992/scala_cli_parser)
 
-*   `dev_0.x_scala_native`:
-
-    *   ![Build status](https://travis-ci.org/fmv1992/scala_cli_parser.svg?branch=dev_0.x_scala_native)
+*   Available for Scala `2.11` (both JVM and [Scala Native](http://www.scala-native.org/en/latest/user/sbt.html)), `2.12` and `2.13`.
 
 * * *
 
 A library for parsing command line arguments.
 
-It's main feature is that it is based on a config file. For example consider a very simple sum program:
+It's main feature is that CLI parsing is defined on a config file. For example consider a very simple sum program:
 
 ~~~~ {#mycode .scala .numberLines pipe="bash" startFrom="1"}
 tail -n +3 scala_cli_parser/src/test/scala/TestSum.scala

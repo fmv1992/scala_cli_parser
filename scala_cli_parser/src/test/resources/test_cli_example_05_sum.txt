@@ -4,7 +4,7 @@ name: version
     help: Help text.
 
 name: help
-    n: 2
+    n: 0
     type: int
     help: Help text.
 

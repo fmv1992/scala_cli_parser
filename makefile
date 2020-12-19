@@ -114,15 +114,18 @@ tmp/scala_pandoc.jar:
 	touch -m $@ ; \
 	}
 
-tmp/test_sum.scala:
-	echo -e '/*** scalaVersion := "2.11.12"\n     libraryDependencies += "fmv1992" %% "scala_cli_parser" % "0.+"\n*/' > $@
+tmp/test_sum.scala: .FORCE
+	@# echo -e '/*** scalaVersion := "2.11.12"\n     libraryDependencies += "io.github.fmv1992" %% "scala_cli_parser" % "[0.0,9.0]"\n*/' > $@
+	@# echo -e '/*** scalaVersion := "2.13.3"\n     libraryDependencies += "io.github.fmv1992" %% "scala_cli_parser" % "0.+"\n*/' > $@
 	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
-	tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
-	tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
+	@# tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
+	@# tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
 	echo -e '$(SCALA_CLI_ARGUMENTS)' >> $@
-	abspath=$(shell readlink -f $@) && cd ./scala_cli_parser && sbtx -q -script $$abspath
+	@# cd ./scala_cli_parser && echo ":silent :load $(shell readlink -f $@)" | sbt --error 'console' 2>/dev/null
+	@# abspath=$(shell readlink -f $@) && cd ./scala_cli_parser && sbtx -q -script $$abspath
+	cd ./scala_cli_parser && sbtx -batch -q -script $(shell readlink -f $@)
 
-readme.md: $(FINAL_TARGET) ./documentation/readme.md ./tmp/scala_pandoc.jar
+readme.md: tmp/test_sum.scala ./documentation/readme.md ./tmp/scala_pandoc.jar
 	pandoc2 --from markdown --to json ./documentation/readme.md \
 		| java -jar ./tmp/scala_pandoc.jar \
 				--evaluate \
@@ -165,7 +168,7 @@ docker_test:
 
 # .EXPORT_ALL_VARIABLES:
 
-.PRECIOUS: $(FINAL_TARGET) tmp/scala_pandoc.jar
+.PRECIOUS: $(FINAL_TARGET) tmp/scala_pandoc.jar tmp/test_sum.scala
 
 .PHONY: all clean test doc test_sbt test_bash
 
