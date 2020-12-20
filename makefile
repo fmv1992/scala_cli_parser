@@ -6,8 +6,8 @@ export PATH := $(PATH):./other/bin
 export PROJECT_NAME ?= $(notdir $(ROOT_DIR))
 
 # Find all scala files.
-SBT_FILES := $(shell find ./ -iname "build.sbt")
-SCALA_FILES := $(shell find $(dir $@) -iname '*.scala')
+SBT_FILES := $(shell find $(PROJECT_NAME) -iname "build.sbt")
+SCALA_FILES := $(shell find $(PROJECT_NAME) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
 export SCALAC_OPTS := -Ywarn-dead-code
@@ -29,9 +29,7 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 all: dev test assembly publishlocal doc coverage
 
 format:
-	find . \( -iname '*.scala' -o -iname '*.sbt' \) -print0 \
-        | xargs --verbose -0 \
-            scalafmt --config ./scala_cli_parser/.scalafmt.conf
+	scalafmt --config ./scala_cli_parser/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
 	cd $(PROJECT_NAME) && sbt 'scalafixAll'
 
 doc:
@@ -109,11 +107,14 @@ test%.sh: .FORCE
 tmp/scala_pandoc.jar:
 	{ \
     export abspathtaget=$(shell readlink -f $@) ; \
-    cd $$(mktemp -d) && \
+    export tempd=$$(mktemp -d) ; \
+    cd "$${tempd}" && \
         git clone --depth 1 --branch dev https://github.com/fmv1992/scala_pandoc && \
         cd scala_pandoc && \
         make && find . -iname "*.jar" -print0 | head -n 1 | xargs -0 mv -t $$(dirname $$abspathtaget) ; \
     touch -m $@ ; \
+    cd $(ROOT_DIR) ; \
+    rm -rf "$${tempd}" ; \
     }
 
 tmp/test_sum.scala:

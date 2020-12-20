@@ -1,6 +1,7 @@
 package fmv1992.scala_cli_parser
 
 import java.io.File
+import java.nio.file.Path
 
 import fmv1992.fmv1992_scala_utilities.util.Reader
 
@@ -94,12 +95,15 @@ class StandardParser(val format: Map[String, Map[String, String]])
 object StandardParser {
 
   def apply(f: File): StandardParser = {
-    val parsed = ConfCLIParser.parseConf(Reader.readLines(f).mkString("\n"))
-    new StandardParser(parsed)
+    apply(Reader.readLines(f).mkString("\n"))
   }
 
-  def apply(s: String): StandardParser = {
-    apply(new File(s))
+  def apply(p: Path): StandardParser = {
+    apply(p.toFile)
+  }
+
+  def apply(contents: String): StandardParser = {
+    new StandardParser(ConfCLIParser.parseConf(contents))
   }
 
 }
@@ -133,8 +137,12 @@ object GNUParser {
     GNUParser(StandardParser(f).format)
   }
 
-  def apply(s: String): GNUParser = {
-    apply(new File(s))
+  def apply(s: Path): GNUParser = {
+    apply(s.toFile)
+  }
+
+  def apply(contents: String): GNUParser = {
+    apply(ConfCLIParser.parseConf(contents))
   }
 
 }

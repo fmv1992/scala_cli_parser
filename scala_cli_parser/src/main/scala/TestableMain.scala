@@ -10,7 +10,7 @@ import fmv1992.fmv1992_scala_utilities.util.Reader
   */
 trait CLIConfigTestableMain extends TestableMain {
 
-  val CLIConfigPath: String
+  val CLIConfigContents: String
 
   val version: String
 
@@ -43,7 +43,7 @@ trait CLIConfigTestableMain extends TestableMain {
     * @see https://en.wikipedia.org/wiki/Standard_streams
     */
   def main(args: Array[String]): Unit = {
-    val parser = GNUParser(CLIConfigPath)
+    val parser = GNUParser(CLIConfigContents)
     val parsed = parser.parse(args.toList)
     // Check if either version of help are given.
     val res = if (parsed.exists(_.longName == "help")) {

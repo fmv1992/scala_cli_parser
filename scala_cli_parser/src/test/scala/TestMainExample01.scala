@@ -1,12 +1,15 @@
 package fmv1992.scala_cli_parser
 
+import fmv1992.fmv1992_scala_utilities.util.S
+
 object TestMainExample01 extends CLIConfigTestableMain {
 
   val version = "0.0.0"
 
   val programName = "TestMainExample01"
 
-  val CLIConfigPath = Example.cli01Path
+  val CLIConfigContents =
+    S.putfile("./src/test/resources/test_cli_example_01.txt")
 
   /** Testable interface for main program. */
   def testableMain(args: Seq[Argument]): List[String] = {
