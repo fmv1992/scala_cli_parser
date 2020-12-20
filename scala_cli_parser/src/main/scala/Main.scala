@@ -1,7 +1,6 @@
 package fmv1992.scala_cli_parser
 
 import fmv1992.fmv1992_scala_utilities.util.Reader
-import scala.util.Try
 
 object Main extends CLIConfigTestableMain {
 
@@ -12,8 +11,8 @@ object Main extends CLIConfigTestableMain {
   lazy val version: String =
     Reader.readLines("./src/main/resources/version").mkString("")
 
-  def testableMain(args: Seq[Argument]) = {
-    Try(Seq())
+  def testableMain(args: Seq[Argument]): Seq[String] = {
+    Seq()
   }
 
 }

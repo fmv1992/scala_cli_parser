@@ -1,7 +1,6 @@
 package fmv1992.scala_cli_parser
 
 import fmv1992.fmv1992_scala_utilities.util.S
-import scala.util.Success
 
 object TestSum extends CLIConfigTestableMain {
 
@@ -12,7 +11,7 @@ object TestSum extends CLIConfigTestableMain {
   val CLIConfigContents =
     S.putfile("./src/test/resources/test_cli_example_02_gnu.txt")
 
-  def testableMain(args: Seq[Argument]) = {
+  def testableMain(args: Seq[Argument]): List[String] = {
 
     val res = args.foldLeft(0)((l, x) => {
       x match {
@@ -21,6 +20,6 @@ object TestSum extends CLIConfigTestableMain {
       }
     })
 
-    Success(List(res.toString))
+    List(res.toString)
   }
 }
