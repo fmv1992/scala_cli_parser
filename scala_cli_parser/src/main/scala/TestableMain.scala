@@ -1,8 +1,11 @@
 package fmv1992.scala_cli_parser
 
 import scala.Iterable
+import scala.util.Try
 
 import fmv1992.fmv1992_scala_utilities.util.Reader
+import scala.util.Failure
+import scala.util.Success
 
 /** Testable main trait with a configurable file CLI implementation.
   *
@@ -46,14 +49,20 @@ trait CLIConfigTestableMain extends TestableMain {
     val parser = GNUParser(CLIConfigContents)
     val parsed = parser.parse(args.toList)
     // Check if either version of help are given.
-    val res = if (parsed.exists(_.longName == "help")) {
-      printHelp(parser.format)
-    } else if (parsed.exists(_.longName == "version")) {
-      printVersion
-    } else {
-      testableMain(parsed)
+    val res: Try[Iterable[String]] = {
+      if (parsed.exists(_.longName == "help")) {
+        Try(printHelp(parser.format))
+      } else if (parsed.exists(_.longName == "version")) {
+        Try(printVersion)
+      } else {
+        testableMain(parsed)
+      }
     }
-    res.foreach(println)
+    res match {
+      case Success(x) => x.foreach(println)
+      case Failure(x) => throw x
+    }
+
   }
 
 }
@@ -74,7 +83,10 @@ trait TestableMain {
   // Does not need to specify the input stream (i.e. file or stdin). These
   // should be encoded by the parsed arguments.
   /** Testable interface for main program. */
-  def testableMain(args: Seq[Argument]): Iterable[String]
+  def testableMain(
+      args: Seq[Argument]
+      // lines: Iterable[String]
+  ): Try[Iterable[String]]
 
   /** Split input [[Argument Arguments]] from other arguments. */
   def splitInputArgumentFromOthers(

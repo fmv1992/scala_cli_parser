@@ -1,6 +1,7 @@
 package fmv1992.scala_cli_parser
 
 import java.io.File
+import java.nio.file.Path
 
 object Example {
 
