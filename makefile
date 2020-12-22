@@ -11,7 +11,7 @@ SCALA_FILES := $(shell find $(PROJECT_NAME) -iname '*.scala')
 SBT_FOLDERS := $(dir $(SBT_FILES))
 
 export SCALAC_OPTS := -Ywarn-dead-code
-export _JAVA_OPTIONS ?= -Xms1024m -Xmx2048m
+export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
 export SCALA_CLI_ARGUMENTS
 
 # Build files.
@@ -70,14 +70,16 @@ coverage:
 #
 # The logic above does not work because `scala` inside a shell script does not
 # terminate with timeout (meaning it always timeouts).
-test: test_sbt test_bash
+test: docker_test test_host
 
-test_bash: $(FINAL_TARGET) $(BASH_TEST_FILES)
+test_host: test_sbt test_bash
+
+test_bash: $(FINAL_TARGET)
+	find ./test/bash/ -iname '*.sh' -print0 | xargs -0 -I % -n 1 -- bash -xv %
 
 test_sbt:
 	cd $(PROJECT_NAME) && sbt '+ test'
 
-# ???: This tasks fails erratically but succeeds after a few retries.
 nativelink:
 	cd $(PROJECT_NAME) && sbt 'nativeLink'
 
@@ -103,9 +105,6 @@ $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
 	cd ./scala_cli_parser && sbt '+ assembly'
 	@# find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
 	@# touch --no-create -m $@
-
-test%.sh: .FORCE
-	bash -xv $@
 
 tmp/scala_pandoc.jar:
 	{ \
@@ -166,7 +165,7 @@ docker_run:
         $(if $(DOCKER_CMD),$(DOCKER_CMD),bash)
 
 docker_test:
-	DOCKER_CMD='make test' make docker_run
+	DOCKER_CMD='make test_host' make docker_run
 	DOCKER_CMD='make nativelink' make docker_run
 
 # --- }}}
