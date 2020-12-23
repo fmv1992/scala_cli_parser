@@ -9,16 +9,16 @@ object Example {
   val cli01Path: String = "./src/test/resources/test_cli_example_01.txt"
   val cli01File: File = new File(cli01Path)
   require(cli01File.exists, cli01File.getCanonicalPath)
-  val cli01Parser: StandardParser = StandardParser(cli01File)
+  val cli01Parser: StandardConfigParser = StandardConfigParser(cli01File)
 
   // --- }
 
-  // Provide examples for StandardParser. --- {
+  // Provide examples for StandardConfigParser. --- {
 
   val cli02Path: String = "./src/test/resources/test_cli_example_02_gnu.txt"
   val cli02File: File = new File(cli02Path)
   require(cli02File.exists, cli02File.getCanonicalPath)
-  val cli02Parser: StandardParser = StandardParser(cli02File)
+  val cli02Parser: StandardConfigParser = StandardConfigParser(cli02File)
 
   // Invalid files.
   val cli03Path: String =
@@ -45,7 +45,10 @@ object Example {
     "./src/test/resources/test_cli_example_05_sum.txt"
   val cli05TestSumFile: File = new File(cli05TestSumPath)
   require(cli05TestSumFile.exists, cli05TestSumFile.getCanonicalPath)
-  val cli05TestSumParser: StandardParser = StandardParser(cli05TestSumFile)
+
+  val cli05TestSumParser: StandardConfigParser = StandardConfigParser(
+    cli05TestSumFile
+  )
 
   // --- }
 

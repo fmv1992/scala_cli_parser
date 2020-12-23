@@ -26,6 +26,8 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 # ???: Google drive link to download ~/.sbt needed to compile this project.
 # https://drive.google.com/open?id=1FoY3kQi52PWllwc3ytYU9452qJ4ack1u
 
+# High level actions. --- {{{
+
 all: dev test assembly publishlocal doc coverage
 
 format:
@@ -49,6 +51,21 @@ coverage:
 	# ???: hack to build the report.
 	cd ./scala_cli_parser && sbt clean coverage test && (sbt coverageReport || sbt coverageAggregate || true)
 	echo "Report can be found on '$$(find . -iname "index.html")'."
+
+# ???: make the assembly process general.
+assembly: $(FINAL_TARGET)
+
+publishlocal: .FORCE
+	cd ./scala_cli_parser && sbt clean update '+ publishLocal'
+
+dev:
+	cp -f ./other/git_hooks/git_pre_commit_hook.sh ./.git/hooks/pre-commit || true
+	cp -f ./other/git_hooks/git_pre_push.sh ./.git/hooks/pre-push || true
+	chmod a+x ./.git/hooks/pre-commit
+	chmod a+x ./.git/hooks/pre-push
+
+sbt:
+	cd $(PROJECT_NAME) && sbt
 
 # Test actions. --- {{{
 
@@ -89,17 +106,9 @@ compile: $(SBT_FILES) $(SCALA_FILES)
 
 # --- }}}
 
-# ???: make the assembly process general.
-assembly: $(FINAL_TARGET)
+# --- }}}
 
-publishlocal: .FORCE
-	cd ./scala_cli_parser && sbt clean update '+ publishLocal'
-
-dev:
-	cp -f ./other/git_hooks/git_pre_commit_hook.sh ./.git/hooks/pre-commit || true
-	cp -f ./other/git_hooks/git_pre_push.sh ./.git/hooks/pre-push || true
-	chmod a+x ./.git/hooks/pre-commit
-	chmod a+x ./.git/hooks/pre-push
+# Specific targets. --- {{{
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
 	cd ./scala_cli_parser && sbt '+ assembly'
@@ -146,6 +155,8 @@ readme.md: tmp/test_sum.scala ./documentation/readme.md ./tmp/scala_pandoc.jar
         /tmp/$(notdir $@) > $@
 	rm /tmp/$(notdir $@)
 
+# --- }}}
+
 # Docker actions. --- {{{
 
 docker_build:
@@ -159,6 +170,7 @@ docker_build:
 docker_run:
 	docker run \
         --interactive \
+        --rm \
         --tty \
         --entrypoint '' \
         $(PROJECT_NAME) \

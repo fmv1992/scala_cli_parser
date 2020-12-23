@@ -1,7 +1,9 @@
 package fmv1992.scala_cli_parser
 
+import java.nio.file.Path
+
 /** Configuration file based CLI parser. */
-trait ConfigFileParser extends CLIParser {
+trait ConfigFileParser extends Parser[Path, ParsedConfigStructure] {
 
   /** Map of parsed options.
     *
@@ -19,6 +21,6 @@ trait ConfigFileParser extends CLIParser {
     * Map(debug -> Map(n -> 0, type -> int, help -> Help text.),
     * verbose -> Map(n -> 0, type -> int, help -> Help text.))
     */
-  val format: Map[String, Map[String, String]]
+  val format: ParsedConfigStructure
 
 }

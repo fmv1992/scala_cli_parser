@@ -5,7 +5,7 @@ package fmv1992.scala_cli_parser
   * @define parseDoc Parse a sequence of strings into a sequence of
   * [[Argument Arguments]].
   */
-trait CLIParser {
+trait CLIParser extends Parser[Seq[String], Seq[Argument]] {
 
   /** $parseDoc */
   def parse(args: Seq[String]): Seq[Argument]

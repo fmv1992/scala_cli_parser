@@ -1,6 +1,17 @@
 package fmv1992.scala_cli_parser
 
+import java.nio.file.Path
+
 import fmv1992.fmv1992_scala_utilities.util.Utilities
+
+case class StandardConfParser(p: Path)
+    extends Parser[Path, ParsedConfigStructure] {
+
+  def parse(input: Path): ParsedConfigStructure = {
+    ???
+  }
+
+}
 
 object ConfCLIParser {
 
@@ -53,7 +64,7 @@ object ConfCLIParser {
     Map((key -> others))
   }
 
-  def parseConf(s: String): Map[String, Map[String, String]] = {
+  def parseConf(s: String): ParsedConfigStructure = {
     val blocks: List[List[String]] = groupContiguousText(s)
     val mapsFromBlocks: List[List[Map[String, String]]] =
       blocks.map(x => x.map(parseString))

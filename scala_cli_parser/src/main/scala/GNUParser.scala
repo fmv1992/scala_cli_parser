@@ -8,7 +8,7 @@ import java.nio.file.Path
   * @see [[https://www.gnu.org/prep/standards/html_node/Command_002dLine-Interfaces.html]]
   */
 case class GNUParser(override val format: Map[String, Map[String, String]])
-    extends StandardParser(format) {
+    extends StandardConfigParser(format) {
 
   require(
     format.contains("help"),
@@ -29,7 +29,7 @@ case class GNUParser(override val format: Map[String, Map[String, String]])
 object GNUParser {
 
   def apply(f: File): GNUParser = {
-    GNUParser(StandardParser(f).format)
+    GNUParser(StandardConfigParser(f).format)
   }
 
   def apply(s: Path): GNUParser = {

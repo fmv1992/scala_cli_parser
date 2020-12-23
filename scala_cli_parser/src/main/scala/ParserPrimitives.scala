@@ -21,8 +21,8 @@ package fmv1992.scala_cli_parser
   * Abstraction:
   *
   * ```
-  * trait Parsers[Parser[+_]] { self => * // so inner classes may call methods of trait
-  * def run[A](p: Parser[A])(input: String): Either[ParseError,A]
+  * trait Parsers[OldParserType[+_]] { self => * // so inner classes may call methods of trait
+  * def run[A](p: OldParserType[A])(input: String): Either[ParseError,A]
   *
   * ...
   *
@@ -34,7 +34,7 @@ package fmv1992.scala_cli_parser
   * object ReferenceTypes {
   *
   * \/\*\* A parser is a kind of state action that can fail. \*\/
-  * type Parser[+A] = ParseState => Result[A]
+  * type OldParserType[+A] = ParseState => Result[A]
   *
   * ...
   *
@@ -63,17 +63,17 @@ package fmv1992.scala_cli_parser
 object ParserPrimitives {
 
   // This doesn't take type checking into account.
-  def emptyLine: Parser = {
+  def emptyLine: OldParserType = {
     x =>
       if (x == "\n" || x.isEmpty) Some(Map.empty) else None
   }
 
-  def commentLine: Parser = {
+  def commentLine: OldParserType = {
     x =>
       if (x.startsWith("#")) Some(Map.empty) else None
   }
 
-  def nameContentLine: Parser = {
+  def nameContentLine: OldParserType = {
     x =>
       {
         val colonPos: Int = x.indexOf(':')
@@ -86,7 +86,7 @@ object ParserPrimitives {
       }
   }
 
-  def generalContentLine: Parser = {
+  def generalContentLine: OldParserType = {
     x =>
       nameContentLine(x.dropWhile(_.isSpaceChar))
   }

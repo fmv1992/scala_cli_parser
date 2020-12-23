@@ -6,10 +6,9 @@ import java.nio.file.Path
 import fmv1992.fmv1992_scala_utilities.util.Reader
 
 /** Standard parser. */
-class StandardParser(val format: Map[String, Map[String, String]])
-    extends ConfigFileParser {
+class StandardConfigParser(val format: ParsedConfigStructure)
+    extends CLIParser {
 
-  /** $parseDoc */
   def parse(args: Seq[String]): Seq[Argument] = {
 
     /** Recursive parse. */
@@ -42,7 +41,8 @@ class StandardParser(val format: Map[String, Map[String, String]])
     // Add default arguments if there is any.
     val defaultKeys: Seq[String] =
       format.filter(x => x._2.contains("default")).keys.toSeq
-    val notIncludedDefaultKeys: Seq[String] = (defaultKeys diff argsLongNames)
+    val notIncludedDefaultKeys: Seq[String] =
+      (defaultKeys diff argsLongNames)
     require(
       argsLongNames.intersect(notIncludedDefaultKeys).isEmpty,
       String.valueOf(argsLongNames) + "|" + notIncludedDefaultKeys
@@ -56,19 +56,19 @@ class StandardParser(val format: Map[String, Map[String, String]])
 
 }
 
-/** Companion object for StandardParser. */
-object StandardParser {
+/** Companion object for StandardConfigParser. */
+object StandardConfigParser {
 
-  def apply(f: File): StandardParser = {
+  def apply(f: File): StandardConfigParser = {
     apply(Reader.readLines(f).mkString("\n"))
   }
 
-  def apply(p: Path): StandardParser = {
+  def apply(p: Path): StandardConfigParser = {
     apply(p.toFile)
   }
 
-  def apply(contents: String): StandardParser = {
-    new StandardParser(ConfCLIParser.parseConf(contents))
+  def apply(contents: String): StandardConfigParser = {
+    new StandardConfigParser(ConfCLIParser.parseConf(contents))
   }
 
 }
