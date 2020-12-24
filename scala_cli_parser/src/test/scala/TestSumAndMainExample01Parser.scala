@@ -5,6 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class TestSumAndMainExample01Parser extends AnyFunSuite {
 
   val defaultArgs: List[String] = "--debug --verbose".split(" ").toList
+  val helpArgs: List[String] = "--help".split(" ").toList
 
   test("Most basic test: test the idea.") {
     val parsed = Example.cli01Parser.parse(defaultArgs)
@@ -29,5 +30,16 @@ class TestSumAndMainExample01Parser extends AnyFunSuite {
     )
 
   }
+
+  // test("Test '--help' with TestMainExample01.") {
+
+  //   assert(
+  //     TestMainExample01.testableMain(
+  //       Example.cli01Parser.parse(defaultArgs.toList)
+  //     ) ==
+  //       """""".stripMargin.trim.split("\n").toList
+  //   )
+
+  // }
 
 }

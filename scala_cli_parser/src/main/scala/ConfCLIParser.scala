@@ -1,32 +1,17 @@
 package fmv1992.scala_cli_parser
 
-import java.nio.file.Path
-
 import fmv1992.fmv1992_scala_utilities.util.Utilities
-
-case class StandardConfParser(p: Path)
-    extends Parser[Path, ParsedConfigStructure] {
-
-  def parse(input: Path): ParsedConfigStructure = {
-    ???
-  }
-
-}
 
 object ConfCLIParser {
 
   def parseStringOpt(s: String): Option[Map[String, String]] = {
     val mEmpty = Map.empty: Map[String, String]
-    val definedLineParser = ParserCombinator.requireSucessful(
-      ParserCombinator.or(
-        ParserCombinator.or(
-          ParserCombinator
-            .or(ParserPrimitives.emptyLine, ParserPrimitives.commentLine),
-          ParserPrimitives.nameContentLine
-        ),
-        ParserPrimitives.generalContentLine
-      )
-    )
+    val definedLineParser = List(
+      ParserPrimitives.emptyLine,
+      ParserPrimitives.commentLine,
+      ParserPrimitives.nameContentLine,
+      ParserPrimitives.generalContentLine
+    ).reduce((x, y) => ParserCombinator.or(x, y))
     s.lines.foldLeft(Option(mEmpty))((om, s) => {
       val oPMap = definedLineParser(s)
       val keyIntersection = om
