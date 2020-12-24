@@ -47,7 +47,6 @@ object ConfCLIParser {
     val i = Utilities.getContiguousElementsIndexes(lines.map(_.isEmpty))
     val blocks: List[List[String]] =
       i.flatMap(x => List(lines.slice(x._1, x._2)))
-    // ???: Single reponsibility.
     val cleanedBlocks = blocks
       .map(ls => ls.filterNot(x => x.isEmpty || x.trim.startsWith("#")))
       .filterNot(_.isEmpty)

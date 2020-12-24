@@ -48,7 +48,7 @@ package fmv1992.scala_cli_parser
   *
   * 1. Parsers must be able to be combined to form more advanced parsers.
   *
-  * 1. In this case a parser is a String => Option[Map[String, String]].
+  * 1. In this case a parser is a String => OldParserType.
   *
   * 1. A parser can fail. Maybe Option[String] is a better approach.
   *

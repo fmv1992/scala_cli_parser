@@ -7,13 +7,13 @@ class TestStandardParser extends AnyFunSuite {
   test("Test API.") {
 
     // Test valid instantiation.
-    StandardConfigParser(Example.cli02File)
+    StandardCLIParser(Example.cli02File)
 
   }
 
   test("Test default keys.") {
 
-    val parser = StandardConfigParser(Example.cli06File)
+    val parser = StandardCLIParser(Example.cli06File)
     assert(!parser.parse(List()).isEmpty)
 
     val parsed = parser.parse(List("--execute", "ten"))

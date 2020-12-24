@@ -6,8 +6,7 @@ import java.nio.file.Path
 import fmv1992.fmv1992_scala_utilities.util.Reader
 
 /** Standard parser. */
-class StandardConfigParser(val format: ParsedConfigStructure)
-    extends CLIParser {
+class StandardCLIParser(val format: ParsedConfigStructure) extends CLIParser {
 
   def parse(args: Seq[String]): Seq[Argument] = {
 
@@ -56,19 +55,19 @@ class StandardConfigParser(val format: ParsedConfigStructure)
 
 }
 
-/** Companion object for StandardConfigParser. */
-object StandardConfigParser {
+/** Companion object for StandardCLIParser. */
+object StandardCLIParser {
 
-  def apply(f: File): StandardConfigParser = {
+  def apply(f: File): StandardCLIParser = {
     apply(Reader.readLines(f).mkString("\n"))
   }
 
-  def apply(p: Path): StandardConfigParser = {
+  def apply(p: Path): StandardCLIParser = {
     apply(p.toFile)
   }
 
-  def apply(contents: String): StandardConfigParser = {
-    new StandardConfigParser(ConfCLIParser.parseConf(contents))
+  def apply(contents: String): StandardCLIParser = {
+    new StandardCLIParser(ConfCLIParser.parseConf(contents))
   }
 
 }
