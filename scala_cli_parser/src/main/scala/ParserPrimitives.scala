@@ -63,19 +63,25 @@ package fmv1992.scala_cli_parser
 object ParserPrimitives {
 
   // This doesn't take type checking into account.
-  def emptyLine: OldParserType = {
-    x =>
-      if (x == "\n" || x.isEmpty) Some(Map.empty) else None
-  }
+  def emptyLine: Parser[String, Option[
+    scala.collection.immutable.Map[String, String]
+  ]] =
+    ParserConcrete(
+      (x: String) => if (x == "\n" || x.isEmpty) Some(Map.empty) else None
+    )
 
-  def commentLine: OldParserType = {
-    x =>
-      if (x.startsWith("#")) Some(Map.empty) else None
-  }
+  def commentLine: ParserConcrete[String, Option[
+    scala.collection.immutable.Map[String, String]
+  ]] =
+    ParserConcrete(
+      (x: String) => if (x.startsWith("#")) Some(Map.empty) else None
+    )
 
-  def nameContentLine: OldParserType = {
-    x =>
-      {
+  def nameContentLine: Parser[String, Option[
+    scala.collection.immutable.Map[String, String]
+  ]] =
+    ParserConcrete(
+      (x: String) => {
         val colonPos: Int = x.indexOf(':')
         val t: (String, String) = x.splitAt(colonPos)
         // `drop`: drop the (": ").
@@ -84,11 +90,13 @@ object ParserPrimitives {
         require(!body.isEmpty, body)
         Option(Map(id -> body))
       }
-  }
+    )
 
-  def generalContentLine: OldParserType = {
-    x =>
-      nameContentLine(x.dropWhile(_.isSpaceChar))
-  }
+  def generalContentLine: Parser[String, Option[
+    scala.collection.immutable.Map[String, String]
+  ]] =
+    ParserConcrete(
+      (x: String) => nameContentLine.parse(x.dropWhile(_.isSpaceChar))
+    )
 
 }

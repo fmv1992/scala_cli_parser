@@ -6,14 +6,16 @@ object ConfCLIParser {
 
   def parseStringOpt(s: String): Option[Map[String, String]] = {
     val mEmpty = Map.empty: Map[String, String]
-    val definedLineParser = List(
+    val definedLineParser: fmv1992.scala_cli_parser.Parser[String, Option[
+      scala.collection.immutable.Map[String, String]
+    ]] = List(
       ParserPrimitives.emptyLine,
       ParserPrimitives.commentLine,
       ParserPrimitives.nameContentLine,
       ParserPrimitives.generalContentLine
     ).reduce((x, y) => ParserCombinator.or(x, y))
     s.lines.foldLeft(Option(mEmpty))((om, s) => {
-      val oPMap = definedLineParser(s)
+      val oPMap = definedLineParser.parse(s)
       val keyIntersection = om
         .getOrElse(mEmpty)
         .keys
