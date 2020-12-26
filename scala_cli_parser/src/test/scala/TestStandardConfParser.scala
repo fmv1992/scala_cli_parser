@@ -5,6 +5,7 @@ import java.nio.file.Paths
 import org.scalatest.funsuite.AnyFunSuite
 
 // ~testOnly *TestStandardConfParser*
+// project scala_cli_parserCrossProjectJVM;~test
 class TestStandardConfParser extends AnyFunSuite {
 
   test("Test API.") {
