@@ -16,20 +16,25 @@ class TestSumAndMainExample01Parser extends AnyFunSuite {
 
     assert(
       TestMainExample01.testableMain(
-        Example.cli01Parser
-          .parse(defaultArgs.toList)
-          .getOrElse(throw new Exception())
-      ) ===
-        """
+        getOrElseEitherShim(
+          Example.cli01Parser
+            .parse(defaultArgs.toList),
+          throw new Exception()
+        )
+      )
+        ===
+          """
         |Got debug flag.
         |Got verbose flag.""".stripMargin.trim.split("\n").toList
     )
 
     assert(
       TestSum.testableMain(
-        Example.cli05TestSumParser
-          .parse("--sum 2 7".split(" ").toList)
-          .getOrElse(throw new Exception())
+        getOrElseEitherShim(
+          Example.cli05TestSumParser
+            .parse("--sum 2 7".split(" ").toList),
+          throw new Exception()
+        )
       ) === List("9")
     )
 

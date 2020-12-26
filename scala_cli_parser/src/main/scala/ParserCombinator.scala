@@ -4,7 +4,11 @@ object ParserCombinator {
 
   def or[A, B](p1: Parser[A, B], p2: Parser[A, B]): Parser[A, B] = {
     ParserConcrete(
-      (x: A) => p1.parse(x).orElse(p2.parse(x))
+      (x: A) =>
+        orElseEitherShim(
+          p1.parse(x),
+          p2.parse(x)
+        )
     )
   }
 

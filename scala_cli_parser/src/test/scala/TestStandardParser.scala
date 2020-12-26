@@ -15,10 +15,14 @@ class TestStandardParser extends AnyFunSuite {
 
     val parser = StandardCLIParser(Example.cli06File)
     assert(!parser.parse(List()).isRight)
-    assert(!parser.parse(List()).getOrElse(throw new Exception()).isEmpty)
+    assert(
+      !getOrElseEitherShim(parser.parse(List()), throw new Exception()).isEmpty
+    )
 
     val parsed = parser.parse(List("--execute", "ten"))
-    assert(parsed.getOrElse(throw new Exception())(0).value(0) == "ten")
+    assert(
+      getOrElseEitherShim(parsed, throw new Exception())(0).value(0) == "ten"
+    )
 
   }
 

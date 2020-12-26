@@ -20,7 +20,10 @@ case class GNUParser(override val format: Map[String, Map[String, String]])
   )
 
   override def parse(args: Seq[String]): Either[Seq[Throwable], Seq[GNUArg]] = {
-    super.parse(args).map(l => l.map(x => GNUArg(x.longName, x.value)))
+    mapEitherShim(
+      super.parse(args),
+      (l: Seq[Argument]) => l.map(x => GNUArg(x.longName, x.value))
+    )
   }
 
 }

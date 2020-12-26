@@ -15,7 +15,7 @@ object ConfCLIParser {
   }
 
   def parseString(s: String): Map[String, String] =
-    parseStringOpt(s).getOrElse(throw new Exception())
+    getOrElseEitherShim(parseStringOpt(s), throw new Exception())
 
   def groupContiguousText(s: String): List[List[String]] = {
     val lines = s.lines.toList

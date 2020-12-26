@@ -29,7 +29,9 @@ class TestGNUParser extends AnyFunSuite {
 
     val parser = GNUParser(Example.cli02File)
     assert(parser.parse(List()).isRight)
-    assert(parser.parse(List()).getOrElse(throw new Exception()).isEmpty)
+    assert(
+      getOrElseEitherShim(parser.parse(List()), throw new Exception()).isEmpty
+    )
 
     assertThrows[scala.IllegalArgumentException](
       parser.parse(List("--bogus", "bog"))
