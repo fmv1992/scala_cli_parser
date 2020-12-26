@@ -19,8 +19,8 @@ case class GNUParser(override val format: Map[String, Map[String, String]])
     String.valueOf(format) + " has to contain entry 'version'."
   )
 
-  override def parse(args: Seq[String]): Seq[GNUArg] = {
-    super.parse(args).map(x => GNUArg(x.longName, x.value))
+  override def parse(args: Seq[String]): Either[Seq[Throwable], Seq[GNUArg]] = {
+    super.parse(args).map(l => l.map(x => GNUArg(x.longName, x.value)))
   }
 
 }

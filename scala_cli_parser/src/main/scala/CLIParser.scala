@@ -8,6 +8,6 @@ package fmv1992.scala_cli_parser
 trait CLIParser extends Parser[Seq[String], Seq[Argument]] {
 
   /** $parseDoc */
-  def parse(args: Seq[String]): Seq[Argument]
+  def parse(args: Seq[String]): Either[Seq[Throwable], Seq[Argument]]
 
 }

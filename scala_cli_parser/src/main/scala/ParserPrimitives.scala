@@ -63,38 +63,35 @@ package fmv1992.scala_cli_parser
 object ParserPrimitives {
 
   // This doesn't take type checking into account.
-  def emptyLine: Parser[String, Option[
-    scala.collection.immutable.Map[String, String]
-  ]] =
+  def emptyLine: Parser[String, Map[String, String]] =
     ParserConcrete(
-      (x: String) => if (x == "\n" || x.isEmpty) Some(Map.empty) else None
+      (x: String) =>
+        if (x == "\n" || x.isEmpty) Right(emptyMapSS) else Left(Seq.empty)
     )
 
-  def commentLine: ParserConcrete[String, Option[
-    scala.collection.immutable.Map[String, String]
-  ]] =
+  def commentLine: Parser[String, Map[String, String]] =
     ParserConcrete(
-      (x: String) => if (x.startsWith("#")) Some(Map.empty) else None
+      (x: String) =>
+        if (x.startsWith("#")) Right(emptyMapSS) else Left(Seq.empty)
     )
 
-  def nameContentLine: Parser[String, Option[
-    scala.collection.immutable.Map[String, String]
-  ]] =
+  def nameContentLine: Parser[String, Map[String, String]] =
     ParserConcrete(
       (x: String) => {
         val colonPos: Int = x.indexOf(':')
-        val t: (String, String) = x.splitAt(colonPos)
-        // `drop`: drop the (": ").
-        val (id, body): (String, String) = (t._1.trim, t._2.trim.drop(2))
-        require(!id.isEmpty, id)
-        require(!body.isEmpty, body)
-        Option(Map(id -> body))
+        if (colonPos == -1) {
+          Left(Seq.empty)
+        } else {
+          val t: (String, String) = x.splitAt(colonPos)
+          val (id, body): (String, String) = (t._1.trim, t._2.trim.drop(2))
+          require(!id.isEmpty, id)
+          require(!body.isEmpty, body)
+          Right(Map(id -> body))
+        }
       }
     )
 
-  def generalContentLine: Parser[String, Option[
-    scala.collection.immutable.Map[String, String]
-  ]] =
+  def generalContentLine: Parser[String, Map[String, String]] =
     ParserConcrete(
       (x: String) => nameContentLine.parse(x.dropWhile(_.isSpaceChar))
     )

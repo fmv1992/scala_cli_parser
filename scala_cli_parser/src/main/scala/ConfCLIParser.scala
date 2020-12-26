@@ -4,26 +4,14 @@ import fmv1992.fmv1992_scala_utilities.util.Utilities
 
 object ConfCLIParser {
 
-  def parseStringOpt(s: String): Option[Map[String, String]] = {
-    val mEmpty = Map.empty: Map[String, String]
-    val definedLineParser: fmv1992.scala_cli_parser.Parser[String, Option[
-      scala.collection.immutable.Map[String, String]
-    ]] = List(
+  def parseStringOpt(s: String): Either[Seq[Throwable], Map[String, String]] = {
+    val definedLineParser: Parser[String, Map[String, String]] = List(
       ParserPrimitives.emptyLine,
       ParserPrimitives.commentLine,
       ParserPrimitives.nameContentLine,
       ParserPrimitives.generalContentLine
     ).reduce((x, y) => ParserCombinator.or(x, y))
-    s.lines.foldLeft(Option(mEmpty))((om, s) => {
-      val oPMap = definedLineParser.parse(s)
-      val keyIntersection = om
-        .getOrElse(mEmpty)
-        .keys
-        .toSet
-        .intersect(oPMap.getOrElse(mEmpty).keys.toSet)
-      require(keyIntersection.isEmpty, keyIntersection)
-      om.flatMap(x => oPMap.map(y => y ++ x))
-    })
+    definedLineParser.parse(s)
   }
 
   def parseString(s: String): Map[String, String] =

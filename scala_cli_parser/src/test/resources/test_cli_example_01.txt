@@ -10,8 +10,5 @@ name: verbose
     help: Help text.
 
 name: help
-    help: | Show this help text.
-          |
-          | Exit with 0 return code.
 
 name: version

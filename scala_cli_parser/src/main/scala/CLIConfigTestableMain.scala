@@ -42,12 +42,17 @@ trait CLIConfigTestableMain extends TestableMain {
     val parser = GNUParser(CLIConfigContents)
     val parsed = parser.parse(args.toList)
     // Check if either version of help are given.
-    val res = if (parsed.exists(_.longName == "help")) {
-      printHelp(parser.format)
-    } else if (parsed.exists(_.longName == "version")) {
-      printVersion
-    } else {
-      testableMain(parsed)
+    val res = parsed match {
+      case Left(seq) => throw new Exception(seq.toString)
+      case Right(seq) => {
+        if (seq.exists(_.longName == "help")) {
+          printHelp(parser.format)
+        } else if (seq.exists(_.longName == "version")) {
+          printVersion
+        } else {
+          testableMain(seq)
+        }
+      }
     }
     res.foreach(println)
   }

@@ -14,10 +14,11 @@ class TestStandardParser extends AnyFunSuite {
   test("Test default keys.") {
 
     val parser = StandardCLIParser(Example.cli06File)
-    assert(!parser.parse(List()).isEmpty)
+    assert(!parser.parse(List()).isRight)
+    assert(!parser.parse(List()).getOrElse(throw new Exception()).isEmpty)
 
     val parsed = parser.parse(List("--execute", "ten"))
-    assert(parsed(0).value(0) == "ten")
+    assert(parsed.getOrElse(throw new Exception())(0).value(0) == "ten")
 
   }
 

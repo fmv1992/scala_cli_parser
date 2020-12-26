@@ -9,15 +9,17 @@ class TestSumAndMainExample01Parser extends AnyFunSuite {
 
   test("Most basic test: test the idea.") {
     val parsed = Example.cli01Parser.parse(defaultArgs)
-    assert(parsed == List(Arg("debug", Nil), Arg("verbose", Nil)))
+    assert(parsed === List(Arg("debug", Nil), Arg("verbose", Nil)))
   }
 
   test("Test functionality with TestMainExample01.") {
 
     assert(
       TestMainExample01.testableMain(
-        Example.cli01Parser.parse(defaultArgs.toList)
-      ) ==
+        Example.cli01Parser
+          .parse(defaultArgs.toList)
+          .getOrElse(throw new Exception())
+      ) ===
         """
         |Got debug flag.
         |Got verbose flag.""".stripMargin.trim.split("\n").toList
@@ -25,8 +27,10 @@ class TestSumAndMainExample01Parser extends AnyFunSuite {
 
     assert(
       TestSum.testableMain(
-        Example.cli05TestSumParser.parse("--sum 2 7".split(" ").toList)
-      ) == List("9")
+        Example.cli05TestSumParser
+          .parse("--sum 2 7".split(" ").toList)
+          .getOrElse(throw new Exception())
+      ) === List("9")
     )
 
   }

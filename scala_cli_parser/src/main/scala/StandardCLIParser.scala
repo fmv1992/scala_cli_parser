@@ -8,7 +8,7 @@ import fmv1992.fmv1992_scala_utilities.util.Reader
 /** Standard parser. */
 class StandardCLIParser(val format: ParsedConfigStructure) extends CLIParser {
 
-  def parse(args: Seq[String]): Seq[Argument] = {
+  def parse(args: Seq[String]): Either[Seq[Throwable], Seq[Argument]] = {
 
     /** Recursive parse. */
     def go(
@@ -50,7 +50,7 @@ class StandardCLIParser(val format: ParsedConfigStructure) extends CLIParser {
       notIncludedDefaultKeys.map(x => Arg(x, List(format(x)("default"))))
     }
 
-    parsedArgs ++ additionalArgs
+    Right(parsedArgs ++ additionalArgs)
   }
 
 }
