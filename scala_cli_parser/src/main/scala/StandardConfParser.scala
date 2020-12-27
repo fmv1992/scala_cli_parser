@@ -5,7 +5,8 @@ import java.nio.file.Path
 import fmv1992.fmv1992_scala_utilities.util.Utilities
 
 case class StandardConfParser(p: Path)
-    extends ParserWithIntermediateState[String, Seq, ParsedConfigStructure] {
+//  extends ParserWithIntermediateState[String, Seq, ParsedConfigStructure] {
+    extends Parser[String, ParsedConfigStructure] {
 
   def parse(): Either[Seq[Throwable], ParsedConfigStructure] = {
     parse(scala.io.Source.fromFile(p.toFile).getLines().toSeq)
