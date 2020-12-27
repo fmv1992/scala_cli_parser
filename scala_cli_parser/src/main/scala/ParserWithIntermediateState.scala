@@ -6,9 +6,9 @@ package fmv1992.scala_cli_parser
   */
 trait ParsedIntermediateState[A, B] {
 
-  def accumulated: Iterable[A]
+  def cons(i: Iterable[A]): ParsedIntermediateState[A, B]
 
-  def build(i: Iterable[A]): ParsedIntermediateState[A, B]
+  def accumulated: Iterable[A]
 
   def isPossibleInput(input: A): Boolean
 
@@ -16,25 +16,43 @@ trait ParsedIntermediateState[A, B] {
 
   def accumulate(input: A): Either[Throwable, ParsedIntermediateState[A, B]] = {
     if (isPossibleInput(input) && hasMeaningfulInputAccumulated()) {
-      Right(this.build(accumulated ++ Iterable(input)))
+      Right(this.cons(accumulated ++ Iterable(input)))
     } else {
       Left(new Exception())
     }
   }
 
+  @scala.annotation.tailrec
+  final def consume(
+      i: Iterable[A],
+      acc: ParsedIntermediateState[A, B] = cons(Iterable.empty)
+  ): (ParsedIntermediateState[A, B], Iterable[A]) = {
+    if (i.isEmpty) {
+      (acc, i)
+    } else {
+      if (acc.isPossibleInput(i.head)) {
+        val newAcc = acc.cons(acc.accumulated ++ Iterable(i.head))
+        newAcc.consume(i.tail, newAcc)
+      } else {
+        (acc, i)
+      }
+    }
+  }
+
 }
 
-// abstract class PISWithAccumulated[A, B](val accumulated: Iterable[A])
-//     extends ParsedIntermediateState[A, B] {
-//
-// }
-
-case class CommentLine(accumulated: Seq[Char])
+case class CommentLine(accumulated: Seq[Char] = Seq.empty)
     extends ParsedIntermediateState[Char, Map[String, String]] {
 
-  def build(
+  def cons(
       i: Iterable[Char]
-  ): ParsedIntermediateState[Char, Map[String, String]] = CommentLine(i.toSeq)
+  ): ParsedIntermediateState[Char, Map[String, String]] = {
+    if (isPossibleInput(i.head)) {
+      CommentLine(i.toSeq)
+    } else {
+      throw new Exception()
+    }
+  }
 
   def isPossibleInput(input: Char): Boolean = {
     if (input == '#' && accumulated.isEmpty) {
