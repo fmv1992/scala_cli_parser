@@ -4,7 +4,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class TestParsedIntermediateState extends AnyFunSuite {
 
-  val multilineComment = "# comment 01.\n# comment 02.\n|Not a comment.|"
+  val multilineComment = "# comment 01.\n# comment 02.\n \t \tNot a comment."
 
   test("`CommentLine.isPossibleInput`.") {
     assert(
@@ -60,12 +60,30 @@ class TestParsedIntermediateState extends AnyFunSuite {
     )
   }
 
-  test("`CommentLine.consume`.") {
-    val (c1, remaining1) = CommentLine().consume(multilineComment)
-    val (c2, remaining2) =
-      (CommentLine("# comment 01.\n# comment 02.\n".toList), "|Not a comment.|")
-    assert(c1 === c2)
-    assert(remaining1.toString === remaining2)
+  test("`CommentLine.getMeaningfulInput`.") {
+    assert(
+      CommentLine("# My comment.\n ")
+        .getMeaningfulInput() === (CommentLine(
+        "# My comment.\n"
+      ), " ".toIterable)
+    )
+    assert(
+      CommentLine(multilineComment)
+        .getMeaningfulInput() === (CommentLine(
+        "# comment 01.\n# comment 02.\n"
+      ), " \t \tNot a comment.".toIterable)
+    )
   }
+
+  // test("`CommentLine.consume`.") {
+  //   val (c1, remaining1) = CommentLine().consume(multilineComment)
+  //   val (c2, remaining2) =
+  //     (
+  //       CommentLine("# comment 01.\n# comment 02.\n".toList),
+  //       " \t \tNot a comment."
+  //     )
+  //   assert(c1 === c2)
+  //   assert(remaining1.toString === remaining2)
+  // }
 
 }

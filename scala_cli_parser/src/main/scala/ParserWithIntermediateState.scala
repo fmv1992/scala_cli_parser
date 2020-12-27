@@ -12,13 +12,15 @@ trait ParsedIntermediateState[A, B] {
 
   def hasMeaningfulInputAccumulated(): Boolean
 
-  def accumulate(input: A): Either[Throwable, ParsedIntermediateState[A, B]] = {
-    if (isPossibleInput(input) && hasMeaningfulInputAccumulated()) {
-      Right(this.update(accumulated ++ Iterable(input)))
-    } else {
-      Left(new Exception())
-    }
-  }
+  def getMeaningfulInput(): (ParsedIntermediateState[A, B], Iterable[A])
+
+  // def accumulate(input: A): Either[Throwable, ParsedIntermediateState[A, B]] = {
+  //   if (isPossibleInput(input) && hasMeaningfulInputAccumulated()) {
+  //     Right(this.update(accumulated ++ Iterable(input)))
+  //   } else {
+  //     Left(new Exception())
+  //   }
+  // }
 
   @scala.annotation.tailrec
   final def consume(
@@ -26,7 +28,8 @@ trait ParsedIntermediateState[A, B] {
       acc: ParsedIntermediateState[A, B] = update(Iterable.empty)
   ): (ParsedIntermediateState[A, B], Iterable[A]) = {
     if (i.isEmpty) {
-      (acc, i)
+      val (validAcc, trailingInput) = acc.getMeaningfulInput()
+      (validAcc, i ++ trailingInput)
     } else {
       if (acc.isPossibleInput(i.head)) {
         val newAcc = acc.update(acc.accumulated ++ Iterable(i.head))
@@ -65,20 +68,21 @@ case class CommentLine(accumulated: Seq[Char] = Seq.empty)
       case None if accumulated.isEmpty => input == '#'
       case None                        => input.isWhitespace || input == '#'
     }
-    // accumulated match {
-    //   case Seq() => input == '#' || input.isWhitespace
-    //   case head +: tail =>
-    //     if (head.isWhitespace) {
-    //       CommentLine(tail).isPossibleInput(input)
-    //     } else {
-    //       false
-    //     }
-    //   case _ => throw new Exception()
-    // }
   }
 
   def hasMeaningfulInputAccumulated(): Boolean = {
     accumulated.head == '#'
+  }
+
+  def getMeaningfulInput()
+      : (ParsedIntermediateState[Char, Map[String, String]], Iterable[Char]) = {
+    val commentLastPost = accumulated.lastIndexOf('#')
+    val newlineAfterLastCommentLastPos =
+      accumulated
+        .drop(commentLastPost + 1)
+        .lastIndexOf('\n') + (commentLastPost + 1) + 1
+    val (valid, invalid) = accumulated.splitAt(newlineAfterLastCommentLastPos)
+    (CommentLine(valid), invalid)
   }
 
 }
