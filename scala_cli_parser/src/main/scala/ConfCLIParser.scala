@@ -11,7 +11,23 @@ object ConfCLIParser {
       ParserPrimitives.nameContentLine,
       ParserPrimitives.generalContentLine
     ).reduce((x, y) => ParserCombinator.or(x, y))
-    definedLineParser.parse(s)
+    // definedLineParser.parse(s)
+    s.lines.foldLeft(
+      Right(emptyMapSS): Either[Seq[Throwable], Map[String, String]]
+    )((either, line) => {
+      val oPMap = definedLineParser.parse(line)
+      val keyIntersection = either
+        .getOrElse(emptyMapSS)
+        .keys
+        .toSet
+        .intersect(oPMap.getOrElse(emptyMapSS).keys.toSet)
+      require(keyIntersection.isEmpty, keyIntersection)
+      oPMap.fold(
+        (seq: Seq[Throwable]) => either.left.map(_ ++ seq),
+        (mss: Map[String, String]) => either.map(_ ++ mss)
+      )
+      oPMap.flatMap(x => either.map(y => y ++ x))
+    })
   }
 
   def parseString(s: String): Map[String, String] =
