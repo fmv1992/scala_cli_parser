@@ -16,7 +16,23 @@ class TestStandardConfParser extends AnyFunSuite {
       )
 
     assert(
-      parser.parse() === Map.empty
+      parser.parse() ===
+        Right(
+          Map(
+            "debug" -> Map(
+              "n" -> "0",
+              "type" -> "int",
+              "help" -> "Turn on debug flag."
+            ),
+            "verbose" -> Map(
+              "n" -> "0",
+              "type" -> "int",
+              "help" -> "Help text."
+            ),
+            "help" -> Map(),
+            "version" -> Map()
+          )
+        )
     )
 
   }

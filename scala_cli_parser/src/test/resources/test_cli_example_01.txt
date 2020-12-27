@@ -1,7 +1,13 @@
+# Simple example. Features:
+# 1.    Multiple lines are intentional.
+
 name: debug
     n: 0
     type: int
-    help: Help text. It now can contain :.
+    help: Turn on debug flag.
+
+
+
 
 
 name: verbose

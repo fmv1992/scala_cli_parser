@@ -14,7 +14,13 @@ case class StandardConfParser(p: Path)
   def parse(
       lines: Seq[String]
   ): Either[Seq[Throwable], ParsedConfigStructure] = {
-    ???
+    Right(ConfCLIParser.parseConf(lines.mkString("\n")))
+  }
+
+  def parse(
+      content: String
+  ): Either[Seq[Throwable], ParsedConfigStructure] = {
+    parse(content)
   }
 
 }
