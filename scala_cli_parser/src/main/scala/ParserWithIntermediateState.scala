@@ -1,12 +1,10 @@
 package fmv1992.scala_cli_parser
 
 /** Parse a sequence of A and turn them into C.
-  *
-  *  Use B[A] to represent an internal state while accumulating.
   */
 trait ParsedIntermediateState[A, B] {
 
-  def cons(i: Iterable[A]): ParsedIntermediateState[A, B]
+  def update(i: Iterable[A]): ParsedIntermediateState[A, B]
 
   def accumulated: Iterable[A]
 
@@ -16,7 +14,7 @@ trait ParsedIntermediateState[A, B] {
 
   def accumulate(input: A): Either[Throwable, ParsedIntermediateState[A, B]] = {
     if (isPossibleInput(input) && hasMeaningfulInputAccumulated()) {
-      Right(this.cons(accumulated ++ Iterable(input)))
+      Right(this.update(accumulated ++ Iterable(input)))
     } else {
       Left(new Exception())
     }
@@ -25,13 +23,13 @@ trait ParsedIntermediateState[A, B] {
   @scala.annotation.tailrec
   final def consume(
       i: Iterable[A],
-      acc: ParsedIntermediateState[A, B] = cons(Iterable.empty)
+      acc: ParsedIntermediateState[A, B] = update(Iterable.empty)
   ): (ParsedIntermediateState[A, B], Iterable[A]) = {
     if (i.isEmpty) {
       (acc, i)
     } else {
       if (acc.isPossibleInput(i.head)) {
-        val newAcc = acc.cons(acc.accumulated ++ Iterable(i.head))
+        val newAcc = acc.update(acc.accumulated ++ Iterable(i.head))
         newAcc.consume(i.tail, newAcc)
       } else {
         (acc, i)
@@ -44,22 +42,39 @@ trait ParsedIntermediateState[A, B] {
 case class CommentLine(accumulated: Seq[Char] = Seq.empty)
     extends ParsedIntermediateState[Char, Map[String, String]] {
 
-  def cons(
+  def update(
       i: Iterable[Char]
   ): ParsedIntermediateState[Char, Map[String, String]] = {
-    if (isPossibleInput(i.head)) {
+    if (i.isEmpty) {
+      this
+    } else if (isPossibleInput(i.head)) {
       CommentLine(i.toSeq)
     } else {
       throw new Exception()
     }
   }
 
+  def getFirstSignificantCharInLine: Option[Char] = {
+    val newlinePos = accumulated.lastIndexOf('\n')
+    accumulated.drop(newlinePos + 1).dropWhile(_.isWhitespace).headOption
+  }
+
   def isPossibleInput(input: Char): Boolean = {
-    if (input == '#' && accumulated.isEmpty) {
-      true
-    } else {
-      false
+    getFirstSignificantCharInLine match {
+      case Some(x)                     => x == '#'
+      case None if accumulated.isEmpty => input == '#'
+      case None                        => input.isWhitespace || input == '#'
     }
+    // accumulated match {
+    //   case Seq() => input == '#' || input.isWhitespace
+    //   case head +: tail =>
+    //     if (head.isWhitespace) {
+    //       CommentLine(tail).isPossibleInput(input)
+    //     } else {
+    //       false
+    //     }
+    //   case _ => throw new Exception()
+    // }
   }
 
   def hasMeaningfulInputAccumulated(): Boolean = {
