@@ -8,20 +8,15 @@ trait ParsedIntermediateState[A, B] {
 
   def accumulated: Iterable[A]
 
+  def build(i: Iterable[A]): ParsedIntermediateState[A, B]
+
   def isPossibleInput(input: A): Boolean
 
   def hasMeaningfulInputAccumulated(): Boolean
 
-  def accumulate(input: A): Either[Throwable, ParsedIntermediateState[A, B]]
-
-}
-
-abstract class PISWithAccumulated[A, B](val accumulated: Iterable[A])
-    extends ParsedIntermediateState[A, B] {
-
-  def accumulate(input: A): Either[Throwable, PISWithAccumulated[A, B]] = {
+  def accumulate(input: A): Either[Throwable, ParsedIntermediateState[A, B]] = {
     if (isPossibleInput(input) && hasMeaningfulInputAccumulated()) {
-      Right(PISWithAccumulated(accumulated ++ Iterable(input)))
+      Right(this.build(accumulated ++ Iterable(input)))
     } else {
       Left(new Exception())
     }
@@ -29,13 +24,20 @@ abstract class PISWithAccumulated[A, B](val accumulated: Iterable[A])
 
 }
 
-case class CommentLine(
-    accumulated: Seq[Char]
-) extends PISWithAccumulated(accumulated) {
-// extends ParsedIntermediateState[Char, Map[String, String]] {
+// abstract class PISWithAccumulated[A, B](val accumulated: Iterable[A])
+//     extends ParsedIntermediateState[A, B] {
+//
+// }
+
+case class CommentLine(accumulated: Seq[Char])
+    extends ParsedIntermediateState[Char, Map[String, String]] {
+
+  def build(
+      i: Iterable[Char]
+  ): ParsedIntermediateState[Char, Map[String, String]] = CommentLine(i.toSeq)
 
   def isPossibleInput(input: Char): Boolean = {
-    if (input == "#" && accumulated.isEmpty) {
+    if (input == '#' && accumulated.isEmpty) {
       true
     } else {
       false
@@ -43,7 +45,7 @@ case class CommentLine(
   }
 
   def hasMeaningfulInputAccumulated(): Boolean = {
-    accumulated.head == "#"
+    accumulated.head == '#'
   }
 
 }
