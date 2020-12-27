@@ -40,7 +40,7 @@ object GNUParser {
   }
 
   def apply(contents: String): GNUParser = {
-    apply(ConfCLIParser.parseConf(contents))
+    apply(StandardConfParser.parseConf(contents))
   }
 
 }

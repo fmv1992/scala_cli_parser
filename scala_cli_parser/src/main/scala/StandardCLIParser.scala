@@ -67,7 +67,7 @@ object StandardCLIParser {
   }
 
   def apply(contents: String): StandardCLIParser = {
-    new StandardCLIParser(ConfCLIParser.parseConf(contents))
+    new StandardCLIParser(StandardConfParser.parseConf(contents))
   }
 
 }

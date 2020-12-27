@@ -20,19 +20,23 @@ class TestParser extends AnyFunSuite {
       )
     )
     assert(
-      ConfCLIParser.parseString(contentLine) ===
+      StandardConfParser.parseString(contentLine) ===
         Map("version" -> "2.27.")
     )
-    assert(ConfCLIParser.parseString(cliConfig) === Map("version" -> "2.27."))
+    assert(
+      StandardConfParser.parseString(cliConfig) === Map("version" -> "2.27.")
+    )
   }
 
   test("Test parser combinators.") {
     assert(
-      ConfCLIParser.parseStringOpt(comment) === ParserPrimitives.commentLine
+      StandardConfParser.parseStringOpt(
+        comment
+      ) === ParserPrimitives.commentLine
         .parse(comment)
     )
     assert(
-      ConfCLIParser.parseStringOpt(cliConfig) === Right(
+      StandardConfParser.parseStringOpt(cliConfig) === Right(
         Map(("version" -> "2.27."))
       )
     )
