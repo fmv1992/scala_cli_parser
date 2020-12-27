@@ -16,17 +16,23 @@ object ConfCLIParser {
       Right(emptyMapSS): Either[Seq[Throwable], Map[String, String]]
     )((either, line) => {
       val oPMap = definedLineParser.parse(line)
-      val keyIntersection = either
-        .getOrElse(emptyMapSS)
-        .keys
-        .toSet
-        .intersect(oPMap.getOrElse(emptyMapSS).keys.toSet)
+      val keyIntersection = getOrElseEitherShim(either, emptyMapSS).keys.toSet
+        .intersect(getOrElseEitherShim(oPMap, emptyMapSS).keys.toSet)
       require(keyIntersection.isEmpty, keyIntersection)
-      oPMap.fold(
-        (seq: Seq[Throwable]) => either.left.map(_ ++ seq),
-        (mss: Map[String, String]) => either.map(_ ++ mss)
+      // oPMap.fold(
+      //   (seq: Seq[Throwable]) => either.left.map(_ ++ seq),
+      //   (mss: Map[String, String]) => either.map(_ ++ mss)
+      // )
+      // flatMapEitherShim(
+      //   oPMap,
+      //   (x: Either[Seq[Throwable], Map[String, String]]) =>
+      //     mapEitherShim(either, (y: Map[String, String]) => y ++ x)
+      // )
+      flatMapEitherShim(
+        oPMap,
+        (x: Map[String, String]) =>
+          mapEitherShim(either, (y: Map[String, String]) => y ++ x)
       )
-      oPMap.flatMap(x => either.map(y => y ++ x))
     })
   }
 

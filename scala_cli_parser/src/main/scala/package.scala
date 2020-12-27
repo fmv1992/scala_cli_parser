@@ -30,4 +30,14 @@ package object scala_cli_parser {
       case _        => or
     }
 
+  def flatMapEitherShim[L, R](
+      x: Either[L, R],
+      f: R => Either[L, R]
+  ): Either[L, R] = {
+    x match {
+      case Right(x) => f(x)
+      case _        => x
+    }
+  }
+
 }
