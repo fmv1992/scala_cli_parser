@@ -75,15 +75,15 @@ class TestParsedIntermediateState extends AnyFunSuite {
     )
   }
 
-  // test("`CommentLine.consume`.") {
-  //   val (c1, remaining1) = CommentLine().consume(multilineComment)
-  //   val (c2, remaining2) =
-  //     (
-  //       CommentLine("# comment 01.\n# comment 02.\n".toList),
-  //       " \t \tNot a comment."
-  //     )
-  //   assert(c1 === c2)
-  //   assert(remaining1.toString === remaining2)
-  // }
+  test("`CommentLine.consume`.") {
+    val (c1, remaining1) = CommentLine().consume(multilineComment)
+    val (c2, remaining2) =
+      (
+        CommentLine("# comment 01.\n# comment 02.\n".toList),
+        " \t \tNot a comment.".toIterable
+      )
+    assert(c1 === c2)
+    assert(remaining1 === remaining2)
+  }
 
 }

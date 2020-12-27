@@ -29,13 +29,14 @@ trait ParsedIntermediateState[A, B] {
   ): (ParsedIntermediateState[A, B], Iterable[A]) = {
     if (i.isEmpty) {
       val (validAcc, trailingInput) = acc.getMeaningfulInput()
-      (validAcc, i ++ trailingInput)
+      (validAcc, trailingInput)
     } else {
       if (acc.isPossibleInput(i.head)) {
         val newAcc = acc.update(acc.accumulated ++ Iterable(i.head))
         newAcc.consume(i.tail, newAcc)
       } else {
-        (acc, i)
+        val (validAcc, trailingInput) = acc.getMeaningfulInput()
+        (validAcc, trailingInput ++ i)
       }
     }
   }
