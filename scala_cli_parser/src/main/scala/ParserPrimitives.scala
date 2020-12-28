@@ -62,6 +62,7 @@ package fmv1992.scala_cli_parser
   */
 object ParserPrimitives {
 
+  // ???: To be replaced by `EmptyLineIS`.
   // This doesn't take type checking into account.
   def emptyLine: Parser[String, Map[String, String]] =
     ParserConcrete(
@@ -69,6 +70,7 @@ object ParserPrimitives {
         if (x == "\n" || x.isEmpty) Right(emptyMapSS) else Left(Seq.empty)
     )
 
+  // ???: To be replaced by `CommentLineIS`.
   def commentLine: Parser[String, Map[String, String]] =
     ParserConcrete(
       (x: String) =>
