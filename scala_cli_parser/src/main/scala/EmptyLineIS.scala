@@ -1,8 +1,8 @@
-
 package fmv1992.scala_cli_parser
 
-case class EmptyLineIS(accumulated: Seq[Char] = Seq.empty)
-    extends ParsedIntermediateState[Char, Map[String, String]] {
+case class EmptyLineIS(override val accumulated: Seq[Char] = Seq.empty)
+    extends Accumulator[Char](accumulated)
+    with ParsedIntermediateState[Char, Map[String, String]] {
 
   def update(
       i: Iterable[Char]

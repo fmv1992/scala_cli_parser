@@ -32,3 +32,11 @@ trait ParsedIntermediateState[A, B] {
   }
 
 }
+
+abstract class Accumulator[A] {
+
+  def accumulated: Iterable[A]
+
+  def this(i: Iterable[A]) = this.type = this(i)
+
+}

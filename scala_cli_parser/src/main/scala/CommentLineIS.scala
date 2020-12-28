@@ -1,7 +1,8 @@
 package fmv1992.scala_cli_parser
 
-case class CommentLineIS(accumulated: Seq[Char] = Seq.empty)
-    extends ParsedIntermediateState[Char, Map[String, String]] {
+case class CommentLineIS(override val accumulated: Seq[Char] = Seq.empty)
+    extends Accumulator[Char]
+    with ParsedIntermediateState[Char, Map[String, String]] {
 
   def update(
       i: Iterable[Char]
