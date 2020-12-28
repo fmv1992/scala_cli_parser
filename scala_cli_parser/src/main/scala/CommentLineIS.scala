@@ -3,8 +3,12 @@ package fmv1992.scala_cli_parser
 case class CommentLineIS(accumulated: Seq[Char] = Seq.empty)
     extends ParsedIntermediateState[Char, Map[String, String]] {
 
+  def apply(
+      i: Seq[Char]
+  ) = CommentLineIS(i.toSeq)
+
   def update(
-      i: Iterable[Char]
+      i: Seq[Char]
   ): ParsedIntermediateState[Char, Map[String, String]] = {
     if (i.isEmpty) {
       this
@@ -29,7 +33,7 @@ case class CommentLineIS(accumulated: Seq[Char] = Seq.empty)
   }
 
   def getMeaningfulInput()
-      : (ParsedIntermediateState[Char, Map[String, String]], Iterable[Char]) = {
+      : (ParsedIntermediateState[Char, Map[String, String]], Seq[Char]) = {
     val commentLastPost = accumulated.lastIndexOf('#')
     val newlineAfterLastCommentLastPos =
       accumulated
