@@ -57,3 +57,7 @@ And its usages are as follows:
 *   `dev_unstable`:
 
     *   Improve parsing process. Parsers can actually fail and provide a useful error message.
+
+### Backlog
+
+*   Add [scalacheck](https://www.scalacheck.org/) to testing.

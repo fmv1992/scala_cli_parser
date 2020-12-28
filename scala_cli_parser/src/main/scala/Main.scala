@@ -2,6 +2,8 @@ package fmv1992.scala_cli_parser
 
 import fmv1992.fmv1992_scala_utilities.util.Reader
 
+/** Validate CLI configurations.
+  */
 object Main extends CLIConfigTestableMain {
 
   // ???: Grab those from somewhere else.
