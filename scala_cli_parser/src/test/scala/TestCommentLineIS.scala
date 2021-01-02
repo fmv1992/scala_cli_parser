@@ -17,11 +17,11 @@ class TestCommentLineIS extends AnyFunSuite {
     )
   }
 
-  test("`CommentLineIS.update`.") {
-    assertThrows[Exception] {
-      CommentLineIS().update("abcde")
-    }
-  }
+  // test("`CommentLineIS.update`.") {
+  //   assertThrows[Exception] {
+  //     CommentLineIS("abcde")
+  //   }
+  // }
 
   test("`CommentLineIS.getFirstSignificantCharInLastLine`.") {
 
@@ -59,7 +59,7 @@ class TestCommentLineIS extends AnyFunSuite {
   }
 
   test("`CommentLineIS.consume`.") {
-    val (c1, remaining1) = CommentLineIS().consume(multilineComment)
+    val (c1, remaining1) = CommentLineIS("").consume(multilineComment)
     val (c2, remaining2) =
       (
         CommentLineIS("# comment 01.\n# comment 02.\n".toList),

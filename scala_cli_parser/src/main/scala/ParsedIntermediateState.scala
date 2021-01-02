@@ -4,7 +4,9 @@ package fmv1992.scala_cli_parser
   */
 trait ParsedIntermediateState[A, B] {
 
-  def apply(i: Seq[A]): ParsedIntermediateState[A, B]
+  def apply[C >: ParsedIntermediateState[A, B]](
+      i: Seq[A]
+  ): C
 
   def accumulated: Seq[A]
 
@@ -21,7 +23,8 @@ trait ParsedIntermediateState[A, B] {
       (validAcc, trailingInput)
     } else {
       if (this.isPossibleInput(i.head)) {
-        val newAcc = this(this.accumulated ++ Seq(i.head))
+        val newAcc: ParsedIntermediateState[A, B] =
+          this(this.accumulated ++ Seq(i.head))
         newAcc.consume(i.tail)
       } else {
         val (validAcc, trailingInput) = this.getMeaningfulInput()

@@ -1,23 +1,14 @@
 package fmv1992.scala_cli_parser
 
-case class CommentLineIS(accumulated: Seq[Char] = Seq.empty)
+case class CommentLineIS(accumulated: Seq[Char])
     extends ParsedIntermediateState[Char, Map[String, String]] {
 
-  def apply(
+  // def apply[A, B, C[A, B] <: ParsedIntermediateState[A, B]](
+  //     i: Seq[Char]
+  // ): C = CommentLineIS(i.toSeq)
+  def apply[C >: ParsedIntermediateState[Char, Map[String, String]]](
       i: Seq[Char]
-  ) = CommentLineIS(i.toSeq)
-
-  def update(
-      i: Seq[Char]
-  ): ParsedIntermediateState[Char, Map[String, String]] = {
-    if (i.isEmpty) {
-      this
-    } else if (isPossibleInput(i.head)) {
-      CommentLineIS(i.toSeq)
-    } else {
-      throw new Exception()
-    }
-  }
+  ): ParsedIntermediateState[Char, Map[String, String]] = CommentLineIS(i.toSeq)
 
   def getFirstSignificantCharInLastLine: Option[Char] = {
     val newlinePos = accumulated.lastIndexOf('\n')
