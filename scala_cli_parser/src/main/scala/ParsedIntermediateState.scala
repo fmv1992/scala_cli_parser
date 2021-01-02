@@ -4,9 +4,9 @@ package fmv1992.scala_cli_parser
   */
 trait ParsedIntermediateState[A, B] {
 
-  def apply[C >: ParsedIntermediateState[A, B]](
+  def apply(
       i: Seq[A]
-  ): C
+  ): ParsedIntermediateState[A, B]
 
   def accumulated: Seq[A]
 

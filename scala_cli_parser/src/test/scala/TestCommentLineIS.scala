@@ -17,11 +17,11 @@ class TestCommentLineIS extends AnyFunSuite {
     )
   }
 
-  // test("`CommentLineIS.update`.") {
-  //   assertThrows[Exception] {
-  //     CommentLineIS("abcde")
-  //   }
-  // }
+  test("`CommentLineIS.update`.") {
+    assertThrows[Exception] {
+      CommentLineIS("abcde")
+    }
+  }
 
   test("`CommentLineIS.getFirstSignificantCharInLastLine`.") {
 
