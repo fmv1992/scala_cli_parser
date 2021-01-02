@@ -23,6 +23,13 @@ trait ParsedIntermediateState[A, B] {
       (validAcc, trailingInput)
     } else {
       if (this.isPossibleInput(i.head)) {
+        // This error shows up if we don't define an `apply` above.
+        //
+        // ```
+        // [error]           this(this.accumulated ++ Seq(i.head)):
+        // ```
+        //
+        // fmv1992.scala_cli_parser.ParsedIntermediateState[A,B] does not take parameters
         val newAcc: ParsedIntermediateState[A, B] =
           this(this.accumulated ++ Seq(i.head))
         newAcc.consume(i.tail)
