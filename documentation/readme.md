@@ -50,6 +50,12 @@ And its usages are as follows:
     make --quiet -B SCALA_CLI_ARGUMENTS='TestSum.main(Array("--sum", "1992", "1"))' tmp/test_sum.scala
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Links
+
+*   [How to force case class constructors to have a pre defined signature in Scala?](https://stackoverflow.com/questions/65544763/how-to-force-case-class-constructors-to-have-a-pre-defined-signature-in-scala).
+
+    >    ⋯ the answer is not possible, constructors are weird, they are not inherited, can not be overridden nor specified in an interface, they also have some weird limitations normal methods do not have.
+
 ## TODO
 
 *   When Scala 2.11 support is dropped: between `0022b3e0a0198d4c970531db3a74c25e0b055f98` and `37424215d82a77ca618333521bce4827394bee66` some shims had to be introduced to make 2.11 compatible with future versions. Revert this when dropping support for Scala 2.11.
