@@ -1,55 +1,52 @@
 package fmv1992.scala_cli_parser
 
-case class CommentLineIS private (accumulated: Seq[Char])
+case class CommentLineIS(intermediateState: Seq[Char])
     extends ParsedIntermediateState[Char, Map[String, String]] {
 
-  def apply(
-      i: Seq[Char]
-  ): fmv1992.scala_cli_parser.ParsedIntermediateState[Char, Map[
-    String,
-    String
-  ]] = CommentLineIS(i)
+  def isValid: Boolean = ???
+
+  def copy(
+      intermediateState: Seq[Char]
+  ): ParsedIntermediateState[Char, Map[String, String]] =
+    CommentLineIS(intermediateState)
 
   def getFirstSignificantCharInLastLine: Option[Char] = {
-    val newlinePos = accumulated.lastIndexOf('\n')
-    accumulated.drop(newlinePos + 1).dropWhile(_.isWhitespace).headOption
+    val newlinePos = intermediateState.lastIndexOf('\n')
+    intermediateState.drop(newlinePos + 1).dropWhile(_.isWhitespace).headOption
   }
 
   def isPossibleInput(input: Char): Boolean = {
     getFirstSignificantCharInLastLine match {
-      case Some(x)                     => x == '#'
-      case None if accumulated.isEmpty => input == '#'
-      case None                        => input.isWhitespace || input == '#'
+      case Some(x)                           => x == '#'
+      case None if intermediateState.isEmpty => input == '#'
+      case None                              => input.isWhitespace || input == '#'
     }
   }
 
   def getMeaningfulInput()
       : (ParsedIntermediateState[Char, Map[String, String]], Seq[Char]) = {
-    val commentLastPost = accumulated.lastIndexOf('#')
+    val commentLastPost = intermediateState.lastIndexOf('#')
     val newlineAfterLastCommentLastPos =
-      accumulated
+      intermediateState
         .drop(commentLastPost + 1)
         .lastIndexOf('\n') + (commentLastPost + 1) + 1
-    val (valid, invalid) = accumulated.splitAt(newlineAfterLastCommentLastPos)
+    val (valid, invalid) =
+      intermediateState.splitAt(newlineAfterLastCommentLastPos)
     (CommentLineIS(valid), invalid)
   }
 
 }
 
-// object CommentLineIS {
+// https://stackoverflow.com/questions/65544763/how-to-force-case-class-constructors-to-have-a-pre-defined-signature-in-scala
 //
-//   // [error] /home/monteirobd/dev/pud/_other/not_yet_commited_projects/scala_cli_parser/scala_cli_parser/src/main/scala/CommentLineIS.scala:34:6: ambiguous reference to overloaded definition,
-//   // [error] both method apply in object CommentLineIS of type (accumulated: Seq[Char]): fmv1992.scala_cli_parser.CommentLineIS
-//   // [error] and  method apply in object CommentLineIS of type [C >: fmv1992.scala_cli_parser.ParsedIntermediateState[Char,Map[String,String]]](i: Seq[Char]): C
-//   // [error] match argument types (Seq[Char]) and expected result type fmv1992.scala_cli_parser.ParsedIntermediateState[Char,Map[String,String]]
-//   // [error]     (CommentLineIS(valid), invalid)
-//   // [error]      ^
-//
-//   // def apply[A, B, C[A, B] <: ParsedIntermediateState[A, B]](
-//   //     i: Seq[Char]
-//   // ): C = CommentLineIS(i.toSeq)
-//   def apply[C >: ParsedIntermediateState[Char, Map[String, String]]](
-//       i: Seq[Char]
-//   ): C = CommentLineIS(i.toSeq)
-//
-// }
+// https://stackoverflow.com/questions/15441589/scala-copy-case-class-with-generic-type
+trait Entity[E <: Entity[E]] {
+  // self-typing to E to force withId to return this type
+  self: E =>
+  def id: Option[Long]
+  def withId(id: Long): E
+}
+
+case class Foo(id: Option[Long]) extends Entity[Foo] {
+  def withId(id: Long) = this.copy(id = Some(id))
+}
