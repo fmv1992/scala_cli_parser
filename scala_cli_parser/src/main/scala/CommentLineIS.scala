@@ -1,30 +1,63 @@
 package fmv1992.scala_cli_parser
 
 case class CommentLineIS(intermediateState: Seq[Char])
-    extends ParsedIntermediateState[Char, Map[String, String]] {
+    extends ParsedIntermediateState[Char, Map[String, String], CommentLineIS] {
 
-  def isValid: Boolean = ???
+  def createNewInstance(input: Seq[Char]): CommentLineIS = CommentLineIS(input)
 
-  def copy(
-      intermediateState: Seq[Char]
-  ): ParsedIntermediateState[Char, Map[String, String]] =
-    CommentLineIS(intermediateState)
+  def isValid: Boolean = {
+    @scala.annotation.tailrec
+    def provideLines(
+        rest: Seq[Char],
+        current: IndexedSeq[Char] = IndexedSeq.empty,
+        // acc: Seq[Seq[Char]] = scala.collection.immutable.Queue.empty
+        acc: Seq[Seq[Char]] = LazyList.empty
+    ): Seq[Seq[Char]] = {
+      if (rest.isEmpty) {
+        if (current.isEmpty) {
+          acc
+        } else {
+          acc.appended(current)
+        }
+      } else {
+        val head = rest.head
+        if (head == '\n') {
+          provideLines(rest.tail, IndexedSeq.empty, acc.appended(current))
+        } else {
+          provideLines(rest.tail, current.appended(head), acc)
+        }
+      }
+    }
+    val lines = provideLines(intermediateState)
+    if (lines.isEmpty) {
+      false
+    } else {
+      lines.forall(x => isValidLine(x.mkString))
+    }
+  }
 
+  @deprecated
   def getFirstSignificantCharInLastLine: Option[Char] = {
     val newlinePos = intermediateState.lastIndexOf('\n')
     intermediateState.drop(newlinePos + 1).dropWhile(_.isWhitespace).headOption
   }
 
-  def isPossibleInput(input: Char): Boolean = {
-    getFirstSignificantCharInLastLine match {
+  def getFirstSignificantCharInLine(line: String): Option[Char] = {
+    line.dropWhile(_.isWhitespace).headOption
+  }
+
+  def isValidLine(line: String): Boolean = {
+    getFirstSignificantCharInLine(line) match {
       case Some(x)                           => x == '#'
-      case None if intermediateState.isEmpty => input == '#'
-      case None                              => input.isWhitespace || input == '#'
+      case None if intermediateState.isEmpty => true
+      case None                              => false
     }
   }
 
-  def getMeaningfulInput()
-      : (ParsedIntermediateState[Char, Map[String, String]], Seq[Char]) = {
+  def getMeaningfulInput(): (
+      ParsedIntermediateState[Char, Map[String, String], CommentLineIS],
+      Seq[Char]
+  ) = {
     val commentLastPost = intermediateState.lastIndexOf('#')
     val newlineAfterLastCommentLastPos =
       intermediateState

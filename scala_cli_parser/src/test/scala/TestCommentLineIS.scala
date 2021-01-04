@@ -6,21 +6,21 @@ class TestCommentLineIS extends AnyFunSuite {
 
   val multilineComment = "# comment 01.\n# comment 02.\n \t \tNot a comment."
 
-  test("`CommentLineIS.isPossibleInput`.") {
-    assert(
-      CommentLineIS(Seq.empty).isPossibleInput('#') ===
-        true
-    )
-    assert(
-      CommentLineIS(Seq.empty).isPossibleInput('x') ===
-        false
-    )
-  }
+  // test("`CommentLineIS.isPossibleInput`.") {
+  // assert(
+  // CommentLineIS(Seq.empty).isPossibleInput('#') ===
+  // true
+  // )
+  // assert(
+  // CommentLineIS(Seq.empty).isPossibleInput('x') ===
+  // false
+  // )
+  // }
 
   test("`CommentLineIS.update`.") {
-    assertThrows[Exception] {
-      CommentLineIS("abcde")
-    }
+    assert(
+      !CommentLineIS("abcde").isValid
+    )
   }
 
   test("`CommentLineIS.getFirstSignificantCharInLastLine`.") {
@@ -58,15 +58,15 @@ class TestCommentLineIS extends AnyFunSuite {
     )
   }
 
-  test("`CommentLineIS.consume`.") {
-    val (c1, remaining1) = CommentLineIS("").consume(multilineComment)
-    val (c2, remaining2) =
-      (
-        CommentLineIS("# comment 01.\n# comment 02.\n".toList),
-        " \t \tNot a comment.".toIterable
-      )
-    assert(c1 === c2)
-    assert(remaining1 === remaining2)
-  }
+  // test("`CommentLineIS.consume`.") {
+  //   val (c1, remaining1) = CommentLineIS("").consume(multilineComment)
+  //   val (c2, remaining2) =
+  //     (
+  //       CommentLineIS("# comment 01.\n# comment 02.\n".toList),
+  //       " \t \tNot a comment.".toIterable
+  //     )
+  //   assert(c1 === c2)
+  //   assert(remaining1 === remaining2)
+  // }
 
 }

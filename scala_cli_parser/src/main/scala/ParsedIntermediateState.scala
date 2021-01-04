@@ -2,43 +2,48 @@ package fmv1992.scala_cli_parser
 
 /** Parse a sequence of A and turn them into C.
   */
-trait ParsedIntermediateState[A, B] {
+trait ParsedIntermediateState[A, B, T <: ParsedIntermediateState[A, B, T]] {
+  self: T =>
 
-  def apply(
-      i: Seq[A]
-  ): ParsedIntermediateState[A, B]
+  def intermediateState: Seq[A]
 
-  def accumulated: Seq[A]
+  def isValid: Boolean
 
-  def isPossibleInput(input: A): Boolean
+  def getMeaningfulInput(): (ParsedIntermediateState[A, B, T], Seq[A])
 
-  def getMeaningfulInput(): (ParsedIntermediateState[A, B], Seq[A])
+  def createNewInstance(input: Seq[A]): T
 
-  @scala.annotation.tailrec
-  final def consume(
-      i: Seq[A]
-  ): (ParsedIntermediateState[A, B], Seq[A]) = {
-    if (i.isEmpty) {
-      val (validAcc, trailingInput) = this.getMeaningfulInput()
-      (validAcc, trailingInput)
-    } else {
-      if (this.isPossibleInput(i.head)) {
-        // This error shows up if we don't define an `apply` above.
-        //
-        // ```
-        // [error]           this(this.accumulated ++ Seq(i.head)):
-        // ```
-        //
-        // fmv1992.scala_cli_parser.ParsedIntermediateState[A,B] does not take parameters
-        val newAcc: ParsedIntermediateState[A, B] =
-          this(this.accumulated ++ Seq(i.head))
-        newAcc.consume(i.tail)
-      } else {
-        val (validAcc, trailingInput) = this.getMeaningfulInput()
-        (validAcc, trailingInput ++ i)
-      }
-    }
+  def update(input: Seq[A]): ParsedIntermediateState[A, B, T] = {
+    self.createNewInstance(intermediateState ++ input)
   }
+
+  // def incrementState(i: A): ParsedIntermediateState[A, B]
+
+  // @scala.annotation.tailrec
+  // final def consume(
+  //     i: Seq[A]
+  // ): (ParsedIntermediateState[A, B], Seq[A]) = {
+  //   if (i.isEmpty) {
+  //     val (validAcc, trailingInput) = this.getMeaningfulInput()
+  //     (validAcc, trailingInput)
+  //   } else {
+  //     if (this.isPossibleInput(i.head)) {
+  //       // This error shows up if we don't define an `apply` above.
+  //       //
+  //       // ```
+  //       // [error]           this(this.accumulated ++ Seq(i.head)):
+  //       // ```
+  //       //
+  //       // fmv1992.scala_cli_parser.ParsedIntermediateState[A,B] does not take parameters
+  //       val newAcc: ParsedIntermediateState[A, B] =
+  //         this(this.accumulated ++ Seq(i.head))
+  //       newAcc.consume(i.tail)
+  //     } else {
+  //       val (validAcc, trailingInput) = this.getMeaningfulInput()
+  //       (validAcc, trailingInput ++ i)
+  //     }
+  //   }
+  // }
 
 }
 
