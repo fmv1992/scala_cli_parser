@@ -6,25 +6,23 @@ case class CommentLineIS(intermediateState: Seq[Char])
   def createNewInstance(input: Seq[Char]): CommentLineIS = CommentLineIS(input)
 
   def isValid: Boolean = {
-    @scala.annotation.tailrec
+
     def provideLines(
         rest: Seq[Char],
-        current: IndexedSeq[Char] = IndexedSeq.empty,
-        // acc: Seq[Seq[Char]] = scala.collection.immutable.Queue.empty
-        acc: Seq[Seq[Char]] = LazyList.empty
-    ): Seq[Seq[Char]] = {
+        current: IndexedSeq[Char] = IndexedSeq.empty
+    ): LazyList[Seq[Char]] = {
       if (rest.isEmpty) {
         if (current.isEmpty) {
-          acc
+          LazyList.empty
         } else {
-          acc.appended(current)
+          LazyList(current)
         }
       } else {
         val head = rest.head
         if (head == '\n') {
-          provideLines(rest.tail, IndexedSeq.empty, acc.appended(current))
+          current #:: provideLines(rest.tail, IndexedSeq.empty)
         } else {
-          provideLines(rest.tail, current.appended(head), acc)
+          provideLines(rest.tail, current.appended(head))
         }
       }
     }
