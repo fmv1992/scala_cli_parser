@@ -52,6 +52,8 @@ And its usages are as follows:
 
 ## TODO
 
+*   On project [`one`](https://github.com/SemanticSugar/one/blob/947e498e0b46ce7a27a5fb2d6e7ba67685c85b7e/one/src/main/scala/One.scala#L15): the design of `CLIConfigTestableMain` is conflicting with `zio.App`.
+
 *   `dev_unstable`:
 
     *   Improve parsing process. Parsers can actually fail and provide a useful error message.
