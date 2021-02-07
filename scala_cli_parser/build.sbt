@@ -110,7 +110,7 @@ lazy val commonSettings = Seq(
     }
   },
   //
-  //
+  // <https://scalacenter.github.io/scalafix/docs/users/installation.html>.
   libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
   semanticdbEnabled := true,
   semanticdbOptions += "-P:semanticdb:synthetics:on",
