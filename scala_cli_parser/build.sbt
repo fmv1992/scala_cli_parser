@@ -15,7 +15,7 @@ inThisBuild(
 )
 
 lazy val commonSettings = Seq(
-  homepage := Some(url("https://github.com/fmv1992/fmv1992_scala_utilities")),
+  homepage := Some(url("https://github.com/fmv1992/scala_cli_parser")),
   organization := "io.github.fmv1992",
   name := "scala_cli_parser",
   scalaVersion := scala213,
