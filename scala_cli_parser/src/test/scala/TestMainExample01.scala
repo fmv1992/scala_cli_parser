@@ -17,9 +17,9 @@ object TestMainExample01 extends CLIConfigTestableMain {
     val res = args
       .foldLeft(Nil: List[String])((l, x) => {
         x match {
-          case Arg("debug", _)   => "Got debug flag." +: l
-          case Arg("verbose", _) => "Got verbose flag." +: l
-          case _                 => throw new Exception()
+          case ArgImpl("debug", _)   => "Got debug flag." +: l
+          case ArgImpl("verbose", _) => "Got verbose flag." +: l
+          case _                     => throw new Exception()
         }
       })
       .reverse

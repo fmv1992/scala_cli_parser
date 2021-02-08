@@ -9,7 +9,9 @@ class TestSumAndMainExample01Parser extends AnyFunSuite {
 
   test("Most basic test: test the idea.") {
     val parsed = Example.cli01Parser.parse(defaultArgs)
-    assert(parsed === Right(List(Arg("debug", Nil), Arg("verbose", Nil))))
+    assert(
+      parsed === Right(List(ArgImpl("debug", Nil), ArgImpl("verbose", Nil)))
+    )
   }
 
   test("Test functionality with TestMainExample01.") {

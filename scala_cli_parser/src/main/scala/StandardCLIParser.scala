@@ -27,7 +27,7 @@ class StandardCLIParser(val format: ParsedConfigStructure) extends CLIParser {
             values.length == n,
             s"Number of parsed values ${values.length} are different from n (${n})."
           )
-          val newArg: Argument = Arg(name, values)
+          val newArg: Argument = ArgImpl(name, values)
           val newList: Seq[Argument] = newArg +: acc
           go(goArgs.drop(n + 1), newList)
         }
@@ -47,7 +47,7 @@ class StandardCLIParser(val format: ParsedConfigStructure) extends CLIParser {
       String.valueOf(argsLongNames) + "|" + notIncludedDefaultKeys
     )
     val additionalArgs: Seq[Argument] = {
-      notIncludedDefaultKeys.map(x => Arg(x, List(format(x)("default"))))
+      notIncludedDefaultKeys.map(x => ArgImpl(x, List(format(x)("default"))))
     }
 
     Right(parsedArgs ++ additionalArgs)

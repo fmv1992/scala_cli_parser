@@ -1,5 +1,7 @@
 import xerial.sbt.Sonatype._
 
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 lazy val scala213 = "2.13.4"
 
 val versionsJVM = Seq(scala213)
