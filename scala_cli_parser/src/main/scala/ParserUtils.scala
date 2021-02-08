@@ -24,10 +24,19 @@ object ParserUtils {
         acc: Seq[B] = Seq.empty
     ): Either[Throwable, Seq[B]] = {
       if (remainingSegment.isEmpty) {
-        if (acc.isEmpty) {
+        val correctedAcc: Seq[B] = if (currentSegment.isEmpty) {
+          acc
+        } else {
+          acc.appended(
+            (validParsers.head
+              .parse(currentSegment)
+              .getOrElse(throw new Exception()): B)
+          )
+        }
+        if (correctedAcc.isEmpty) {
           Left(null)
         } else {
-          Right(acc)
+          Right(correctedAcc)
         }
       } else {
         val newCurrentSegment = currentSegment.appended(remainingSegment.head)
