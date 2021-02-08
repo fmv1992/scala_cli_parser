@@ -1,9 +1,13 @@
 package fmv1992.scala_cli_parser
 
-trait Parser[A, +B] {
-// ???:         ↑
-//              Why is this necessary? But it is not for A.
+trait Parser[A, B] {
 
-  def parse(input: A): Either[Seq[Throwable], B]
+  def parse(input: A): B
+
+}
+
+trait ParserWithEither[A, B] extends Parser[A, Either[Throwable, B]] {
+
+  def parse(input: A): Either[Throwable, B]
 
 }
