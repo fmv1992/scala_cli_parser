@@ -2,9 +2,9 @@ package fmv1992.scala_cli_parser
 
 case class SpaceConfParser(data: Seq[Char]) {
 
-  def parse: Either[Throwable, String] = {
+  def parse: Either[Throwable, ParsedResult[Seq[Char], String]] = {
     if (isValid) {
-      Right(data.mkString)
+      Right(ParsedResult(data, data.mkString))
     } else {
       Left(ParseException())
     }
@@ -16,9 +16,15 @@ case class SpaceConfParser(data: Seq[Char]) {
 
 }
 
-object SpaceConfParser extends ParserWithEither[Seq[Char], String] {
+object SpaceConfParser
+    extends ParserWithEither[
+      Seq[Char],
+      ParsedResult[Seq[Char], String]
+    ] {
 
-  def parse(input: Seq[Char]): Either[Throwable, String] = {
+  def parse(
+      input: Seq[Char]
+  ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
     SpaceConfParser(input).parse
   }
 

@@ -27,7 +27,7 @@ class TestSpaceConfParser extends AnyFunSuite {
     assert(
       ccp.parse.getOrElse(
         throw new Exception()
-      ) === " \n "
+      ) === ParsedResult(" \n ".toSeq, " \n ")
     )
   }
 

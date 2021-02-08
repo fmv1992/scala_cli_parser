@@ -29,7 +29,10 @@ class TestCommentConfParser extends AnyFunSuite {
     assert(
       ccp.parse.getOrElse(
         throw new Exception()
-      ) === "# Comment.\n# Other comment."
+      ) === ParsedResult(
+        "# Comment.\n# Other comment.".toSeq,
+        "# Comment.\n# Other comment."
+      )
     )
   }
 

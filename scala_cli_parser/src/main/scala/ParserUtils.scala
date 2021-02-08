@@ -13,62 +13,43 @@ object ParserUtils {
       }
   }
 
-  def tryAll[E, B](
-      input: ParserWithEither[Seq[E], B]*
-  ): ParserWithEither[Seq[E], Seq[B]] = {
+  def tryAll[A, B](
+      input: ParserWithEither[Seq[A], B]*
+  ): ParserWithEither[Seq[A], Seq[B]] = {
     val parserSet = input.toSet
     def go(
-        currentSegment: Seq[E],
-        remainingSegment: Seq[E],
-        validParsers: Set[ParserWithEither[Seq[E], B]],
-        acc: Seq[B] = Seq.empty,
-        parsed: Option[B] = None
+        currentSegment: Seq[A],
+        remainingSegment: Seq[A],
+        validParsers: Set[ParserWithEither[Seq[A], B]],
+        acc: Seq[B] = Seq.empty
     ): Either[Throwable, Seq[B]] = {
-      println("-" * 79)
-      println(currentSegment)
-      println(remainingSegment)
-      println(validParsers)
-      println(acc)
-      println(parsed)
-      println("-" * 79)
       if (remainingSegment.isEmpty) {
-        if (currentSegment.isEmpty) {
-          Right(acc)
+        if (acc.isEmpty) {
+          Left(null)
         } else {
-          Right(acc.appended(parsed.getOrElse(throw new Exception())))
+          Right(acc)
         }
       } else {
-        if (validParsers.isEmpty) {
-          val last = currentSegment.last
-          val remainder = currentSegment.dropRight(1)
-          go(
-            remainder,
-            last +: remainingSegment,
-            parserSet,
-            acc.appended(parsed.getOrElse(throw new Exception())),
-            None
-          )
+        val newCurrentSegment = currentSegment.appended(remainingSegment.head)
+        val newValidParsers =
+          validParsers.filter(_.parse(newCurrentSegment).isRight)
+        if (newValidParsers.size > 0) {
+          go(newCurrentSegment, remainingSegment.tail, newValidParsers, acc)
         } else {
-          val newSet = validParsers.filter(x => x.parse(currentSegment).isRight)
-          val parsed = if (newSet.size == 1) {
-            Some(
-              newSet.head.parse(currentSegment).getOrElse(throw new Exception())
-            )
-          } else {
-            None
-          }
           go(
-            currentSegment.appended(remainingSegment.head),
-            remainingSegment.tail,
-            newSet,
-            acc,
-            parsed
+            Seq.empty,
+            remainingSegment,
+            parserSet,
+            validParsers.head.parse(currentSegment) match {
+              case Left(_)  => acc
+              case Right(r) => acc.appended(r)
+            }
           )
         }
       }
     }
-    (x: Seq[E]) => {
-      go(Seq(x.head), x.tail, parserSet)
+    (x: Seq[A]) => {
+      go(Seq.empty, x, parserSet)
     }
   }
 
