@@ -1,6 +1,6 @@
 package fmv1992.scala_cli_parser
 
-trait ParserDataHolder[A, B] { self: Parser[A, B] =>
+trait ParserDataHolder[A, B] {
 
   def data: A
 

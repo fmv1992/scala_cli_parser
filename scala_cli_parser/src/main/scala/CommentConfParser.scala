@@ -1,10 +1,9 @@
 package fmv1992.scala_cli_parser
 
 case class CommentConfParser(data: Seq[Char])
-    extends Parser[Seq[Char], String]
-    with ParserDataHolder[Seq[Char], String] {
+    extends ParserDataHolder[Seq[Char], String] {
 
-  def parse(input: Seq[Char]): Either[Seq[Throwable], String] = {
+  def parse: Either[Seq[Throwable], String] = {
     if (isValid) {
       Right(data.mkString)
     } else {
@@ -89,5 +88,13 @@ case class CommentConfParser(data: Seq[Char])
   //     intermediateState.splitAt(newlineAfterLastCommentLastPos)
   //   (CommentLineIS(valid), invalid)
   // }
+
+}
+
+object CommentConfParser extends Parser[Seq[Char], String] {
+
+  def parse(input: Seq[Char]): Either[Seq[Throwable], String] = {
+    CommentConfParser(input).parse
+  }
 
 }

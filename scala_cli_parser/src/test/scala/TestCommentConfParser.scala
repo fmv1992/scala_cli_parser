@@ -24,6 +24,15 @@ class TestCommentConfParser extends AnyFunSuite {
     )
   }
 
+  test("`CommentConfParser.parse`.") {
+    val ccp = CommentConfParser("# Comment.\n# Other comment.")
+    assert(
+      ccp.parse.getOrElse(
+        throw new Exception()
+      ) === "# Comment.\n# Other comment."
+    )
+  }
+
   // test("`CommentConfParser.getFirstSignificantCharInLastLine`.") {
 
   //   assert(
