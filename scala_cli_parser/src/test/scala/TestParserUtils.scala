@@ -15,5 +15,17 @@ class TestParserUtils extends AnyFunSuite {
     assert(parser.parse(space1).right.value === space1)
     assert(parser.parse(combined1).isLeft)
   }
+  test("`tryAll` valid.") {
+    val parser1 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
+    assert(parser1.parse(comment1).right.value === 1)
+    // val parser2 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
+    // assert(
+    //   parser.parse(combined1) === Right(
+    //     List(
+    //       ""
+    //     )
+    //   )
+    // )
+  }
 
 }
