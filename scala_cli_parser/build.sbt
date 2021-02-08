@@ -15,7 +15,7 @@ inThisBuild(
 )
 
 lazy val commonSettings = Seq(
-  homepage := Some(url("https://github.com/fmv1992/fmv1992_scala_utilities")),
+  homepage := Some(url("https://github.com/fmv1992/scala_cli_parser")),
   organization := "io.github.fmv1992",
   name := "scala_cli_parser",
   scalaVersion := scala213,
@@ -110,7 +110,7 @@ lazy val commonSettings = Seq(
     }
   },
   //
-  //
+  // <https://scalacenter.github.io/scalafix/docs/users/installation.html>.
   libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
   semanticdbEnabled := true,
   semanticdbOptions += "-P:semanticdb:synthetics:on",

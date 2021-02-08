@@ -60,6 +60,8 @@ And its usages are as follows:
 
 *   When Scala 2.11 support is dropped: between `0022b3e0a0198d4c970531db3a74c25e0b055f98` and `37424215d82a77ca618333521bce4827394bee66` some shims had to be introduced to make 2.11 compatible with future versions. Revert this when dropping support for Scala 2.11.
 
+*   On project [`one`](https://github.com/SemanticSugar/one/blob/947e498e0b46ce7a27a5fb2d6e7ba67685c85b7e/one/src/main/scala/One.scala#L15): the design of `CLIConfigTestableMain` is conflicting with `zio.App`.
+
 *   `dev_unstable`:
 
     *   Improve parsing process. Parsers can actually fail and provide a useful error message.
