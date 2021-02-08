@@ -21,3 +21,25 @@ object ParserCombinator {
   }
 
 }
+
+object ParserCombinatorIncremental {
+
+  def sequentialAny[A <: Seq[_], B](parsers: Parser[A, B]*): Parser[A, B] = {
+    def consumeData(
+        data: A,
+        parserSet: Set[Parser[A, B]],
+        acc: Seq[Either[Seq[Throwable], B]] = Seq.empty
+    ): Either[Seq[Throwable], B] = {
+      if (data.isEmpty) {
+        acc
+      } else {}
+    }
+    val parserSet = parsers.toSet
+    ParserConcrete((x: A) => {
+      val consumed = consumeData(x)
+      val consolidated: Either[Seq[Throwable], B] = ???
+      consolidated
+    })
+  }
+
+}
