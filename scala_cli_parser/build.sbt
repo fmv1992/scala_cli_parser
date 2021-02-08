@@ -1,11 +1,9 @@
 import xerial.sbt.Sonatype._
 
-lazy val scala211 = "2.11.12"
-lazy val scala212 = "2.12.8"
-lazy val scala213 = "2.13.3"
+lazy val scala213 = "2.13.4"
 
-val versionsJVM = Seq(scala211, scala212, scala213)
-val versionsNative = Seq(scala211)
+val versionsJVM = Seq(scala213)
+val versionsNative = Seq(scala213)
 
 inThisBuild(
   List(
@@ -125,16 +123,16 @@ lazy val commonSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  libraryDependencies += "io.github.fmv1992" %%% "util" % "1.11.4",
-  libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.2.0",
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.1.0" % Test
+  libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.0",
+  libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.0",
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test
 )
 
 lazy val commonSettingsAndDependencies = commonSettings ++ commonDependencies
 
 lazy val scalaNativeSettings = Seq(
   crossScalaVersions := versionsNative,
-  scalaVersion := scala211, // allows to compile if scalaVersion set not 2.11
+  scalaVersion := scala213, // allows to compile if scalaVersion set not 2.11
   nativeLinkStubs := true,
   nativeLinkStubs in runMain := true,
   nativeLinkStubs in Test := true,
