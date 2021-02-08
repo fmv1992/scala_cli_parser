@@ -42,11 +42,11 @@ object ConfCLIParser {
   def parseString(s: String): Map[String, String] =
     parseStringOpt(s).getOrElse(throw new Exception())
 
-  def groupContiguousText(s: String): List[List[String]] = {
-    val lines = s.lines.toList
+  def groupContiguousText(s: String): Seq[Seq[String]] = {
+    val lines = s.lines.toSeq
     val i = Utilities.getContiguousElementsIndexes(lines.map(_.isEmpty))
-    val blocks: List[List[String]] =
-      i.flatMap(x => List(lines.slice(x._1, x._2)))
+    val blocks: Seq[Seq[String]] =
+      i.flatMap(x => Seq(lines.slice(x._1, x._2)))
     val cleanedBlocks = blocks
       .map(ls => ls.filterNot(x => x.isEmpty || x.trim.startsWith("#")))
       .filterNot(_.isEmpty)
@@ -54,7 +54,7 @@ object ConfCLIParser {
   }
 
   def nestConfigMaps(
-      lm: List[Map[String, String]]
+      lm: Seq[Map[String, String]]
   ): Map[String, Map[String, String]] = {
     require(lm.length == lm.map(x => x.keys.toSet).reduce(_ ++ _).size, lm)
     val flattenedM = lm.reduce(_ ++ _)
@@ -64,10 +64,10 @@ object ConfCLIParser {
   }
 
   def parseConf(s: String): ParsedConfigStructure = {
-    val blocks: List[List[String]] = groupContiguousText(s)
-    val mapsFromBlocks: List[List[Map[String, String]]] =
+    val blocks: Seq[Seq[String]] = groupContiguousText(s)
+    val mapsFromBlocks: Seq[Seq[Map[String, String]]] =
       blocks.map(x => x.map(parseString))
-    val listNestedMap: List[Map[String, Map[String, String]]] =
+    val listNestedMap: Seq[Map[String, Map[String, String]]] =
       mapsFromBlocks.map(nestConfigMaps)
     val nestedMap: Map[String, Map[String, String]] =
       listNestedMap.reduceLeft(_ ++ _)
