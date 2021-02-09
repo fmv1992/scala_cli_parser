@@ -6,28 +6,29 @@ class TestSpaceConfParser extends AnyFunSuite {
 
   test("`SpaceConfParser` invalid.") {
     assert(
-      !SpaceConfParser("abcde").isValid
+      !SpaceConfParser.isValid("abcde")
     )
     assert(
-      !SpaceConfParser(" # .").isValid
+      !SpaceConfParser.isValid(" # .")
     )
   }
 
   test("`SpaceConfParser` valid.") {
     assert(
-      SpaceConfParser("\n\n\n\n\n\n\n\n\n\n").isValid
+      SpaceConfParser.isValid("\n\n\n\n\n\n\n\n\n\n")
     )
     assert(
-      SpaceConfParser("\t \n ").isValid
+      SpaceConfParser.isValid("\t \n ")
     )
   }
 
   test("`SpaceConfParser.parse`.") {
-    val ccp = SpaceConfParser(" \n ")
     assert(
-      ccp.parse.getOrElse(
-        throw new Exception()
-      ) === ParsedResult(" \n ".toSeq, " \n ")
+      SpaceConfParser
+        .parse(" \n ")
+        .getOrElse(
+          throw new Exception()
+        ) === ParsedResult(" \n ".toSeq, " \n ")
     )
   }
 

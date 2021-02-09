@@ -8,27 +8,26 @@ class TestCommentConfParser extends AnyFunSuite {
 
   test("`CommentConfParser` invalid.") {
     assert(
-      !CommentConfParser("abcde").isValid
+      !CommentConfParser.isValid("abcde")
     )
     assert(
-      !CommentConfParser("# Comment.\n# Other comment.\n ").isValid
+      !CommentConfParser.isValid("# Comment.\n# Other comment.\n ")
     )
   }
 
   test("`CommentConfParser` valid.") {
     assert(
-      CommentConfParser("# Comment.").isValid
+      CommentConfParser.isValid("# Comment.")
     )
     assert(
-      CommentConfParser("# Comment.\n# Other comment.").isValid
+      CommentConfParser.isValid("# Comment.\n# Other comment.")
     )
   }
 
   test("`CommentConfParser.parse`.") {
     val comment1 = "# Comment.\n# Other comment."
-    val ccp = CommentConfParser(comment1)
     assert(
-      ccp
+      CommentConfParser
         .parse(comment1)
         .getOrElse(
           throw new Exception()

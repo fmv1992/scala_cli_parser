@@ -1,26 +1,24 @@
 package fmv1992.scala_cli_parser
 
-case class CommentConfParser(data: Seq[Char])
-    extends ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] {
-  self: ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] =>
+import ParsedResult.parserWithEitherToParsedResult
 
-  import ParsedResult.parserWithEitherToParsedResult
-
-  // private def parseP: Either[Throwable, String] = {
-  // if (isValid) {
-  // Right(data.mkString)
-  // } else {
-  // Left(ParseException())
-  // }
-  // }
+object CommentConfParser
+    extends ParserWithEither[
+      Seq[Char],
+      ParsedResult[Seq[Char], String]
+    ] {
 
   def parse(
-      x: Seq[Char]
+      input: Seq[Char]
   ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
-    self
+    if (isValid(input)) {
+      Right(input.mkString)
+    } else {
+      Left(ParseException())
+    }
   }
 
-  def isValid = {
+  def isValid(data: Seq[Char]) = {
     @scala.annotation.tailrec
     def go(da: Seq[Char]): Boolean = {
       if (da.isEmpty) {
@@ -37,20 +35,6 @@ case class CommentConfParser(data: Seq[Char])
       }
     }
     go(data)
-  }
-
-}
-
-object CommentConfParser
-    extends ParserWithEither[
-      Seq[Char],
-      ParsedResult[Seq[Char], String]
-    ] {
-
-  def parse(
-      input: Seq[Char]
-  ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
-    CommentConfParser(input).parse(input)
   }
 
 }
