@@ -1,13 +1,23 @@
 package fmv1992.scala_cli_parser
 
-case class CommentConfParser(data: Seq[Char]) {
+case class CommentConfParser(data: Seq[Char])
+    extends ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] {
+  self: ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] =>
 
-  def parse: Either[Throwable, ParsedResult[Seq[Char], String]] = {
-    if (isValid) {
-      Right(ParsedResult(data, data.mkString))
-    } else {
-      Left(ParseException())
-    }
+  import ParsedResult.parserWithEitherToParsedResult
+
+  // private def parseP: Either[Throwable, String] = {
+  // if (isValid) {
+  // Right(data.mkString)
+  // } else {
+  // Left(ParseException())
+  // }
+  // }
+
+  def parse(
+      x: Seq[Char]
+  ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
+    self
   }
 
   def isValid = {
@@ -40,7 +50,7 @@ object CommentConfParser
   def parse(
       input: Seq[Char]
   ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
-    CommentConfParser(input).parse
+    CommentConfParser(input).parse(input)
   }
 
 }

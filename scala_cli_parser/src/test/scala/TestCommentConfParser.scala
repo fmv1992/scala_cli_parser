@@ -25,11 +25,14 @@ class TestCommentConfParser extends AnyFunSuite {
   }
 
   test("`CommentConfParser.parse`.") {
-    val ccp = CommentConfParser("# Comment.\n# Other comment.")
+    val comment1 = "# Comment.\n# Other comment."
+    val ccp = CommentConfParser(comment1)
     assert(
-      ccp.parse.getOrElse(
-        throw new Exception()
-      ) === ParsedResult(
+      ccp
+        .parse(comment1)
+        .getOrElse(
+          throw new Exception()
+        ) === ParsedResult(
         "# Comment.\n# Other comment.".toSeq,
         "# Comment.\n# Other comment."
       )
