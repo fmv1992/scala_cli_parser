@@ -21,7 +21,7 @@ object ParserUtils {
         remainingSegment: Seq[A],
         validParsers: Set[ParserWithEither[Seq[A], B]],
         acc: Seq[B] = Seq.empty
-    ): Either[Throwable, Seq[B]] = {
+    ): Seq[B] = {
       if (remainingSegment.isEmpty) {
         val correctedAcc: Seq[B] = if (currentSegment.isEmpty) {
           acc
@@ -33,9 +33,9 @@ object ParserUtils {
           )
         }
         if (correctedAcc.isEmpty) {
-          Left(null)
+          Seq.empty
         } else {
-          Right(correctedAcc)
+          correctedAcc
         }
       } else {
         val newCurrentSegment = currentSegment.appended(remainingSegment.head)
@@ -59,7 +59,6 @@ object ParserUtils {
     ParserImpl((x: Seq[A]) => {
       go(Seq.empty, x, parserSet)
     })
-    ???
   }
 
 }
