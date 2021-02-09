@@ -12,16 +12,14 @@ object CommentConfParser
     if (isValid(input)) {
       Right(transform(input))
     } else {
-      Left(ParseException())
+      // ???: Another chance to use implicits maybe? (mark01)
+      Left(ParseException.fromInput(input, CommentConfParser))
     }
   }
 
   def isValid(input: Seq[Char]) = {
     @scala.annotation.tailrec
     def go(da: Seq[Char]): Boolean = {
-      // println("-" * 79)
-      // Console.err.println(da)
-      // println("-" * 79)
       if (da.isEmpty) {
         true
       } else if (da.head == '#') {
