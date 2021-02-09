@@ -6,15 +6,18 @@ object SpaceConfParser
       ParsedResult[Seq[Char], String]
     ] {
 
-  def parse(
+  override def parse(
       input: Seq[Char]
   ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
     if (isValid(input)) {
-      Right(ParsedResult(input, input.mkString))
+      Right(transform(input))
     } else {
       Left(ParseException())
     }
   }
+
+  def transform(input: Seq[Char]): ParsedResult[Seq[Char], String] =
+    ParsedResult(input, input.mkString)
 
   def isValid(input: Seq[Char]) = {
     input.forall(_.isWhitespace)

@@ -1,7 +1,5 @@
 package fmv1992.scala_cli_parser
 
-import scala.language.implicitConversions
-
 trait Parser[A, +B] {
 
   def parse(input: A): B
@@ -10,10 +8,28 @@ trait Parser[A, +B] {
 
 trait ParserWithEither[A, +B] extends Parser[A, Either[Throwable, B]] {
 
-  def parse(input: A): Either[Throwable, B]
+  def parse(
+      input: A
+  ): Either[Throwable, B] = {
+    if (isValid(input)) {
+      Right(transform(input))
+    } else {
+      Left(ParseException())
+    }
+  }
+
+  def transform(input: A): B
 
   def isValid(input: A): Boolean
+}
 
+case class ParserImpl[A, +B](private val _transform: A => B)
+    extends ParserWithEither[A, B] {
+
+  def transform(input: A): B = _transform(input)
+
+  def isValid(input: A): Boolean = scala.util.Try(transform(input)).isSuccess
+  // def isValid(input: A): Boolean = parse(input).isRight
 }
 
 case class ParsedResult[A, +B](data: A, result: B) {}
@@ -22,16 +38,6 @@ object ParsedResult {
 
   def fromParser[A, B](parser: Parser[A, B]): A => ParsedResult[A, B] = {
     (data: A) => ParsedResult(data, parser.parse(data))
-  }
-
-  // It is not possible to "lift" something to `ParsedResult` as it has two
-  // parameters. How is it going to find the input parameter?
-  implicit def parserWithEitherToParsedResult[A, B](
-      // p: ParserWithEither[A, ParsedResult[A, B]]
-      // e: Either[Throwable, B]
-      b: B
-  ): Either[Throwable, ParsedResult[A, B]] = {
-    ???
   }
 
 }

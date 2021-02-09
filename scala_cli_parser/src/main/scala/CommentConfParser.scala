@@ -1,26 +1,27 @@
 package fmv1992.scala_cli_parser
 
-import ParsedResult.parserWithEitherToParsedResult
-
 object CommentConfParser
     extends ParserWithEither[
       Seq[Char],
       ParsedResult[Seq[Char], String]
     ] {
 
-  def parse(
+  override def parse(
       input: Seq[Char]
   ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
     if (isValid(input)) {
-      Right(input.mkString)
+      Right(transform(input))
     } else {
       Left(ParseException())
     }
   }
 
-  def isValid(data: Seq[Char]) = {
+  def isValid(input: Seq[Char]) = {
     @scala.annotation.tailrec
     def go(da: Seq[Char]): Boolean = {
+      // println("-" * 79)
+      // Console.err.println(da)
+      // println("-" * 79)
       if (da.isEmpty) {
         true
       } else if (da.head == '#') {
@@ -34,7 +35,10 @@ object CommentConfParser
         false
       }
     }
-    go(data)
+    go(input)
   }
+
+  def transform(input: Seq[Char]): ParsedResult[Seq[Char], String] =
+    ParsedResult(input, input.mkString)
 
 }

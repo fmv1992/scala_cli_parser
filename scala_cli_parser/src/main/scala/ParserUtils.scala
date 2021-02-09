@@ -6,11 +6,10 @@ object ParserUtils {
       p1: ParserWithEither[A, B],
       p2: ParserWithEither[A, B]
   ): ParserWithEither[A, B] = {
-    (x: A) =>
-      p1.parse(x) match {
-        case Left(_)  => p2.parse(x)
-        case Right(r) => Right(r)
-      }
+    ParserImpl(
+      (x: A) =>
+        p2.parse(x).getOrElse(p1.parse(x).getOrElse(throw new Exception()))
+    )
   }
 
   def tryAll[A, B](
@@ -57,9 +56,10 @@ object ParserUtils {
         }
       }
     }
-    (x: Seq[A]) => {
+    ParserImpl((x: Seq[A]) => {
       go(Seq.empty, x, parserSet)
-    }
+    })
+    ???
   }
 
 }
