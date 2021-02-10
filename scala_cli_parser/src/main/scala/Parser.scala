@@ -34,10 +34,10 @@ case class ParserImpl[A, +B](private val _transform: A => B)
 
 case class ParsedResult[A, +B](data: A, result: B) {}
 
-object ParsedResult {
-
-  def fromParser[A, B](parser: Parser[A, B]): A => ParsedResult[A, B] = {
-    (data: A) => ParsedResult(data, parser.parse(data))
-  }
-
-}
+// object ParsedResult {
+//
+//   def fromParser[A, B](parser: Parser[A, B]): A => ParsedResult[A, B] = {
+//     (data: A) => ParsedResult(data, parser.parse(data))
+//   }
+//
+// }

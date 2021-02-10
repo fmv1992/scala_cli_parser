@@ -5,7 +5,9 @@ case class ParseException(
 ) extends java.lang.Exception(message)
 
 trait ErrorPosition
-case class ErrorPositionExisting(line: Int, column: Int) extends ErrorPosition
+
+case class ErrorPositionExisting(line: Int, column: Int, position: Int)
+    extends ErrorPosition
 case object ErrorPositionUnexisting extends ErrorPosition
 
 object ParseException {
@@ -24,7 +26,7 @@ object ParseException {
         ErrorPositionUnexisting
       } else {
         if (errorFunction(curSlice)) {
-          ErrorPositionExisting(currentLine, currentColumn)
+          ErrorPositionExisting(currentLine, currentColumn, currentChar)
         } else {
           if (curSlice.last == '\n') {
             go(currentLine + 1, 0, currentChar + 1)
@@ -39,8 +41,41 @@ object ParseException {
 
   def getExceptionMessage[A, B](input: A, parser: Parser[A, B]): String = {
     input match {
-      case _: Seq[Char] => input.toString
-      case _            => input.toString
+      case inputAsSeq: Seq[Char] =>
+        parser match {
+          case pa: ParserWithEither[Seq[Char], B] => {
+            val position: ErrorPosition =
+              getExceptionPosition(input, (x: A) => !pa.isValid(x))
+            position match {
+              case ErrorPositionUnexisting => input.toString
+              case ErrorPositionExisting(_, _, humanPosition) => {
+                val computerPosition = humanPosition - 1
+                val leftContextSize = List(5, computerPosition).min
+                val rightContextSize =
+                  List(5, inputAsSeq.length - computerPosition).min
+                val leftContext =
+                  inputAsSeq
+                    .slice(
+                      computerPosition - leftContextSize,
+                      computerPosition
+                    )
+                    .mkString
+                val rightContext =
+                  inputAsSeq
+                    .slice(
+                      computerPosition + 1,
+                      computerPosition + rightContextSize + 1
+                    )
+                    .mkString
+                s"'${parser.getClass.getSimpleName}': '${position}': '${leftContext + inputAsSeq
+                  .slice(computerPosition, computerPosition + 1)
+                  .mkString + rightContext}'."
+              }
+            }
+          }
+          case _ => input.toString
+        }
+      case _ => input.toString
     }
   }
 
