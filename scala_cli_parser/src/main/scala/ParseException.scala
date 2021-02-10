@@ -12,10 +12,6 @@ case object ErrorPositionUnexisting extends ErrorPosition
 
 object ParseException {
 
-  def blinkString(s: String): String = {
-    scala.io.AnsiColor.BLINK + s + scala.io.AnsiColor.RESET
-  }
-
   def getExceptionPosition[A](
       input: Seq[A],
       errorFunction: Seq[A] => Boolean
@@ -71,12 +67,9 @@ object ParseException {
                       computerPosition + rightContextSize + 1
                     )
                     .mkString
-                val highlightedChar = blinkString(
-                  inputAsSeq
-                    .slice(computerPosition, computerPosition + 1)
-                    .mkString
-                )
-                s"'${parser.getClass.getSimpleName}': '${position}': '${leftContext + highlightedChar + rightContext}'."
+                s"'${parser.getClass.getSimpleName}': '${position}': '${leftContext + inputAsSeq
+                  .slice(computerPosition, computerPosition + 1)
+                  .mkString + rightContext}'."
               }
             }
           }
