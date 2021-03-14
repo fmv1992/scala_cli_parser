@@ -2,40 +2,49 @@ package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class TestCommentConfParser extends AnyFunSuite {
+class TestEmptyConfParser extends AnyFunSuite {
 
-  val multilineComment = "# comment 01.\n# comment 02.\n \t \tNot a comment."
+  val valid01 = ""
+  val inValid01 = " "
+  val inValid02 = "abcde"
 
-  test("`CommentConfParser` invalid.") {
+  test("`EmptyConfParser` valid.") {
     assert(
-      !CommentConfParser.isValid("abcde")
-    )
-    assert(
-      !CommentConfParser.isValid("# Comment.\n# Other comment.\n ")
-    )
-  }
-
-  test("`CommentConfParser` valid.") {
-    assert(
-      CommentConfParser.isValid("# Comment.")
-    )
-    assert(
-      CommentConfParser.isValid("# Comment.\n# Other comment.")
+      EmptyConfParser.isValid(valid01)
     )
   }
 
-  test("`CommentConfParser.parse`.") {
-    val comment1 = "# Comment.\n# Other comment."
+  test("`EmptyConfParser` invalid.") {
     assert(
-      CommentConfParser
-        .parse(comment1)
+      !CommentConfParser.isValid(inValid01)
+    )
+    assert(
+      !CommentConfParser.isValid(inValid02)
+    )
+  }
+
+  test("`EmptyConfParser.parse`.") {
+    assert(
+      EmptyConfParser
+        .parse(valid01)
         .getOrElse(
           throw new Exception()
         ) === ParsedResult(
-        "# Comment.\n# Other comment.".toSeq,
-        "# Comment.\n# Other comment."
+        valid01.toSeq,
+        valid01
       )
     )
+    // ???: Test that some input throw exception.
+    // assert(
+    //   EmptyConfParser
+    //     .parse(inValid01)
+    //     .getOrElse(
+    //       throw new Exception()
+    //     ) === ParsedResult(
+    //     "",
+    //     ""
+    //   )
+    // )
   }
 
   // test("`CommentConfParser.getFirstSignificantCharInLastLine`.") {
@@ -83,7 +92,5 @@ class TestCommentConfParser extends AnyFunSuite {
   //   assert(c1 === c2)
   //   assert(remaining1 === remaining2)
   // }
-
-  // ???: Test that some input throw exception.
 
 }

@@ -32,4 +32,6 @@ class TestSpaceConfParser extends AnyFunSuite {
     )
   }
 
+  // ???: Test that some input throw exception.
+
 }

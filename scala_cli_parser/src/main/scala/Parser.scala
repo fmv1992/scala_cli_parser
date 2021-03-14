@@ -29,15 +29,6 @@ case class ParserImpl[A, +B](private val _transform: A => B)
   def transform(input: A): B = _transform(input)
 
   def isValid(input: A): Boolean = scala.util.Try(transform(input)).isSuccess
-  // def isValid(input: A): Boolean = parse(input).isRight
 }
 
 case class ParsedResult[A, +B](data: A, result: B) {}
-
-// object ParsedResult {
-//
-//   def fromParser[A, B](parser: Parser[A, B]): A => ParsedResult[A, B] = {
-//     (data: A) => ParsedResult(data, parser.parse(data))
-//   }
-//
-// }
