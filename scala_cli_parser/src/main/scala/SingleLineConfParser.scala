@@ -36,6 +36,8 @@ object SingleLineConfParser
       ParsedResult[Seq[Char], String]
     ] {
 
+  val parser = ParserUtils.or(EmptyConfParser, SpaceConfParser)
+
   def isValid(input: Seq[Char]): Boolean = {
     ???
   }

@@ -31,4 +31,18 @@ case class ParserImpl[A, +B](private val _transform: A => B)
   def isValid(input: A): Boolean = scala.util.Try(transform(input)).isSuccess
 }
 
+object ParserImpl {
+
+  // def apply[A, B](
+  // transformEither: A => Either[Throwable, B]
+  // ): ParserImpl[A, B] = {
+  // ParserImpl((x: A) => transformEither(x))
+  // }
+
+  // def apply[A, B](transform: A => B) = {
+  // ParserImpl(transformEither)
+  // }
+
+}
+
 case class ParsedResult[A, +B](data: A, result: B) {}
