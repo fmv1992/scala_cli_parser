@@ -22,6 +22,8 @@ object ParserUtils {
       (x: Seq[_]) => {
         val allSubSequences =
           (0 to x.length).reverse.toIterator
+            // ???: I'm not sure this `combinations` is the right operator
+            // here.
             .flatMap(i => x.combinations(i))
         val maxSize: Int =
           allSubSequences.filter(p1.isValid(_)).to(LazyList).head.length
