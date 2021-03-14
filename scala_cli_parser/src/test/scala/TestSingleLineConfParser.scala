@@ -2,7 +2,45 @@ package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class TestEmptyConfParser extends AnyFunSuite {
+class TestSolidLineConfParser extends AnyFunSuite {
+
+  val valid01 = "name: cliarg"
+  val inValid01 = " " + valid01
+  val inValid02 = "abcde"
+  val inValid03 = ":"
+  val inValid04 = ":"
+
+  test("`SolidLineConfParser` valid.") {
+    assert(
+      SolidLineConfParser.isValid(valid01)
+    )
+  }
+
+  test("`SolidLineConfParser` invalid.") {
+    assert(
+      !SolidLineConfParser.isValid(inValid01)
+    )
+    assert(
+      !SolidLineConfParser.isValid(inValid02)
+    )
+  }
+
+  test("`SolidLineConfParser.parse`.") {
+    assert(
+      SolidLineConfParser
+        .parse(valid01)
+        .getOrElse(
+          throw new Exception()
+        ) === ParsedResult(
+        valid01.toSeq,
+        Map("name" -> "cliarg")
+      )
+    )
+  }
+
+}
+
+class TestSingleLineConfParser extends AnyFunSuite {
 
   val valid01 = ""
   val inValid01 = " "
