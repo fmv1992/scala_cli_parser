@@ -45,7 +45,7 @@ object ParseException {
         parser match {
           case pa: ParserWithEither[Seq[Char], B] => {
             val position: ErrorPosition =
-              getExceptionPosition(input, (x: A) => !pa.isValid(x))
+              getExceptionPosition(input, (x: Seq[Char]) => !pa.isValid(x))
             position match {
               case ErrorPositionUnexisting => input.toString
               case ErrorPositionExisting(_, _, humanPosition) => {

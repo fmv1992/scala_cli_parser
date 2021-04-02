@@ -13,29 +13,14 @@ object ParserUtils {
   }
 
   def and[A, B](
-      p1: ParserWithEither[Seq[_], A],
-      p2: ParserWithEither[Seq[_], A],
+      p1: ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]],
+      p2: ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]],
       combiner: (A, A) => B
   ): ParserWithEither[Seq[_], B] = {
     // Tries to find the longest valid sequence for `p1`.
     ParserImpl(
       (x: Seq[_]) => {
-        val allSubSequences =
-          (0 to x.length).reverse.toIterator
-            // ???: I'm not sure this `combinations` is the right operator
-            // here.
-            .flatMap(i => x.combinations(i))
-        val maxSize: Int =
-          allSubSequences.filter(p1.isValid(_)).to(LazyList).head.length
-        val left = x.slice(0, maxSize)
-        val right = x.drop(maxSize)
-        val res = p1
-          .parse(left)
-          .flatMap(x => p2.parse(right).map(y => combiner(x, y)))
-        res match {
-          case Left(x)  => throw x
-          case Right(x) => x
-        }
+        ???
       }
     )
   }
