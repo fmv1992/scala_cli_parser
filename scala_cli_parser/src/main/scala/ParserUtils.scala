@@ -74,4 +74,8 @@ object ParserUtils {
     })
   }
 
+  def allSubsequencesFromStart[A](s: Seq[A]): Seq[Seq[A]] = {
+    (0 to s.length).map(l1 => s.slice(0, l1))
+  }
+
 }

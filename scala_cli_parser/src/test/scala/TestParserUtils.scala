@@ -57,4 +57,15 @@ class TestParserUtils extends AnyFunSuite {
     )
   }
 
+  test("`allSubsequencesFromStart` valid.") {
+    assert(
+      Seq("", "a", "ab", "abc").toSet === ParserUtils
+        .allSubsequencesFromStart(
+          "abc"
+        )
+        .map(_.toString)
+        .toSet
+    )
+  }
+
 }
