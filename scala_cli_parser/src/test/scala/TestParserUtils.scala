@@ -105,4 +105,25 @@ class TestParserUtils extends AnyFunSuite {
 
   ignore("`allSubsequencesFromStart` invalid.") {}
 
+  test("`many` valid.") {
+    val parserMany = ParserUtils.many(
+      SingleLineConfParser,
+      (
+          x: ParsedResult[Seq[Char], Map[String, String]],
+          y: ParsedResult[Seq[Char], Map[String, String]]
+      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
+    )
+    assert(
+      parserMany.parse(List("n: 10", "required: true").mkString("\n")) ===
+        Right(
+          ParsedResult(
+            "n: 10\nrequired: true".toSeq,
+            Map("n" -> "10", "required" -> "true")
+          )
+        )
+    )
+  }
+
+  ignore("`many` invalid.") {}
+
 }

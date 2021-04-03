@@ -7,9 +7,13 @@ object SolidLineConfParser
     ] {
 
   def isValid(input: Seq[Char]): Boolean = {
-    (!input.isEmpty) && (!input.head.isWhitespace && input.tail.exists(
-      _ == ':'
-    ))
+    lazy val isNotEmpty = !input.isEmpty
+    lazy val headIsSolidAndContainsColon =
+      (!input.head.isWhitespace && input.tail.exists(_ == ':'))
+    lazy val newLinePos = input.indexOf('\n')
+    lazy val newLinesOnlyAtEnd =
+      (newLinePos == -1) || newLinePos == input.length
+    isNotEmpty && headIsSolidAndContainsColon && newLinesOnlyAtEnd
   }
 
   def transform(

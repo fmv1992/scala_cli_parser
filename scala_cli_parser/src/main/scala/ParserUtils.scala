@@ -85,6 +85,36 @@ object ParserUtils {
     })
   }
 
+  // ???: I believe there is a lot of redundancy in this method.
+  def many[A, B](
+      p: ParserWithEither[Seq[A], B],
+      combiner: (B, B) => B
+  ): ParserWithEither[Seq[A], B] = {
+    def go(rest: Seq[A]): LazyList[Either[Throwable, B]] =
+      if (rest.isEmpty) {
+        LazyList.empty
+      } else {
+        val inputOpt =
+          allSubsequencesFromStart(rest).reverse.filter(p.isValid(_)).headOption
+        inputOpt match {
+          case Some(input) => p.parse(input) #:: go(rest.drop(input.length))
+          case None        => LazyList(Left(ParseException.fromInput(rest, p)))
+        }
+      }
+    ParserImpl((x: Seq[A]) => {
+      val parsedAcc = go(x)
+      val left = parsedAcc.filter(_.isLeft).headOption
+      if (left.isDefined) {
+        // ???: This does not feel right.
+        p.transform(x)
+      } else {
+        val rights =
+          parsedAcc.map(_.getOrElse(throw new Exception())).reduce(combiner)
+        rights
+      }
+    })
+  }
+
   def allSubsequencesFromStart[A](s: Seq[A]): Seq[Seq[A]] = {
     (0 to s.length).map(l1 => s.slice(0, l1))
   }
