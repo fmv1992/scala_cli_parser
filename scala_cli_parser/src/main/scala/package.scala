@@ -7,6 +7,15 @@ package object scala_cli_parser {
   type ParsedConfigStructure = Map[String, Map[String, String]]
   val emptyMapSS: Map[String, String] = Map.empty
 
+  val SingleLineConfParser =
+    ParserUtils.or(
+      ParserUtils.and(SpaceConfParser, SolidLineConfParser, ???),
+      SolidLineConfParser
+    )
+
+  val SingleCLIPropertyConfParser =
+    ParserUtils.or(SingleLineConfParser, MultiLineConfParser)
+
   def getOrElseEitherShim[L, R](e: Either[L, R], or: => R): R = {
     e match {
       case Right(b) => b

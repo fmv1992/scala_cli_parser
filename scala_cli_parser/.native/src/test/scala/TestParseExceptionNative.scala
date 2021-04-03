@@ -1,6 +1,5 @@
 package fmv1992.scala_cli_parser
 
-
 class TestParseExceptionNative extends TestParseException {
 
   test("ParseException name matches (exact): 01.") {
