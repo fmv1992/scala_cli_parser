@@ -6,7 +6,7 @@ import org.scalatest.funsuite.AnyFunSuite
 // This is factored out into
 // `scala_cli_parser:15d3f98:scala_cli_parser/.native/src/test/scala/TestParseExceptionNative.scala:4`
 // and
-// `scala_cli_parser:15d3f98:scala_cli_parser/.jvm/src/test/scala/TestParseExceptionJVM.scala:3`
+// `scala_cli_parser:15d3f98:scala_cli_parser/.jvm/src/test/scala/TestParseExceptionJVM.scala:3`.
 class TestParseException extends AnyFunSuite {
 
   val input01 = "abc"

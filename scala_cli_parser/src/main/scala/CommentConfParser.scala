@@ -17,6 +17,9 @@ object CommentConfParser
     }
   }
 
+  /** Valid lines are non-empty lines starting with the comment character. They
+    *  are parsed up to and including the newline.
+    */
   def isValid(input: Seq[Char]) = {
     @scala.annotation.tailrec
     def go(da: Seq[Char]): Boolean = {
@@ -33,7 +36,7 @@ object CommentConfParser
         false
       }
     }
-    go(input)
+    if (input.isEmpty) false else go(input)
   }
 
   def transform(input: Seq[Char]): ParsedResult[Seq[Char], String] =

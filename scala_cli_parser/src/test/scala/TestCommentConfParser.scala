@@ -13,6 +13,9 @@ class TestCommentConfParser extends AnyFunSuite {
     assert(
       !CommentConfParser.isValid("# Comment.\n# Other comment.\n ")
     )
+    assert(
+      !CommentConfParser.isValid("")
+    )
   }
 
   test("`CommentConfParser` valid.") {
