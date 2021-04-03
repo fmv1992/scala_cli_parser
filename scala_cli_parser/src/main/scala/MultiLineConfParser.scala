@@ -6,6 +6,22 @@ object MultiLineConfParser
       ParsedResult[Seq[Char], Map[String, String]]
     ] {
 
+  private val SpacedSolidLineWithPipe
+      : ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] =
+    ParserUtils.or(
+      SolidLineWithPipe: ParserWithEither[Seq[Char], ParsedResult[Seq[
+        Char
+      ], String]],
+      ParserUtils.and(
+        SpaceConfParser,
+        SolidLineWithPipe,
+        (
+            x: ParsedResult[Seq[Char], Map[String, String]],
+            y: ParsedResult[Seq[Char], String]
+        ) => ParsedResult(x.data ++ y.data, y.result)
+      ): ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]]
+    )
+
   ParserUtils.and(
     ParserUtils.and(
       SpaceConfParser,
@@ -57,6 +73,7 @@ object MultiLineConfParser
       (firstLine.toList +: otherLines.toList).flatten == input.toList,
       (firstLine.toList, otherLines.toList, input.toList)
     )
+    Thread.sleep(10)
     println("-" * 79)
     Console.err.println(firstLine.toList)
     println("-" * 79)
@@ -64,21 +81,19 @@ object MultiLineConfParser
     println("-" * 79)
     println(SingleLineConfParser.isValid(firstLine))
     println("-" * 79)
-    println(otherLines.forall(SolidLineWithPipe.isValid(_)))
+    println(otherLines.forall(SpacedSolidLineWithPipe.isValid(_)))
     println("-" * 79)
     println("-" * 79)
+    Thread.sleep(10)
     SingleLineConfParser.isValid(firstLine) && otherLines.forall(
-      SolidLineWithPipe.isValid(_)
+      SpacedSolidLineWithPipe.isValid(_)
     )
   }
 
 }
 
 object SolidLineWithPipe
-    extends ParserWithEither[
-      Seq[Char],
-      ParsedResult[Seq[Char], String]
-    ] {
+    extends ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] {
 
   def transform(
       input: Seq[Char]

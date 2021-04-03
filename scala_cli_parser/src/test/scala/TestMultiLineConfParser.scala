@@ -9,7 +9,6 @@ class TestMultiLineConfParser extends AnyFunSuite with TimeLimits {
 
   val valid01 = """
 help: | cliarg
-      |
       | other line
 """.trim
 
