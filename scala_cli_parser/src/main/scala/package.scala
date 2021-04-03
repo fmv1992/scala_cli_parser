@@ -9,7 +9,14 @@ package object scala_cli_parser {
 
   val SingleLineConfParser =
     ParserUtils.or(
-      ParserUtils.and(SpaceConfParser, SolidLineConfParser, ???),
+      ParserUtils.and(
+        SpaceConfParser,
+        SolidLineConfParser,
+        (
+            x: ParsedResult[Seq[Char], Map[String, String]],
+            y: ParsedResult[Seq[Char], Map[String, String]]
+        ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
+      ),
       SolidLineConfParser
     )
 

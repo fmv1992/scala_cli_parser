@@ -2,134 +2,28 @@ package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class TestSolidLineConfParser extends AnyFunSuite {
+class TestSingleLineConfParser extends AnyFunSuite {
 
   val valid01 = "name: cliarg"
-  val inValid01 = " " + valid01
-  val inValid02 = "abcde"
-  val inValid03 = ":"
-  val inValid04 = ":"
+  val valid02 = "\ttype: int"
+  val inValid01 = "no colon line"
 
-  test("`SolidLineConfParser` valid.") {
+  test("`SingleLineConfParser` valid.") {
     assert(
-      SolidLineConfParser.isValid(valid01)
+      SingleLineConfParser.isValid(valid01)
+    )
+    assert(
+      SingleLineConfParser.isValid(valid02)
     )
   }
 
-  test("`SolidLineConfParser` invalid.") {
+  test("`SingleLineConfParser` invalid.") {
     assert(
       !SolidLineConfParser.isValid(inValid01)
     )
     assert(
-      !SolidLineConfParser.isValid(inValid02)
+      !SolidLineConfParser.isValid("")
     )
   }
-
-  test("`SolidLineConfParser.parse`.") {
-    assert(
-      SolidLineConfParser
-        .parse(valid01)
-        .getOrElse(
-          throw new Exception()
-        ) === ParsedResult(
-        valid01.toSeq,
-        Map("name" -> "cliarg")
-      )
-    )
-  }
-
-}
-
-class TestSingleLineConfParser extends AnyFunSuite {
-
-  val valid01 = ""
-  val inValid01 = " "
-  val inValid02 = "abcde"
-
-  test("`EmptyConfParser` valid.") {
-    assert(
-      EmptyConfParser.isValid(valid01)
-    )
-  }
-
-  test("`EmptyConfParser` invalid.") {
-    assert(
-      !CommentConfParser.isValid(inValid01)
-    )
-    assert(
-      !CommentConfParser.isValid(inValid02)
-    )
-  }
-
-  test("`EmptyConfParser.parse`.") {
-    assert(
-      EmptyConfParser
-        .parse(valid01)
-        .getOrElse(
-          throw new Exception()
-        ) === ParsedResult(
-        valid01.toSeq,
-        valid01
-      )
-    )
-
-    // ???: Test that some input throw exception.
-    // assert(
-    //   EmptyConfParser
-    //     .parse(inValid01)
-    //     .getOrElse(
-    //       throw new Exception()
-    //     ) === ParsedResult(
-    //     "",
-    //     ""
-    //   )
-    // )
-  }
-
-  // test("`CommentConfParser.getFirstSignificantCharInLastLine`.") {
-
-  //   assert(
-  //     CommentConfParser("#").getFirstSignificantCharInLastLine
-  //       === Some('#')
-  //   )
-  //   assert(
-  //     CommentConfParser(" #").getFirstSignificantCharInLastLine
-  //       === Some('#')
-  //   )
-  //   assert(
-  //     CommentConfParser(" x").getFirstSignificantCharInLastLine
-  //       === Some('x')
-  //   )
-  //   assert(
-  //     CommentConfParser(" cc\n x \n l ").getFirstSignificantCharInLastLine
-  //       === Some('l')
-  //   )
-  // }
-
-  // test("`CommentConfParser.getMeaningfulInput`.") {
-  //   assert(
-  //     CommentConfParser("# My comment.\n ")
-  //       .getMeaningfulInput() === (CommentConfParser(
-  //       "# My comment.\n"
-  //     ), " ".toIterable)
-  //   )
-  //   assert(
-  //     CommentConfParser(multilineComment)
-  //       .getMeaningfulInput() === (CommentConfParser(
-  //       "# comment 01.\n# comment 02.\n"
-  //     ), " \t \tNot a comment.".toIterable)
-  //   )
-  // }
-
-  // test("`CommentConfParser.consume`.") {
-  //   val (c1, remaining1) = CommentConfParser("").consume(multilineComment)
-  //   val (c2, remaining2) =
-  //     (
-  //       CommentConfParser("# comment 01.\n# comment 02.\n".toList),
-  //       " \t \tNot a comment.".toIterable
-  //     )
-  //   assert(c1 === c2)
-  //   assert(remaining1 === remaining2)
-  // }
 
 }

@@ -23,7 +23,6 @@ object SolidLineConfParser
         left.mkString -> right.tail
           .dropWhile(_.isWhitespace)
           .mkString
-          .dropWhile(_.isWhitespace)
       )
     )
   }
