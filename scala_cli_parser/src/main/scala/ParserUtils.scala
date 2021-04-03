@@ -12,11 +12,11 @@ object ParserUtils {
     )
   }
 
-  def and[A, B](
+  def and[A, B, C, D](
       p1: ParserWithEither[Seq[A], B],
-      p2: ParserWithEither[Seq[A], B],
-      combiner: (B, B) => B
-  ): ParserWithEither[Seq[A], B] = {
+      p2: ParserWithEither[Seq[A], C],
+      combiner: (B, C) => D
+  ): ParserWithEither[Seq[A], D] = {
     // Tries to find the longest valid sequence for `p1`.
     ParserImpl(
       (x: Seq[A]) => {
