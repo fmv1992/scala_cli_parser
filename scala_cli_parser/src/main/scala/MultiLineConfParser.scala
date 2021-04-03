@@ -74,21 +74,12 @@ object MultiLineConfParser
       (firstLine.toList +: otherLines.toList).flatten == input.toList,
       (firstLine.toList, otherLines.toList, input.toList)
     )
-    Thread.sleep(10)
-    println("-" * 79)
-    Console.err.println(firstLine.toList)
-    println("-" * 79)
-    Console.err.println(otherLines.toList)
-    println("-" * 79)
-    println(SingleLineConfParser.isValid(firstLine))
-    println("-" * 79)
-    println(otherLines.forall(SpacedSolidLineWithPipe.isValid(_)))
-    println("-" * 79)
-    println("-" * 79)
-    Thread.sleep(10)
-    SingleLineConfParser.isValid(firstLine) && otherLines.forall(
-      SpacedSolidLineWithPipe.isValid(_)
-    )
+    val pipePos = splitOnLines.map(_.indexOf('|'))
+    val pipePosAreTheSame: Boolean = pipePos.forall(_ == pipePos.head)
+    SingleLineConfParser.isValid(firstLine) && pipePosAreTheSame && otherLines
+      .forall(
+        SpacedSolidLineWithPipe.isValid(_)
+      )
   }
 
 }

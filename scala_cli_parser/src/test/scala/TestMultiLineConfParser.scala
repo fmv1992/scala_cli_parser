@@ -15,13 +15,19 @@ help: | cliarg
 
   val inValid01 = """
 help: | cliarg
-      |
+     |
       | other line
 """.trim
 
   test("`MultiLineConfParser` valid.")(failAfter(Span(100, Millis))({
     assert(
       MultiLineConfParser.isValid(valid01)
+    )
+  }))
+
+  test("`MultiLineConfParser` invalid.")(failAfter(Span(100, Millis))({
+    assert(
+      !MultiLineConfParser.isValid(inValid01)
     )
   }))
 
