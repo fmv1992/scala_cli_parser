@@ -36,7 +36,7 @@ class TestCommentConfParser extends AnyFunSuite {
           throw new Exception()
         ) === ParsedResult(
         "# Comment.\n# Other comment.".toSeq,
-        "# Comment.\n# Other comment."
+        emptyMapSS
       )
     )
   }

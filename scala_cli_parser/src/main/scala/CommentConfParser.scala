@@ -3,12 +3,12 @@ package fmv1992.scala_cli_parser
 object CommentConfParser
     extends ParserWithEither[
       Seq[Char],
-      ParsedResult[Seq[Char], String]
+      ParsedResult[Seq[Char], Map[String, String]]
     ] {
 
   override def parse(
       input: Seq[Char]
-  ): Either[Throwable, ParsedResult[Seq[Char], String]] = {
+  ): Either[Throwable, ParsedResult[Seq[Char], Map[String, String]]] = {
     if (isValid(input)) {
       Right(transform(input))
     } else {
@@ -39,7 +39,9 @@ object CommentConfParser
     if (input.isEmpty) false else go(input)
   }
 
-  def transform(input: Seq[Char]): ParsedResult[Seq[Char], String] =
-    ParsedResult(input, input.mkString)
+  def transform(
+      input: Seq[Char]
+  ): ParsedResult[Seq[Char], Map[String, String]] =
+    ParsedResult(input, emptyMapSS)
 
 }

@@ -28,7 +28,7 @@ class TestSpaceConfParser extends AnyFunSuite {
         .parse(" \n ")
         .getOrElse(
           throw new Exception()
-        ) === ParsedResult(" \n ".toSeq, " \n ")
+        ) === ParsedResult(" \n ".toSeq, emptyMapSS)
     )
   }
 

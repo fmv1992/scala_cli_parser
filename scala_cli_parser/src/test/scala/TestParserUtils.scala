@@ -14,9 +14,9 @@ class TestParserUtils extends AnyFunSuite {
       SpaceConfParser,
       CommentConfParser,
       (
-          x: ParsedResult[Seq[Char], String],
-          y: ParsedResult[Seq[Char], String]
-      ) => ParsedResult(x.data ++ y.data, x.result + y.result)
+          x: ParsedResult[Seq[Char], Map[String, String]],
+          y: ParsedResult[Seq[Char], Map[String, String]]
+      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
     )
 
   val parserCommentAndSpace =
@@ -24,9 +24,9 @@ class TestParserUtils extends AnyFunSuite {
       CommentConfParser,
       SpaceConfParser,
       (
-          x: ParsedResult[Seq[Char], String],
-          y: ParsedResult[Seq[Char], String]
-      ) => ParsedResult(x.data ++ y.data, x.result + y.result)
+          x: ParsedResult[Seq[Char], Map[String, String]],
+          y: ParsedResult[Seq[Char], Map[String, String]]
+      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
     )
 
   test("`or` valid.") {
@@ -34,11 +34,14 @@ class TestParserUtils extends AnyFunSuite {
     assert(
       parser.parse(comment1).right.value === ParsedResult(
         comment1.toSeq,
-        comment1
+        emptyMapSS
       )
     )
     assert(
-      parser.parse(space1).right.value === ParsedResult(space1.toSeq, space1)
+      parser.parse(space1).right.value === ParsedResult(
+        space1.toSeq,
+        emptyMapSS
+      )
     )
     assert(parser.parse(combined1).isLeft)
   }
@@ -52,7 +55,7 @@ class TestParserUtils extends AnyFunSuite {
         .right
         .value === ParsedResult(
         space1.toSeq ++ comment1.toSeq,
-        space1 + comment1
+        emptyMapSS
       )
     )
     assert(
@@ -76,13 +79,13 @@ class TestParserUtils extends AnyFunSuite {
     val parser1 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
     assert(
       parser1.parse(comment1).right.value ===
-        List(ParsedResult(comment1.toList, comment1))
+        List(ParsedResult(comment1.toList, emptyMapSS))
     )
     val parser2 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
     assert(
       parser2.parse(combined1).right.value === List(
-        ParsedResult((comment1 + '\n').toList, (comment1 + '\n')),
-        ParsedResult(space1.toList, space1)
+        ParsedResult((comment1 + '\n').toList, emptyMapSS),
+        ParsedResult(space1.toList, emptyMapSS)
       )
     )
   }
