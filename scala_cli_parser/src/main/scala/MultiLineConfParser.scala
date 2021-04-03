@@ -8,10 +8,7 @@ object MultiLineConfParser
 
   private val SpacedSolidLineWithPipe
       : ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] =
-    ParserUtils.or(
-      SolidLineWithPipe: ParserWithEither[Seq[Char], ParsedResult[Seq[
-        Char
-      ], String]],
+    ParserUtils.many(
       ParserUtils.and(
         SpaceConfParser,
         SolidLineWithPipe,
@@ -19,7 +16,11 @@ object MultiLineConfParser
             x: ParsedResult[Seq[Char], Map[String, String]],
             y: ParsedResult[Seq[Char], String]
         ) => ParsedResult(x.data ++ y.data, y.result)
-      ): ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]]
+      ),
+      (
+          x: ParsedResult[Seq[Char], String],
+          y: ParsedResult[Seq[Char], String]
+      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
     )
 
   ParserUtils.and(
@@ -102,12 +103,11 @@ object SolidLineWithPipe
   }
 
   def isValid(input: Seq[Char]) = {
-    val isPipeFirst = input.headOption.map(_ == '|')
-    val newLinePos = input.find(_ == '\n')
-    newLinePos match {
-      case Some(pos) =>
-        (pos == input.length - 1) && isPipeFirst.getOrElse(false)
-      case None => isPipeFirst.getOrElse(false)
-    }
+    lazy val notEmpty = !input.isEmpty
+    lazy val isPipeFirst = input.head == '|'
+    lazy val newLinePos = input.indexOf('\n')
+    lazy val newLinesOnlyAtEnd =
+      (newLinePos == -1) || (newLinePos == input.length - 1)
+    notEmpty && isPipeFirst && newLinesOnlyAtEnd
   }
 }
