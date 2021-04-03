@@ -9,10 +9,20 @@ class TestParserUtils extends AnyFunSuite {
   val space1 = " "
   val combined1 = List(comment1, space1).mkString("\n")
 
-  val parserAnd =
+  val parserSpaceAndComment =
     ParserUtils.and(
       SpaceConfParser,
       CommentConfParser,
+      (
+          x: ParsedResult[Seq[Char], String],
+          y: ParsedResult[Seq[Char], String]
+      ) => ParsedResult(x.data ++ y.data, x.result + y.result)
+    )
+
+  val parserCommentAndSpace =
+    ParserUtils.and(
+      CommentConfParser,
+      SpaceConfParser,
       (
           x: ParsedResult[Seq[Char], String],
           y: ParsedResult[Seq[Char], String]
@@ -37,16 +47,29 @@ class TestParserUtils extends AnyFunSuite {
 
   test("`and` valid.") {
     assert(
-      parserAnd.parse(space1 + comment1).right.value === ParsedResult(
+      parserSpaceAndComment
+        .parse(space1 + comment1)
+        .right
+        .value === ParsedResult(
         space1.toSeq ++ comment1.toSeq,
         space1 + comment1
       )
     )
-    assert(parserAnd.parse(combined1).isLeft)
+    assert(
+      parserSpaceAndComment
+        .parse("")
+        .isLeft
+    )
+    assert(parserSpaceAndComment.parse(combined1).isLeft)
   }
 
   test("`and` invalid.") {
-    assert(parserAnd.parse(space1).isLeft)
+    assert(
+      parserCommentAndSpace
+        .parse(space1 + comment1)
+        .isLeft
+    )
+    assert(parserCommentAndSpace.parse(combined1).isRight)
   }
 
   test("`tryAll` valid.") {
