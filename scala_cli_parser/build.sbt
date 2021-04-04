@@ -19,6 +19,9 @@ inThisBuild(
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
       scalaVersion.value
     )
+    // fork in Test := false,
+    // fork in test := false,
+    // fork in run := false
   )
 )
 
@@ -53,6 +56,7 @@ lazy val commonSettings = Seq(
   // Ship resource files with each jar.
   resourceDirectory in Compile := file(".") / "./src/main/resources",
   resourceDirectory in Runtime := file(".") / "./src/main/resources",
+  resourceDirectory in Test := file(".") / "./src/test/resources",
   // fmv1992_scala_utilities:33e41c7:fmv1992_scala_utilities/build.sbt:29
   test in assembly := {},
   assemblyMergeStrategy in assembly := {

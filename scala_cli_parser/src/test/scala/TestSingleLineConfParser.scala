@@ -20,3 +20,19 @@ class TestSingleLineConfParser extends AnyFunSuite {
   ignore("`SingleLineConfParser` invalid.") {}
 
 }
+
+class TestSingleCLIPropertyConfParser extends AnyFunSuite {
+
+  val multilineDef = """
+name: multiline
+abc: 1
+type: int
+  """.trim()
+
+  test("`PropertyBlockParser` valid.") {
+    assert(
+      PropertyBlockParser.isValid(multilineDef)
+    )
+  }
+
+}

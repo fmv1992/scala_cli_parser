@@ -12,7 +12,7 @@ object SolidLineConfParser
       (!input.head.isWhitespace && input.tail.exists(_ == ':'))
     lazy val newLinePos = input.indexOf('\n')
     lazy val newLinesOnlyAtEnd =
-      (newLinePos == -1) || newLinePos == input.length - 1
+      (newLinePos == -1) || (newLinePos == input.length - 1)
     isNotEmpty && headIsSolidAndContainsColon && newLinesOnlyAtEnd
   }
 

@@ -14,7 +14,7 @@ trait ParserWithEither[-A, +B] extends Parser[A, Either[Throwable, B]] {
     if (isValid(input)) {
       Right(transform(input))
     } else {
-      Left(ParseException())
+      Left(ParseException("1"))
     }
   }
 

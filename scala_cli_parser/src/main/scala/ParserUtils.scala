@@ -90,7 +90,12 @@ object ParserUtils {
       p: ParserWithEither[Seq[A], B],
       combiner: (B, B) => B
   ): ParserWithEither[Seq[A], B] = {
-    def go(rest: Seq[A]): LazyList[Either[Throwable, B]] =
+    def go(rest: Seq[A]): LazyList[Either[Throwable, B]] = {
+      //x// Thread.sleep(10)
+      //x// println("-" * 79)
+      //x// println(rest.mkString)
+      //x// println("-" * 79)
+      //x// Thread.sleep(10)
       if (rest.isEmpty) {
         LazyList.empty
       } else {
@@ -101,6 +106,7 @@ object ParserUtils {
           case None        => LazyList(Left(ParseException.fromInput(rest, p)))
         }
       }
+    }
     ParserImpl((x: Seq[A]) => {
       val parsedAcc = go(x)
       val left = parsedAcc.filter(_.isLeft).headOption

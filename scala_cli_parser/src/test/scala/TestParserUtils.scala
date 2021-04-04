@@ -5,6 +5,34 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class TestParserUtils extends AnyFunSuite {
 
+  def parserFactory(
+      x: String
+  ): ParserWithEither[Seq[Char], ParsedResult[Seq[Char], Map[String, Int]]] =
+    ParserImpl((s: Seq[Char]) => {
+      if (s == x.toSeq) {
+        (ParsedResult(s, Map(x -> 1)): ParsedResult[
+          Seq[Char],
+          Map[String, Int]
+        ])
+      } else {
+        throw new Exception()
+      }
+    })
+
+  val bParser = parserFactory("b")
+  val aParser = parserFactory("a")
+
+  val combinerString = (
+      x: ParsedResult[Seq[Char], Map[String, Int]],
+      y: ParsedResult[Seq[Char], Map[String, Int]]
+  ) =>
+    ParsedResult(
+      x.data ++ y.data,
+      (x.result.keySet ++ y.result.keySet).map {
+        i => (i, x.result.getOrElse(i, 0) + y.result.getOrElse(i, 0))
+      }.toMap
+    )
+
   val comment1 = "# Comment 01."
   val space1 = " "
   val combined1 = List(comment1, space1).mkString("\n")
@@ -13,20 +41,14 @@ class TestParserUtils extends AnyFunSuite {
     ParserUtils.and(
       SpaceConfParser,
       CommentConfParser,
-      (
-          x: ParsedResult[Seq[Char], Map[String, String]],
-          y: ParsedResult[Seq[Char], Map[String, String]]
-      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
+      standardCombiner
     )
 
   val parserCommentAndSpace =
     ParserUtils.and(
       CommentConfParser,
       SpaceConfParser,
-      (
-          x: ParsedResult[Seq[Char], Map[String, String]],
-          y: ParsedResult[Seq[Char], Map[String, String]]
-      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
+      standardCombiner
     )
 
   test("`or` valid.") {
@@ -106,13 +128,7 @@ class TestParserUtils extends AnyFunSuite {
   ignore("`allSubsequencesFromStart` invalid.") {}
 
   test("`many` valid.") {
-    val parserMany = ParserUtils.many(
-      SingleLineConfParser,
-      (
-          x: ParsedResult[Seq[Char], Map[String, String]],
-          y: ParsedResult[Seq[Char], Map[String, String]]
-      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
-    )
+    val parserMany = ParserUtils.many(SingleLineConfParser, standardCombiner)
     assert(
       parserMany.parse(List("n: 10", "required: true").mkString("\n")) ===
         Right(
@@ -121,6 +137,33 @@ class TestParserUtils extends AnyFunSuite {
             Map("n" -> "10", "required" -> "true")
           )
         )
+    )
+  }
+
+  test("`many` \"b\"s.") {
+    val manyBsParser = ParserUtils.many(bParser, combinerString)
+    assert(manyBsParser.parse("b").right.value.result === Map("b" -> 1))
+    assert(manyBsParser.parse("bbbb").right.value.result === Map("b" -> 4))
+
+    val manyAsParser = ParserUtils.many(aParser, combinerString)
+    val manyAsOrBsParser = ParserUtils.many(
+      ParserUtils.or(manyAsParser, manyBsParser),
+      combinerString
+    )
+    assert(
+      manyAsOrBsParser.parse("ab").right.value.result === Map(
+        "a" -> 1,
+        "b" -> 1
+      )
+    )
+    assert(
+      manyAsOrBsParser.parse("abababbb").right.value.result === Map(
+        "a" -> 3,
+        "b" -> 5
+      )
+    )
+    assert(
+      manyAsOrBsParser.parse("ab ab").isLeft
     )
   }
 
