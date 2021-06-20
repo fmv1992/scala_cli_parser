@@ -23,7 +23,10 @@ package object scala_cli_parser {
     )
 
   val SingleCLIPropertyConfParser =
-    ParserUtils.or(SingleLineConfParser, MultiLineConfParser)
+    ParserUtils.or(
+      ParserUtils.and(SingleLineConfParser, SpaceConfParser, standardCombiner),
+      ParserUtils.and(MultiLineConfParser, SpaceConfParser, standardCombiner)
+    )
 
   val PropertyBlockParser =
     ParserUtils.many(SingleCLIPropertyConfParser, standardCombiner)

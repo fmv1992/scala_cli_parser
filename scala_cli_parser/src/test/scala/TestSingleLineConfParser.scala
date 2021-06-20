@@ -30,9 +30,17 @@ type: int
   """.trim()
 
   test("`PropertyBlockParser` valid.") {
+    assert(PropertyBlockParser.isValid(multilineDef))
     assert(
-      PropertyBlockParser.isValid(multilineDef)
+      PropertyBlockParser.parse(multilineDef) ===
+        Right(
+          ParsedResult(
+            multilineDef.toSeq,
+            Map("name" -> "multiline", "abc" -> "1", "type" -> "int")
+          )
+        )
     )
+
   }
 
 }

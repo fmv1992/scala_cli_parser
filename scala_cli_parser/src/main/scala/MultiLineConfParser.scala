@@ -1,5 +1,7 @@
 package fmv1992.scala_cli_parser
 
+/** Parse a **single** config that spans multiple lines.
+  */
 object MultiLineConfParser
     extends ParserWithEither[
       Seq[Char],
@@ -49,7 +51,7 @@ object MultiLineConfParser
   def transform(
       input: Seq[Char]
   ): ParsedResult[Seq[Char], Map[String, String]] = {
-    throw new Exception()
+    throw new Exception(input.toString)
   }
 
   def isValid(input: Seq[Char]) = {
