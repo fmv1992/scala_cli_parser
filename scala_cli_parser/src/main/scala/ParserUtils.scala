@@ -90,20 +90,23 @@ object ParserUtils {
       p: ParserWithEither[Seq[A], B],
       combiner: (B, B) => B
   ): ParserWithEither[Seq[A], B] = {
-    def go(rest: Seq[A]): LazyList[Either[Throwable, B]] = {
-      //x// Thread.sleep(10)
-      //x// println("-" * 79)
-      //x// println(rest.mkString)
-      //x// println("-" * 79)
-      //x// Thread.sleep(10)
-      if (rest.isEmpty) {
-        LazyList.empty
+    def go(
+        input: Seq[A],
+        curlen: Int = 1,
+        acc: LazyList[Either[Throwable, B]] = LazyList.empty
+    ): LazyList[Either[Throwable, B]] = {
+      if (input.isEmpty) {
+        acc
       } else {
-        val inputOpt =
-          allSubsequencesFromStart(rest).reverse.filter(p.isValid(_)).headOption
-        inputOpt match {
-          case Some(input) => p.parse(input) #:: go(rest.drop(input.length))
-          case None        => LazyList(Left(ParseException.fromInput(rest, p)))
+        if (curlen <= input.length) {
+          val subSegment = input.slice(0, curlen)
+          if (p.isValid(subSegment)) {
+            go(input.drop(curlen), 1, acc.appended(p.parse(subSegment)))
+          } else {
+            go(input, curlen + 1, acc)
+          }
+        } else {
+          LazyList(Left(ParseException.fromInput(input, p)))
         }
       }
     }

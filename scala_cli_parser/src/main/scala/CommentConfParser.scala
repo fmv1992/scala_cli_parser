@@ -21,22 +21,16 @@ object CommentConfParser
     *  are parsed up to and including the newline.
     */
   def isValid(input: Seq[Char]) = {
-    @scala.annotation.tailrec
-    def go(da: Seq[Char]): Boolean = {
-      if (da.isEmpty) {
+    if (input.headOption == Some('#')) {
+      val spaceIndex = input.indexOf('\n')
+      if (spaceIndex == input.length - 1) {
         true
-      } else if (da.head == '#') {
-        val spaceIndex = da.indexOf('\n')
-        if (spaceIndex == -1) {
-          true
-        } else {
-          go(da.drop(spaceIndex + 1))
-        }
       } else {
         false
       }
+    } else {
+      false
     }
-    if (input.isEmpty) false else go(input)
   }
 
   def transform(

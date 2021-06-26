@@ -16,10 +16,10 @@ package object scala_cli_parser {
     ParserUtils.or(
       ParserUtils.and(
         SpaceConfParser,
-        SolidLineConfParser,
+        ParserUtils.and(SolidLineConfParser, SpaceConfParser, standardCombiner),
         standardCombiner
       ),
-      SolidLineConfParser
+      ParserUtils.and(SolidLineConfParser, SpaceConfParser, standardCombiner)
     )
 
   val SingleCLIPropertyConfParser =
