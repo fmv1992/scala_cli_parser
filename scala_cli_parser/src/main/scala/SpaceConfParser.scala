@@ -1,7 +1,7 @@
 package fmv1992.scala_cli_parser
 
 object SpaceConfParser
-    extends ParserWithEither[
+    extends ParserWithEither2[
       Seq[Char],
       ParsedResult[Seq[Char], Map[String, String]]
     ] {
@@ -23,6 +23,15 @@ object SpaceConfParser
 
   def isValid(input: Seq[Char]) = {
     input.forall(_.isWhitespace)
+  }
+
+  def getValidSubSequence(input: Seq[Char]): Option[Int] = {
+    val subSeq = input.takeWhile(_.isWhitespace)
+    if (subSeq.isEmpty) {
+      None
+    } else {
+      Some(subSeq.length)
+    }
   }
 
 }

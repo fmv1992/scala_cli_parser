@@ -23,6 +23,13 @@ trait ParserWithEither[-A, +B] extends Parser[A, Either[Throwable, B]] {
   def isValid(input: A): Boolean
 }
 
+trait ParserWithEither2[-A <: Seq[_], +B] extends ParserWithEither[A, B] {
+
+  // This library is lacking a linear time parse or parse helper function.
+  def getValidSubSequence(input: A): Option[Int]
+
+}
+
 case class ParserImpl[A, +B](private val _transform: A => B)
     extends ParserWithEither[A, B] {
 

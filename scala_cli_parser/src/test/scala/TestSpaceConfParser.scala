@@ -32,6 +32,16 @@ class TestSpaceConfParser extends AnyFunSuite {
     )
   }
 
+  test("`SpaceConfParser.getValidSubSequence`.") {
+    val mixedSpace = " \t x a "
+    assert(
+      mixedSpace.slice(
+        0,
+        SpaceConfParser.getValidSubSequence(mixedSpace).getOrElse(-1)
+      ) == " \t "
+    )
+  }
+
   // ???: Test that some input throw exception.
 
 }

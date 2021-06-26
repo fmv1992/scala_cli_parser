@@ -7,6 +7,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class TestCommentConfParser extends AnyFunSuite {
 
   val multilineComment = "# comment 01.\n# comment 02.\n \t \tNot a comment."
+  val comment1 = "# Comment.\n# Other comment."
 
   test("`CommentConfParser` invalid.") {
     assert(
@@ -30,7 +31,6 @@ class TestCommentConfParser extends AnyFunSuite {
   }
 
   test("`CommentConfParser.parse`.") {
-    val comment1 = "# Comment.\n# Other comment."
     assert(
       CommentConfParser
         .parse(comment1)
@@ -40,6 +40,15 @@ class TestCommentConfParser extends AnyFunSuite {
         "# Comment.\n# Other comment.".toSeq,
         emptyMapSS
       )
+    )
+  }
+
+  test("`CommentConfParser.getValidSubSequence`.") {
+    assert(
+      comment1.slice(
+        0,
+        CommentConfParser.getValidSubSequence(comment1).getOrElse(-1)
+      ) == "# Comment."
     )
   }
 
