@@ -1,5 +1,8 @@
 package fmv1992.scala_cli_parser
 
+/** Parse a solid line (with no leading spaces). It includes the new line at
+  * the end.
+  */
 object SolidLineConfParser
     extends ParserWithEither[
       Seq[Char],
@@ -31,6 +34,16 @@ object SolidLineConfParser
           .trim
       )
     )
+  }
+
+  def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
+    val newLinePos = input.indexOf('\n')
+    val line = if (newLinePos == -1) input else input.slice(0, newLinePos)
+    if (isValid(line)) {
+      Some(line)
+    } else {
+      None
+    }
   }
 
 }

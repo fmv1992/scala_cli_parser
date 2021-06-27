@@ -1,7 +1,7 @@
 package fmv1992.scala_cli_parser
 
 object CommentConfParser
-    extends ParserWithEither2[
+    extends ParserWithEither[
       Seq[Char],
       ParsedResult[Seq[Char], Map[String, String]]
     ] {
@@ -44,17 +44,18 @@ object CommentConfParser
   ): ParsedResult[Seq[Char], Map[String, String]] =
     ParsedResult(input, emptyMapSS)
 
-  def getValidSubSequence(input: Seq[Char]): Option[Int] = {
+  def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
     val idx = input.indexOf('\n')
     if (idx == -1) {
       if (isValid(input)) {
-        Some(input.length)
+        Some(input)
       } else {
         None
       }
     } else {
-      if (isValid(input.slice(0, idx))) {
-        Some(idx)
+      val subString = input.slice(0, idx)
+      if (isValid(subString)) {
+        Some(subString)
       } else {
         None
       }

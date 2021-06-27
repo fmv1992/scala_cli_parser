@@ -6,7 +6,7 @@ trait Parser[-A, +B] {
 
 }
 
-trait ParserWithEither[-A, +B] extends Parser[A, Either[Throwable, B]] {
+trait ParserWithEither[A, +B] extends Parser[A, Either[Throwable, B]] {
 
   def parse(
       input: A
@@ -21,13 +21,8 @@ trait ParserWithEither[-A, +B] extends Parser[A, Either[Throwable, B]] {
   def transform(input: A): B
 
   def isValid(input: A): Boolean
-}
 
-trait ParserWithEither2[-A <: Seq[_], +B] extends ParserWithEither[A, B] {
-
-  // This library is lacking a linear time parse or parse helper function.
-  def getValidSubSequence(input: A): Option[Int]
-
+  def getValidSubSequence(input: A): Option[A]
 }
 
 case class ParserImpl[A, +B](private val _transform: A => B)
@@ -36,6 +31,14 @@ case class ParserImpl[A, +B](private val _transform: A => B)
   def transform(input: A): B = _transform(input)
 
   def isValid(input: A): Boolean = scala.util.Try(transform(input)).isSuccess
+
+  def getValidSubSequence(input: A): Option[A] = {
+    if (isValid(input)) {
+      Some(input)
+    } else {
+      None
+    }
+  }
 }
 
 object ParserImpl {

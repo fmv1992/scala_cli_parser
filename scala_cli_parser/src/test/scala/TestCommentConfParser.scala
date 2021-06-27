@@ -45,10 +45,8 @@ class TestCommentConfParser extends AnyFunSuite {
 
   test("`CommentConfParser.getValidSubSequence`.") {
     assert(
-      comment1.slice(
-        0,
-        CommentConfParser.getValidSubSequence(comment1).getOrElse(-1)
-      ) == "# Comment."
+      CommentConfParser.getValidSubSequence(comment1)
+        == Some("# Comment.")
     )
   }
 

@@ -16,4 +16,12 @@ object EmptyConfParser
     ParsedResult(input, input.mkString)
   }
 
+  def getValidSubSequence(input: Seq[Char]) = {
+    if (isValid(input)) {
+      Some(input)
+    } else {
+      None
+    }
+  }
+
 }

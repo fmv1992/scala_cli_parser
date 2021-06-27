@@ -21,19 +21,19 @@ help: | cliarg
       | other line
 """.trim
 
-//  test("`MultiLineConfParser` valid.")(failAfter(Span(200, Millis))({
-//    assert(
-//      MultiLineConfParser.isValid(valid01)
-//    )
-//  }))
-//
-//  test("`MultiLineConfParser` invalid.")(failAfter(Span(200, Millis))({
-//    assert(
-//      !MultiLineConfParser.isValid(inValid01)
-//    )
-//  }))
+  test("`MultiLineConfParser` valid.")(failAfter(Span(200, Millis))({
+    assert(
+      MultiLineConfParser.isValid(valid01)
+    )
+  }))
 
-  test("`ConfParser` full example.")(failAfter(Span(500, Millis))({
+  test("`MultiLineConfParser` invalid.")(failAfter(Span(200, Millis))({
+    assert(
+      !MultiLineConfParser.isValid(inValid01)
+    )
+  }))
+
+  ignore("`ConfParser` full example.")(failAfter(Span(500, Millis))({
     val fullConfig =
       scala.io.Source
         .fromResource("test_multiline_01.txt")
