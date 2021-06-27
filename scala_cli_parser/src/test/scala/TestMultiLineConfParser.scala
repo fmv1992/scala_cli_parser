@@ -1,4 +1,4 @@
-// project scala_cli_parserCrossProjectJVM;testOnly fmv1992.scala_cli_parser.TestMultiLineConfParser
+// project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestMultiLineConfParser
 
 package fmv1992.scala_cli_parser
 
@@ -17,7 +17,7 @@ help: | cliarg
 
   val inValid01 = """
 help: | cliarg
-      |
+     |
       | other line
 """.trim
 

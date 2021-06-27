@@ -1,7 +1,7 @@
 package fmv1992.scala_cli_parser
 
 /** Parse a solid line (with no leading spaces). It includes the new line at
-  * the end.
+  * the end if it is present.
   */
 object SolidLineConfParser
     extends ParserWithEither[
@@ -14,9 +14,8 @@ object SolidLineConfParser
     lazy val headIsSolidAndContainsColon =
       (!input.head.isWhitespace && input.tail.exists(_ == ':'))
     lazy val newLinePos = input.indexOf('\n')
-    lazy val newLinesOnlyAtEnd = (newLinePos == input.length - 1)
-    // lazy val newLinesOnlyAtEnd =
-    // (newLinePos == -1) || (newLinePos == input.length - 1)
+    lazy val newLinesOnlyAtEnd =
+      (newLinePos == -1) || (newLinePos == input.length - 1)
     isNotEmpty && headIsSolidAndContainsColon && newLinesOnlyAtEnd
   }
 
