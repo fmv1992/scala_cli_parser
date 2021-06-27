@@ -3,7 +3,7 @@ package fmv1992.scala_cli_parser
 object EmptyConfParser
     extends ParserWithEither[
       Seq[Char],
-      ParsedResult[Seq[Char], String]
+      ParsedResult[Seq[Char], Map[String, String]]
     ] {
 
   def isValid(input: Seq[Char]): Boolean = {
@@ -12,8 +12,8 @@ object EmptyConfParser
 
   def transform(
       input: Seq[Char]
-  ): fmv1992.scala_cli_parser.ParsedResult[Seq[Char], String] = {
-    ParsedResult(input, input.mkString)
+  ): fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]] = {
+    ParsedResult(input, Map.empty)
   }
 
   def getValidSubSequence(input: Seq[Char]) = {

@@ -31,7 +31,7 @@ class TestEmptyConfParser extends AnyFunSuite {
           throw new Exception()
         ) === ParsedResult(
         valid01.toSeq,
-        valid01
+        Map.empty
       )
     )
 
