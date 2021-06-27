@@ -1,4 +1,4 @@
-// project scala_cli_parserCrossProjectJVM;testOnly fmv1992.scala_cli_parser.TestCommentConfParser
+// project scala_cli_parserCrossProjectJVM;testOnly ~fmv1992.scala_cli_parser.TestCommentConfParser
 
 package fmv1992.scala_cli_parser
 
@@ -46,56 +46,7 @@ class TestCommentConfParser extends AnyFunSuite {
   test("`CommentConfParser.getValidSubSequence`.") {
     assert(
       CommentConfParser.getValidSubSequence(comment1)
-        == Some("# Comment.")
+        == Some("# Comment.".toSeq)
     )
   }
-
-  // test("`CommentConfParser.getFirstSignificantCharInLastLine`.") {
-
-  //   assert(
-  //     CommentConfParser("#").getFirstSignificantCharInLastLine
-  //       === Some('#')
-  //   )
-  //   assert(
-  //     CommentConfParser(" #").getFirstSignificantCharInLastLine
-  //       === Some('#')
-  //   )
-  //   assert(
-  //     CommentConfParser(" x").getFirstSignificantCharInLastLine
-  //       === Some('x')
-  //   )
-  //   assert(
-  //     CommentConfParser(" cc\n x \n l ").getFirstSignificantCharInLastLine
-  //       === Some('l')
-  //   )
-  // }
-
-  // test("`CommentConfParser.getMeaningfulInput`.") {
-  //   assert(
-  //     CommentConfParser("# My comment.\n ")
-  //       .getMeaningfulInput() === (CommentConfParser(
-  //       "# My comment.\n"
-  //     ), " ".toIterable)
-  //   )
-  //   assert(
-  //     CommentConfParser(multilineComment)
-  //       .getMeaningfulInput() === (CommentConfParser(
-  //       "# comment 01.\n# comment 02.\n"
-  //     ), " \t \tNot a comment.".toIterable)
-  //   )
-  // }
-
-  // test("`CommentConfParser.consume`.") {
-  //   val (c1, remaining1) = CommentConfParser("").consume(multilineComment)
-  //   val (c2, remaining2) =
-  //     (
-  //       CommentConfParser("# comment 01.\n# comment 02.\n".toList),
-  //       " \t \tNot a comment.".toIterable
-  //     )
-  //   assert(c1 === c2)
-  //   assert(remaining1 === remaining2)
-  // }
-
-  // ???: Test that some input throw exception.
-
 }
