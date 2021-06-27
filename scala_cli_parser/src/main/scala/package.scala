@@ -16,26 +16,30 @@ package object scala_cli_parser {
     ParserUtils.or(
       ParserUtils.and(
         SpaceConfParser,
-        ParserUtils.and(SolidLineConfParser, SpaceConfParser, standardCombiner),
+        ParserUtils.and(
+          SolidLineConfParser,
+          ParserUtils.or(SpaceConfParser, EmptyConfParser),
+          standardCombiner
+        ),
         standardCombiner
       ),
-      ParserUtils.and(SolidLineConfParser, SpaceConfParser, standardCombiner)
+      ParserUtils.and(
+        SolidLineConfParser,
+        ParserUtils.or(SpaceConfParser, EmptyConfParser),
+        standardCombiner
+      )
     )
 
   val SingleCLIPropertyConfParser =
     ParserUtils.or(
       ParserUtils.and(
         SingleLineConfParser,
-        ParserUtils.or(SpaceConfParser, EmptyConfParser): ParserWithEither[Seq[
-          Char
-        ], ParsedResult[Seq[Char], Map[String, String]]],
+        ParserUtils.or(SpaceConfParser, EmptyConfParser),
         standardCombiner
       ),
       ParserUtils.and(
         MultiLineConfParser,
-        ParserUtils.or(SpaceConfParser, EmptyConfParser): ParserWithEither[Seq[
-          Char
-        ], ParsedResult[Seq[Char], Map[String, String]]],
+        ParserUtils.or(SpaceConfParser, EmptyConfParser),
         standardCombiner
       )
     )

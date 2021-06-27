@@ -10,6 +10,9 @@ object SolidLineConfParser
     ] {
 
   def isValid(input: Seq[Char]): Boolean = {
+    // Console.err.println("-" * 79)
+    // Console.err.println(input.mkString)
+    // Console.err.println("-" * 79)
     lazy val isNotEmpty = !input.isEmpty
     lazy val headIsSolidAndContainsColon =
       (!input.head.isWhitespace && input.tail.exists(_ == ':'))

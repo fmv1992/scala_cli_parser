@@ -6,9 +6,10 @@ object ParserUtils {
       p1: ParserWithEither[A, B],
       p2: ParserWithEither[A, B]
   ): ParserWithEither[A, B] = {
+    // ???: Notice the subtle difference in the order of `p1` or `p2` (which comes first). This should be tested.
     ParserImpl(
       (x: A) =>
-        p2.parse(x).getOrElse(p1.parse(x).getOrElse(throw new Exception()))
+        p1.parse(x).getOrElse(p2.parse(x).getOrElse(throw new Exception()))
     )
   }
 
@@ -95,18 +96,26 @@ object ParserUtils {
         curlen: Int = 1,
         acc: LazyList[Either[Throwable, B]] = LazyList.empty
     ): LazyList[Either[Throwable, B]] = {
-      if (input.isEmpty) {
-        acc
+      if (curlen > input.length) {
+        LazyList(Left(ParseException.fromInput(input, p)))
       } else {
-        if (curlen <= input.length) {
-          val subSegment = input.slice(0, curlen)
-          if (p.isValid(subSegment)) {
-            go(input.drop(curlen), 1, acc.appended(p.parse(subSegment)))
-          } else {
-            go(input, curlen + 1, acc)
-          }
+        Console.err.println("-" * 79)
+        Console.err.println("|" + input.mkString + "|")
+        Console.err.println(acc.toList)
+        Console.err.println("-" * 79)
+        if (input.isEmpty) {
+          acc
         } else {
-          LazyList(Left(ParseException.fromInput(input, p)))
+          if (curlen <= input.length) {
+            val subSegment = input.slice(0, curlen)
+            if (p.isValid(subSegment)) {
+              go(input.drop(curlen), 1, acc.appended(p.parse(subSegment)))
+            } else {
+              go(input, curlen + 1, acc)
+            }
+          } else {
+            LazyList(Left(ParseException.fromInput(input, p)))
+          }
         }
       }
     }
