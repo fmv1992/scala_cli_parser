@@ -25,6 +25,10 @@ trait ParserWithEither[A, +B] extends Parser[A, Either[Throwable, B]] {
   def getValidSubSequence(input: A): Option[A]
 }
 
+/** CURRENT: The issue is that `ParserImpl` gets the `transform` function but
+  * it is more suitable to have a `getValidSubSequence` so that parser
+  * combiners could combine them.
+  */
 case class ParserImpl[A, +B](private val _transform: A => B)
     extends ParserWithEither[A, B] {
 

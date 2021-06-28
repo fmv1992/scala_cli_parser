@@ -1,4 +1,4 @@
-// project scala_cli_parserCrossProjectJVM;testOnly fmv1992.scala_cli_parser.TestParserUtils
+// project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestParserUtils
 
 package fmv1992.scala_cli_parser
 
@@ -143,7 +143,8 @@ class TestParserUtils extends AnyFunSuite {
     )
   }
 
-  test("`many` \"b\"s.") {
+  // Many should not have to guess and decrease the input w any strategy.
+  ignore("`many` \"b\"s.") {
     val manyBsParser = ParserUtils.many(bParser, combinerString)
     assert(manyBsParser.parse("b").right.value.result === Map("b" -> 1))
     assert(manyBsParser.parse("bbbb").right.value.result === Map("b" -> 4))

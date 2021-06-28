@@ -43,29 +43,6 @@ object MultiLineConfParser
       ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
     )
 
-  ParserUtils.and(
-    ParserUtils.and(
-      SpaceConfParser,
-      SingleLineConfParser,
-      (
-          x: ParsedResult[Seq[Char], Map[String, String]],
-          y: ParsedResult[Seq[Char], Map[String, String]]
-      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
-    ),
-    ParserUtils.many(
-      SolidLineStartingWithPipe,
-      (
-          x: ParsedResult[Seq[Char], String],
-          y: ParsedResult[Seq[Char], String]
-      ) => ParsedResult(x.data ++ y.data, x.result + '\n' + y.result)
-    ),
-    (
-        x: ParsedResult[Seq[Char], Map[String, String]],
-        // y: ParsedResult[Seq[Char], Map[String, String]]
-        y: ParsedResult[Seq[Char], String]
-    ) => ParsedResult(x.data ++ y.data, 1)
-  )
-
   def transform(
       input: Seq[Char]
   ): ParsedResult[Seq[Char], Map[String, String]] = {
@@ -82,13 +59,28 @@ object MultiLineConfParser
     )
     val pipePos = splitLines.map(_.indexOf('|'))
     val pipePosAreTheSame: Boolean = pipePos.forall(_ == pipePos.head)
-    SingleLineConfParser.isValid(firstLine) && pipePosAreTheSame && otherLines
+    Thread.sleep(1000)
+    Console.err.println("-" * 79)
+    Console.err.println(SingleLineConfParser.isValid(firstLine))
+    Console.err.println(pipePosAreTheSame)
+    Console.err.println(
+      otherLines
+        .forall(
+          SpacedSolidLineStartingWithPipe.isValid(_)
+        )
+    )
+    Console.err.println("-" * 79)
+    SingleLineConfParser.isValid(firstLine) && pipePosAreTheSame &&
+    otherLines
       .forall(
         SpacedSolidLineStartingWithPipe.isValid(_)
       )
   }
 
   def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
+    // Console.err.println("-" * 79)
+    // Console.err.println("🐛" + input.mkString + "🐛")
+    // Console.err.println("-" * 79)
     val splitLines = splitOnLines(input)
     val idx = splitLines.indexWhere(!_.contains('|'))
     if (idx == -1) {

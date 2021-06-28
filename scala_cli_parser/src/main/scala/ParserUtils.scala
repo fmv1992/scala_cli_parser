@@ -21,17 +21,23 @@ object ParserUtils {
     // Tries to find the longest valid sequence for `p1`.
     ParserImpl(
       (x: Seq[A]) => {
-        val allSubSequences: Seq[Seq[A]] = allSubsequencesFromStart(x).reverse
-        val maxSize: Int =
-          allSubSequences.filter(p1.isValid(_)).to(LazyList).head.length
-        val left = x.slice(0, maxSize)
-        val right = x.drop(maxSize)
-        val res = p1
-          .parse(left)
-          .flatMap(x => p2.parse(right).map(y => combiner(x, y)))
-        res match {
-          case Left(x)  => throw x
-          case Right(x) => x
+        val parsedOpt1 = p1.getValidSubSequence(x)
+        parsedOpt1 match {
+          case Some(x1) => {
+            val inputRemaining = x.drop(x1.length)
+            val parsedOpt2 = p2.getValidSubSequence(inputRemaining)
+            Console.err.println(parsedOpt1)
+            Console.err.println(parsedOpt2)
+            parsedOpt2 match {
+              case Some(x2) if inputRemaining.drop(x2.length).length == 0 =>
+                combiner(p1.transform(x1), p2.transform(x2))
+              case Some(_) =>
+                throw ParseException.fromInput(inputRemaining, p2)
+              case None =>
+                throw ParseException.fromInput(inputRemaining, p2)
+            }
+          }
+          case None => throw ParseException.fromInput(x, p1)
         }
       }
     )
@@ -93,29 +99,19 @@ object ParserUtils {
   ): ParserWithEither[Seq[A], B] = {
     def go(
         input: Seq[A],
-        curlen: Int = 1,
         acc: LazyList[Either[Throwable, B]] = LazyList.empty
     ): LazyList[Either[Throwable, B]] = {
-      if (curlen > input.length) {
-        LazyList(Left(ParseException.fromInput(input, p)))
+      // Console.err.println("-" * 79)
+      // Console.err.println("¦" + input.mkString + "¦")
+      // Console.err.println(acc.toList)
+      // Console.err.println("-" * 79)
+      if (input.isEmpty) {
+        acc
       } else {
-        Console.err.println("-" * 79)
-        Console.err.println("|" + input.mkString + "|")
-        Console.err.println(acc.toList)
-        Console.err.println("-" * 79)
-        if (input.isEmpty) {
-          acc
-        } else {
-          if (curlen <= input.length) {
-            val subSegment = input.slice(0, curlen)
-            if (p.isValid(subSegment)) {
-              go(input.drop(curlen), 1, acc.appended(p.parse(subSegment)))
-            } else {
-              go(input, curlen + 1, acc)
-            }
-          } else {
-            LazyList(Left(ParseException.fromInput(input, p)))
-          }
+        val parsedOpt = p.getValidSubSequence(input)
+        parsedOpt match {
+          case Some(x) => go(input.drop(x.length), acc.appended(p.parse(x)))
+          case None    => acc
         }
       }
     }

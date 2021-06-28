@@ -39,6 +39,7 @@ object SolidLineConfParser
   }
 
   def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
+    // Console.err.println(input)
     val newLinePos = input.indexOf('\n')
     val line = if (newLinePos == -1) input else input.slice(0, newLinePos)
     if (isValid(line)) {
