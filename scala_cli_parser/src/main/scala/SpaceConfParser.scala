@@ -17,7 +17,7 @@ object SpaceConfParser
   override def parse(
       input: Seq[Char]
   ): Try[ParsedResult[Seq[Char], Map[String, String]]] =
-    super[ParserWithTry].parse(input)
+    super[ParserPartial].parse(input)
 
   def partialParse(
       input: Seq[Char]

@@ -68,7 +68,6 @@ class TestParserUtils extends AnyFunSuite {
         emptyMapSS
       ) === parser.parse(space1).get
     )
-    assert(parser.parse(combined1).isSuccess)
     // CURRENT
     // ???: Again it is evident that there is redundancy (and errors) on how
     // `Success` is handled currently. This should fail.
@@ -78,6 +77,7 @@ class TestParserUtils extends AnyFunSuite {
         emptyMapSS
       ) === parser.parse(combined1).get
     )
+    assert(parser.parse(combined1).isFailure)
   }
 
 //
