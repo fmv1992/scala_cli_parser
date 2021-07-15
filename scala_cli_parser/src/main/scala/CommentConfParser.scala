@@ -1,65 +1,62 @@
-// package fmv1992.scala_cli_parser
-//
-// object CommentConfParser
-//     extends ParserWithEither[
-//       Seq[Char],
-//       ParsedResult[Seq[Char], Map[String, String]]
-//     ] {
-//
-//   override def parse(
-//       input: Seq[Char]
-//   ): Either[Throwable, ParsedResult[Seq[Char], Map[String, String]]] = {
-//     if (isValid(input)) {
-//       Right(transform(input))
-//     } else {
-//       // ???: Another chance to use implicits maybe? (mark01)
-//       Left(ParseException.fromInput(input, CommentConfParser))
-//     }
-//   }
-//
-//   /** Valid lines are non-empty lines starting with the comment character. They
-//     *  are parsed up to and including the newline.
-//     */
-//   def isValid(input: Seq[Char]) = {
-//     @scala.annotation.tailrec
-//     def go(da: Seq[Char]): Boolean = {
-//       if (da.isEmpty) {
-//         true
-//       } else if (da.head == '#') {
-//         val spaceIndex = da.indexOf('\n')
-//         if (spaceIndex == -1) {
-//           true
-//         } else {
-//           go(da.drop(spaceIndex + 1))
-//         }
-//       } else {
-//         false
-//       }
-//     }
-//     if (input.isEmpty) false else go(input)
-//   }
-//
-//   def transform(
-//       input: Seq[Char]
-//   ): ParsedResult[Seq[Char], Map[String, String]] =
-//     ParsedResult(input, emptyMapSS)
-//
-//   def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
-//     val idx = input.indexOf('\n')
-//     if (idx == -1) {
-//       if (isValid(input)) {
-//         Some(input)
-//       } else {
-//         None
-//       }
-//     } else {
-//       val subString = input.slice(0, idx)
-//       if (isValid(subString)) {
-//         Some(subString)
-//       } else {
-//         None
-//       }
-//     }
-//   }
-//
-// }
+package fmv1992.scala_cli_parser
+
+import scala.util.Try
+import scala.util.Failure
+import fastparse.Parsed
+import scala.util.Success
+
+object CommentConfParser
+    extends ParserPartial[
+      Seq[Char],
+      Try[ParsedResult[Seq[Char], Map[String, String]]]
+    ]
+    with ParserWithTry[
+      Seq[Char],
+      ParsedResult[Seq[Char], Map[String, String]]
+    ] {
+
+  override def parse(
+      input: Seq[Char]
+  ): Try[ParsedResult[Seq[Char], Map[String, String]]] =
+    super[ParserWithTry].parse(input)
+
+  def partialParse(
+      input: Seq[Char]
+  ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = {
+    def go(
+        i: Seq[Char],
+        acc: Seq[Char]
+    ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = {
+      if (i.isEmpty) {
+        if (acc.isEmpty) {
+          (Seq.empty, Failure(ParseException(input.mkString)))
+        } else {
+          (i, Success(ParsedResult(acc, emptyMapSS)))
+        }
+      } else if (i.head == '#') {
+        val spaceIndex = i.indexOf('\n')
+        if (spaceIndex == -1) {
+          (Seq.empty, Success(ParsedResult(input, emptyMapSS)))
+        } else {
+          go(i.drop(spaceIndex + 1), acc ++ i.take(spaceIndex))
+        }
+      } else {
+        if (acc.isEmpty) {
+          (Seq.empty, Failure(ParseException(input.mkString)))
+        } else {
+          (i, Success(ParsedResult(acc, emptyMapSS)))
+        }
+      }
+    }
+    go(input, Seq.empty)
+  }
+
+  def transform(
+      input: Seq[Char]
+  ): ParsedResult[Seq[Char], Map[String, String]] =
+    partialParse(input) match {
+      case (_, Success(a)) => a
+      case (_, Failure(_)) => throw new ParseException(input.mkString)
+    }
+
+}

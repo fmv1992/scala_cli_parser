@@ -24,7 +24,7 @@ class TestSpaceConfParser extends AnyFunSuite {
   test("`SpaceConfParser.partialParse`.") {
     assert(
       SpaceConfParser
-        .partialParse(" a\t")
+        .partialParse(" a\t".toSeq)
         === (
           "a\t".toSeq,
           Success(ParsedResult(" ".toSeq, emptyMapSS))
