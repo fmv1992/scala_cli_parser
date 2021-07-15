@@ -10,7 +10,6 @@
 !*.scala
 !*.sh
 !*.txt
-!*.vim
 !.gitignore
 !.gitkeep
 !.properties

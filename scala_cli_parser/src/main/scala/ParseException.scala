@@ -43,9 +43,9 @@ object ParseException {
     input match {
       case inputAsSeq: Seq[Char] =>
         parser match {
-          case pa: ParserWithEither[Seq[Char], B] => {
+          case pa: ParserWithTry[Seq[Char], B] => {
             val position: ErrorPosition =
-              getExceptionPosition(input, (x: Seq[Char]) => !pa.isValid(x))
+              getExceptionPosition(input, (x: Seq[Char]) => ???)
             position match {
               case ErrorPositionUnexisting => input.toString
               case ErrorPositionExisting(_, _, humanPosition) => {
@@ -98,7 +98,7 @@ object ParseException {
 
   def fromInput[A, B](
       input: Seq[A],
-      parser: ParserWithEither[Seq[A], B]
+      parser: ParserWithTry[Seq[A], B]
   ): ParseException = {
     // ???: Another chance to use implicits maybe? (mark01)
     ParseException(
@@ -106,7 +106,7 @@ object ParseException {
         .getExceptionPosition(
           input,
           (x: Seq[A]) => {
-            parser.parse(x).isLeft
+            parser.parse(x).isFailure
           }
         )
         .toString
