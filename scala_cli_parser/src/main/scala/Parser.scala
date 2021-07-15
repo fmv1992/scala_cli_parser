@@ -6,6 +6,15 @@ trait Parser[-A, +B] {
 
 }
 
+trait ParserPartial[-A <: Seq[_], +B] {
+  this: Parser[A, B] =>
+
+  // ???: Not sure I get the variances right here.
+  def partialParse[C <: A](input: A): (C, B) = {
+    ???
+  }
+}
+
 trait ParserWithEither[A, +B] extends Parser[A, Either[Throwable, B]] {
 
   def parse(
@@ -37,6 +46,7 @@ case class ParserImpl[A, +B](private val _transform: A => B)
   def isValid(input: A): Boolean = scala.util.Try(transform(input)).isSuccess
 
   def getValidSubSequence(input: A): Option[A] = {
+    ???
     if (isValid(input)) {
       Some(input)
     } else {
