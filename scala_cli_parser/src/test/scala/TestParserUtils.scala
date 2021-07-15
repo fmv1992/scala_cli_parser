@@ -1,12 +1,12 @@
-// // project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestParserUtils
-//
-// package fmv1992.scala_cli_parser
-//
-// import org.scalatest.EitherValues._
-// import org.scalatest.funsuite.AnyFunSuite
-//
-// class TestParserUtils extends AnyFunSuite {
-//
+// project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestParserUtils
+
+package fmv1992.scala_cli_parser
+
+import org.scalatest.EitherValues._
+import org.scalatest.funsuite.AnyFunSuite
+
+class TestParserUtils extends AnyFunSuite {
+
 //   def parserFactory(
 //       x: String
 //   ): ParserWithEither[Seq[Char], ParsedResult[Seq[Char], Map[String, Int]]] =
@@ -35,9 +35,9 @@
 //       }.toMap
 //     )
 //
-//   val comment1 = "# Comment 01."
-//   val space1 = " "
-//   val combined1 = List(comment1, space1).mkString("\n")
+  val comment1 = "# Comment 01."
+  val space1 = " "
+  val combined1 = List(comment1, space1).mkString("\n")
 //
 //   val parserSpaceAndComment =
 //     ParserUtils.and(
@@ -53,22 +53,33 @@
 //       standardCombiner
 //     )
 //
-//   test("`or` valid.") {
-//     val parser = ParserUtils.or(CommentConfParser, SpaceConfParser)
-//     assert(
-//       parser.parse(comment1).right.value === ParsedResult(
-//         comment1.toSeq,
-//         emptyMapSS
-//       )
-//     )
-//     assert(
-//       parser.parse(space1).right.value === ParsedResult(
-//         space1.toSeq,
-//         emptyMapSS
-//       )
-//     )
-//     assert(parser.parse(combined1).isLeft)
-//   }
+
+  test("`or` valid.") {
+    val parser = ParserUtils.or(CommentConfParser, SpaceConfParser)
+    assert(
+      ParsedResult(
+        comment1.toSeq,
+        emptyMapSS
+      ) === parser.parse(comment1).get
+    )
+    assert(
+      ParsedResult(
+        space1.toSeq,
+        emptyMapSS
+      ) === parser.parse(space1).get
+    )
+    assert(parser.parse(combined1).isSuccess)
+    // CURRENT
+    // ???: Again it is evident that there is redundancy (and errors) on how
+    // `Success` is handled currently. This should fail.
+    assert(
+      ParsedResult(
+        combined1.toSeq,
+        emptyMapSS
+      ) === parser.parse(combined1).get
+    )
+  }
+
 //
 //   ignore("`or` invalid.") {}
 //
@@ -173,4 +184,4 @@
 //
 //   ignore("`many` invalid.") {}
 //
-// }
+}

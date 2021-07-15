@@ -1,23 +1,20 @@
-// package fmv1992.scala_cli_parser
-//
-// object ParserUtils {
-//
-//   def or[A, B](
-//       p1: ParserWithEither[A, B],
-//       p2: ParserWithEither[A, B]
-//   ): ParserWithEither[A, B] = {
-//     // ???: Notice the subtle difference in the order of `p1` or `p2` (which comes first). This should be tested.
-//     ParserImpl(
-//       (x: A) =>
-//         p1.parse(x).getOrElse(p2.parse(x).getOrElse(throw new Exception()))
-//     )
-//   }
+package fmv1992.scala_cli_parser
+
+object ParserUtils {
+
+  def or[A, B](
+      p1: ParserWithTry[A, B],
+      p2: ParserWithTry[A, B]
+  ): ParserWithTry[A, B] = {
+    ParserImpl((x: A) => p1.parse(x).orElse(p2.parse(x)).get)
+  }
+
 //
 //   def and[A, B, C, D](
-//       p1: ParserWithEither[Seq[A], B],
-//       p2: ParserWithEither[Seq[A], C],
+//       p1: ParserWithTry[Seq[A], B],
+//       p2: ParserWithTry[Seq[A], C],
 //       combiner: (B, C) => D
-//   ): ParserWithEither[Seq[A], D] = {
+//   ): ParserWithTry[Seq[A], D] = {
 //     // Tries to find the longest valid sequence for `p1`.
 //     ParserImpl(
 //       (x: Seq[A]) => {
@@ -44,13 +41,13 @@
 //   }
 //
 //   def tryAll[A, B](
-//       input: ParserWithEither[Seq[A], B]*
-//   ): ParserWithEither[Seq[A], Seq[B]] = {
+//       input: ParserWithTry[Seq[A], B]*
+//   ): ParserWithTry[Seq[A], Seq[B]] = {
 //     val parserSet = input.toSet
 //     def go(
 //         currentSegment: Seq[A],
 //         remainingSegment: Seq[A],
-//         validParsers: Set[ParserWithEither[Seq[A], B]],
+//         validParsers: Set[ParserWithTry[Seq[A], B]],
 //         acc: Seq[B] = Seq.empty
 //     ): Seq[B] = {
 //       if (remainingSegment.isEmpty) {
@@ -94,9 +91,9 @@
 //
 //   // ???: I believe there is a lot of redundancy in this method.
 //   def many[A, B](
-//       p: ParserWithEither[Seq[A], B],
+//       p: ParserWithTry[Seq[A], B],
 //       combiner: (B, B) => B
-//   ): ParserWithEither[Seq[A], B] = {
+//   ): ParserWithTry[Seq[A], B] = {
 //     def go(
 //         input: Seq[A],
 //         acc: LazyList[Either[Throwable, B]] = LazyList.empty
@@ -133,4 +130,4 @@
 //     (0 to s.length).map(l1 => s.slice(0, l1))
 //   }
 //
-// }
+}

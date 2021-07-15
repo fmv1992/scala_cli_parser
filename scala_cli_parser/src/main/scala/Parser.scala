@@ -34,4 +34,11 @@ trait ParserWithTry[A, +B] extends Parser[A, Try[B]] {
 
 }
 
+case class ParserImpl[A, +B](private val _transform: A => B)
+    extends ParserWithTry[A, B] {
+
+  def transform(input: A): B = _transform(input)
+
+}
+
 case class ParsedResult[A, +B](data: A, result: B)
