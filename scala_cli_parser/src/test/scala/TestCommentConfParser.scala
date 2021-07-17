@@ -2,10 +2,10 @@
 
 package fmv1992.scala_cli_parser
 
+import scala.util.Failure
 import scala.util.Success
 
 import org.scalatest.funsuite.AnyFunSuite
-import scala.util.Failure
 
 class TestCommentConfParser extends AnyFunSuite {
 
