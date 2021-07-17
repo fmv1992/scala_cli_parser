@@ -23,33 +23,43 @@ object MultiLineConfParser
 
   def partialParse(
       input: Seq[Char]
-  ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = ???
+  ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = {
+    val lines = splitOnLines(input)
+    // Make sure this is multi line.
+    if (lines.length <= 1) {
+      (
+        input,
+        Failure(ParseException(s"Is a single line: '${input.mkString}'."))
+      )
+    } else {
+      // Get key.
+      val keyPos = lines.head.indexOf(':')
+      val key =
+        if (keyPos == -1) {
+          throw new ParseException(s"Char ':' not found: '${input.mkString}'.")
+        } else {
+          lines.head.take(keyPos)
+        }
+
+      // Get value.
+      val pipePos = lines.head.indexOf('|')
+      val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
+      val rest = lines.drop(linesWithSamePipePos.length)
+      val value =
+        linesWithSamePipePos
+          .map(x => x.drop(pipePos + 1).mkString.strip)
+          .mkString("\n")
+      (
+        rest.mkString("\n"),
+        Success(ParsedResult(input, Map(key.mkString -> value)))
+      )
+    }
+  }
 
   def transform(
       input: Seq[Char]
   ): ParsedResult[Seq[Char], Map[String, String]] = {
-    val lines = splitOnLines(input)
-    // Get key.
-    val keyPos = lines.head.indexOf(':')
-    val key =
-      if (keyPos == -1) {
-        throw new ParseException(
-          List("Char ':' not found:", input.mkString).mkString("\n")
-        )
-      } else {
-        lines.head.take(keyPos)
-      }
-
-    // Get value.
-    val pipePos = lines.map(_.indexOf('|'))
-    val pipePosAreTheSame: Boolean = pipePos.forall(_ == pipePos.head)
-    val value =
-      if (pipePosAreTheSame) {
-        lines.map(x => x.drop(pipePos.head + 1).mkString.strip).mkString("\n")
-      } else {
-        throw new ParseException(input.mkString)
-      }
-    ParsedResult(input, Map(key.mkString -> value))
+    ???
   }
 
   private def splitOnLines(input: Seq[Char]): Seq[Seq[Char]] = {

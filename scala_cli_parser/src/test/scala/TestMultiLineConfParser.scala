@@ -6,6 +6,7 @@ import org.scalatest.concurrent.TimeLimits
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.Millis
 import org.scalatest.time.Span
+import scala.util.Success
 
 class TestMultiLineConfParser extends AnyFunSuite with TimeLimits {
 
@@ -15,17 +16,42 @@ help: | cliarg
       | other line
  """.trim
 
-  val inValid01 = """
+  val invalid01 = """
  help: | cliarg
       |
        | other line
  """.trim
 
-  test("`MultiLineConfParser.transform` valid.")(
-    failAfter(Span(200000, Millis))({
+  test("`MultiLineConfParser.partialParse` valid.")(
+    failAfter(Span(200_000, Millis))({
       assert(
-        ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line")) ===
+        (
+          "".toSeq,
+          Success(
+            ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line"))
+          )
+        ) ===
+          MultiLineConfParser.partialParse(valid01)
+      )
+    })
+  )
+
+  ignore("`MultiLineConfParser.transform` valid.")(
+    failAfter(Span(200_000, Millis))({
+      assert(
+        (
+          "".toSeq,
+          ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line"))
+        ) ===
           MultiLineConfParser.transform(valid01)
+      )
+    })
+  )
+
+  ignore("`MultiLineConfParser.transform` invalid.")(
+    failAfter(Span(200_000, Millis))({
+      assertThrows[ParseException](
+        MultiLineConfParser.transform(invalid01)
       )
     })
   )
