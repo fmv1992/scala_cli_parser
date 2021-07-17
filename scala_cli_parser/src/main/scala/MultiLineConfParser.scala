@@ -19,7 +19,8 @@ object MultiLineConfParser
 
   override def parse(
       input: Seq[Char]
-  ): Try[ParsedResult[Seq[Char], Map[String, String]]] = ???
+  ): Try[ParsedResult[Seq[Char], Map[String, String]]] =
+    super[ParserPartial].parse(input)
 
   def partialParse(
       input: Seq[Char]
@@ -44,11 +45,16 @@ object MultiLineConfParser
       // Get value.
       val pipePos = lines.head.indexOf('|')
       val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
-      val rest = lines.drop(linesWithSamePipePos.length)
-      val value =
+      val value = if (linesWithSamePipePos.length >= 2) {
         linesWithSamePipePos
           .map(x => x.drop(pipePos + 1).mkString.strip)
           .mkString("\n")
+      } else {
+        throw new ParseException(
+          s"`MultiLineConfParser` parses multi lines only: '${input.mkString}'."
+        )
+      }
+      val rest = lines.drop(linesWithSamePipePos.length)
       (
         rest.mkString("\n"),
         Success(ParsedResult(input, Map(key.mkString -> value)))
@@ -59,6 +65,10 @@ object MultiLineConfParser
   def transform(
       input: Seq[Char]
   ): ParsedResult[Seq[Char], Map[String, String]] = {
+    partialParse(input) match {
+      case (_, Success(a)) => a
+      case (_, Failure(_)) => throw new ParseException(input.mkString)
+    }
     ???
   }
 

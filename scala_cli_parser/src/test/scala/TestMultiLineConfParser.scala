@@ -17,7 +17,7 @@ help: | cliarg
  """.trim
 
   val invalid01 = """
- help: | cliarg
+help: | cliarg
       |
        | other line
  """.trim
@@ -36,25 +36,22 @@ help: | cliarg
     })
   )
 
-  ignore("`MultiLineConfParser.transform` valid.")(
-    failAfter(Span(200_000, Millis))({
-      assert(
-        (
-          "".toSeq,
-          ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line"))
-        ) ===
-          MultiLineConfParser.transform(valid01)
-      )
-    })
-  )
+  // test("`MultiLineConfParser.transform` valid.")(
+  // failAfter(Span(200000, Millis))({
+  // assert(
+  // ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line")) ===
+  // MultiLineConfParser.transform(valid01)
+  // )
+  // })
+  // )
 
-  ignore("`MultiLineConfParser.transform` invalid.")(
-    failAfter(Span(200_000, Millis))({
-      assertThrows[ParseException](
-        MultiLineConfParser.transform(invalid01)
-      )
-    })
-  )
+  // test("`MultiLineConfParser.transform` invalid.")(
+  // failAfter(Span(200_000, Millis))({
+  // assertThrows[ParseException](
+  // MultiLineConfParser.transform(invalid01)
+  // )
+  // })
+  // )
 
   // test("`MultiLineConfParser` invalid.")(failAfter(Span(200000, Millis))({
   // assert(
