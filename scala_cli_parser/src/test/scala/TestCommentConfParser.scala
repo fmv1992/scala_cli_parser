@@ -5,6 +5,7 @@ package fmv1992.scala_cli_parser
 import scala.util.Success
 
 import org.scalatest.funsuite.AnyFunSuite
+import scala.util.Failure
 
 class TestCommentConfParser extends AnyFunSuite {
 
@@ -13,13 +14,13 @@ class TestCommentConfParser extends AnyFunSuite {
 
   test("`CommentConfParser.parse`.") {
     assert(
-      CommentConfParser
-        .parse(comment1)
-        .get
-        === ParsedResult(
-          "# Comment.\n# Other comment.".toSeq,
-          emptyMapSS
-        )
+      ParsedResult(
+        "# Comment.\n# Other comment.".toSeq,
+        emptyMapSS
+      ) ===
+        CommentConfParser
+          .parse(comment1)
+          .get
     )
     // assert(
     // CommentConfParser
@@ -30,10 +31,25 @@ class TestCommentConfParser extends AnyFunSuite {
 
   test("`CommentConfParser.partialParse`.") {
     assert(
-      CommentConfParser.partialParse(
-        "# Line 1.\nname: a_name."
-      ) === ("name: a_name.".toSeq,
-      Success(ParsedResult("# Line 1.".toSeq, emptyMapSS)))
+      (
+        "name: a_name.".toSeq,
+        Success(ParsedResult("# Line 1.".toSeq, emptyMapSS))
+      ) ===
+        CommentConfParser.partialParse(
+          "# Line 1.\nname: a_name."
+        )
+    )
+    assert(
+      (" ".toSeq, Failure(ParseException(" "))) ===
+        CommentConfParser.partialParse(
+          " "
+        )
+    )
+    assert(
+      (" a".toSeq, Success(ParsedResult("# Comment 02.".toSeq, emptyMapSS))) ===
+        CommentConfParser.partialParse(
+          "# Comment 02.\n a"
+        )
     )
   }
 

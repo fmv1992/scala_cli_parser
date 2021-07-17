@@ -3,6 +3,8 @@
 package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
+import scala.util.Failure
+import scala.util.Try
 
 class TestParserUtils extends AnyFunSuite {
 
@@ -37,22 +39,21 @@ class TestParserUtils extends AnyFunSuite {
   val comment1 = "# Comment 01."
   val space1 = " "
   val spaceAndComment = space1 ++ comment1
+  val commentAndSpace = comment1 ++ "\n" ++ space1
 
   val parserSpaceAndComment =
     ParserUtils.and(
       SpaceConfParser,
       CommentConfParser
     )
-//
-//   val parserCommentAndSpace =
-//     ParserUtils.and(
-//       CommentConfParser,
-//       SpaceConfParser,
-//       standardCombiner
-//     )
-//
 
-  test("`or` valid.") {
+  val parserCommentAndSpace =
+    ParserUtils.and(
+      CommentConfParser,
+      SpaceConfParser
+    )
+
+  ignore("`or` valid.") {
     val parser = ParserUtils.or(CommentConfParser, SpaceConfParser)
     assert(
       ParsedResult(
@@ -81,13 +82,22 @@ class TestParserUtils extends AnyFunSuite {
         emptyMapSS
       )
     )
-    // assert(
-    // parserSpaceAndComment
-    // .parse("")
-    // .isLeft
-    // )
-    // assert(parserSpaceAndComment.parse(spaceAndComment).isLeft)
+    assertThrows[ParseException](
+      parserSpaceAndComment
+        .parse("")
+    )
+    assertThrows[ParseException](
+      parserSpaceAndComment.partialParse(commentAndSpace)
+    )
+//      ((
+//        "",
+//        Failure(ParseException(commentAndSpace))
+//      ): Tuple2[String, Try[
+//        fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]]
+//      ]]) === partialParse01
+//    )
   }
+
 //
 //   test("`and` invalid.") {
 //     assert(

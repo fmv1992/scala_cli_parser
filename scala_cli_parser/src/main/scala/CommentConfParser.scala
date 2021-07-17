@@ -41,7 +41,7 @@ object CommentConfParser
         }
       } else {
         if (acc.isEmpty) {
-          (Seq.empty, Failure(ParseException(input.mkString)))
+          (input, Failure(ParseException(input.mkString)))
         } else {
           (i, Success(ParsedResult(acc, emptyMapSS)))
         }
