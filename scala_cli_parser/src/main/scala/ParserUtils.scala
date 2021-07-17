@@ -6,10 +6,20 @@ object ParserUtils {
       p1: ParserWithTry[A, B],
       p2: ParserWithTry[A, B]
   ): ParserWithTry[A, B] = {
-    ParserImpl((x: A) => p1.parse(x).orElse(p2.parse(x)).get)
+    ParserWithTryImpl((x: A) => p1.parse(x).orElse(p2.parse(x)).get)
   }
 
-//
+  def and[A <: Seq[_], B](
+      p1: ParserPartial[A, B],
+      p2: ParserPartial[A, B]
+  )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
+    ParserPartialImpl((a: A) => {
+      val (rest1: A, parsed1: B) = p1.partialParse(a)
+      val (rest2: A, parsed2: B) = p2.partialParse(rest1)
+      (rest2, combiner(parsed1, parsed2))
+    })
+  }
+
 //   def and[A, B, C, D](
 //       p1: ParserWithTry[Seq[A], B],
 //       p2: ParserWithTry[Seq[A], C],

@@ -2,9 +2,9 @@
 
 package fmv1992.scala_cli_parser
 
-import org.scalatest.funsuite.AnyFunSuite
-import scala.util.Try
 import scala.util.Success
+
+import org.scalatest.funsuite.AnyFunSuite
 
 class TestSpaceConfParser extends AnyFunSuite {
 

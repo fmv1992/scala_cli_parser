@@ -1,8 +1,6 @@
 package fmv1992.scala_cli_parser
 
 import scala.util.Try
-import scala.util.Success
-import scala.util.Failure
 
 trait Parser[-A, +B] {
 
@@ -26,6 +24,14 @@ trait ParserPartial[A <: Seq[_], +B] {
   }
 }
 
+case class ParserPartialImpl[A <: Seq[_], +B](
+    private val _partialParse: A => (A, B)
+) extends ParserPartial[A, B]
+    with Parser[A, B] {
+
+  def partialParse(input: A): (A, B) = _partialParse(input)
+}
+
 trait ParserWithTry[A, +B] extends Parser[A, Try[B]] {
 
   def parse(input: A): Try[B] = Try(transform(input))
@@ -34,7 +40,7 @@ trait ParserWithTry[A, +B] extends Parser[A, Try[B]] {
 
 }
 
-case class ParserImpl[A, +B](private val _transform: A => B)
+case class ParserWithTryImpl[A, +B](private val _transform: A => B)
     extends ParserWithTry[A, B] {
 
   def transform(input: A): B = _transform(input)

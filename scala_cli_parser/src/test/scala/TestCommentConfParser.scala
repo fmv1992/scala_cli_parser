@@ -2,7 +2,6 @@
 
 package fmv1992.scala_cli_parser
 
-import scala.util.Try
 import scala.util.Success
 
 import org.scalatest.funsuite.AnyFunSuite

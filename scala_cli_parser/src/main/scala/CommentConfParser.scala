@@ -1,9 +1,8 @@
 package fmv1992.scala_cli_parser
 
-import scala.util.Try
 import scala.util.Failure
-import fastparse.Parsed
 import scala.util.Success
+import scala.util.Try
 
 object CommentConfParser
     extends ParserPartial[

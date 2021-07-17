@@ -2,7 +2,6 @@
 
 package fmv1992.scala_cli_parser
 
-import org.scalatest.EitherValues._
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestParserUtils extends AnyFunSuite {
@@ -37,14 +36,13 @@ class TestParserUtils extends AnyFunSuite {
 //
   val comment1 = "# Comment 01."
   val space1 = " "
-  val combined1 = List(comment1, space1).mkString("\n")
-//
-//   val parserSpaceAndComment =
-//     ParserUtils.and(
-//       SpaceConfParser,
-//       CommentConfParser,
-//       standardCombiner
-//     )
+  val spaceAndComment = space1 ++ comment1
+
+  val parserSpaceAndComment =
+    ParserUtils.and(
+      SpaceConfParser,
+      CommentConfParser
+    )
 //
 //   val parserCommentAndSpace =
 //     ParserUtils.and(
@@ -68,38 +66,28 @@ class TestParserUtils extends AnyFunSuite {
         emptyMapSS
       ) === parser.parse(space1).get
     )
-    // CURRENT
-    // ???: Again it is evident that there is redundancy (and errors) on how
-    // `Success` is handled currently. This should fail.
-    assert(
-      ParsedResult(
-        combined1.toSeq,
-        emptyMapSS
-      ) === parser.parse(combined1).get
-    )
-    assert(parser.parse(combined1).isFailure)
+    assert(parser.parse(spaceAndComment).isFailure)
   }
 
 //
 //   ignore("`or` invalid.") {}
 //
-//   test("`and` valid.") {
-//     assert(
-//       parserSpaceAndComment
-//         .parse(space1 + comment1)
-//         .right
-//         .value === ParsedResult(
-//         space1.toSeq ++ comment1.toSeq,
-//         emptyMapSS
-//       )
-//     )
-//     assert(
-//       parserSpaceAndComment
-//         .parse("")
-//         .isLeft
-//     )
-//     assert(parserSpaceAndComment.parse(combined1).isLeft)
-//   }
+  test("`and` valid.") {
+    assert(
+      parserSpaceAndComment
+        .parse(spaceAndComment)
+        .get === ParsedResult(
+        space1.toSeq ++ comment1.toSeq,
+        emptyMapSS
+      )
+    )
+    // assert(
+    // parserSpaceAndComment
+    // .parse("")
+    // .isLeft
+    // )
+    // assert(parserSpaceAndComment.parse(spaceAndComment).isLeft)
+  }
 //
 //   test("`and` invalid.") {
 //     assert(
@@ -107,7 +95,7 @@ class TestParserUtils extends AnyFunSuite {
 //         .parse(space1 + comment1)
 //         .isLeft
 //     )
-//     assert(parserCommentAndSpace.parse(combined1).isRight)
+//     assert(parserCommentAndSpace.parse(spaceAndComment).isRight)
 //   }
 //
 //   test("`tryAll` valid.") {
@@ -118,7 +106,7 @@ class TestParserUtils extends AnyFunSuite {
 //     )
 //     val parser2 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
 //     assert(
-//       parser2.parse(combined1).right.value === List(
+//       parser2.parse(spaceAndComment).right.value === List(
 //         ParsedResult((comment1 + '\n').toList, emptyMapSS),
 //         ParsedResult(space1.toList, emptyMapSS)
 //       )
