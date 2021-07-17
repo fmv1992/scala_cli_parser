@@ -9,7 +9,9 @@ import scala.util.Failure
 
 class TestCommentConfParser extends AnyFunSuite {
 
-  val multilineComment = "# comment 01.\n# comment 02.\n \t \tNot a comment."
+  val multilineCommentWithError =
+    "# comment 01.\n# comment 02.\n \t \tNot a comment."
+  val multilineComment01 = "# Comment 01.\n# Comment 02."
   val comment1 = "# Comment.\n# Other comment."
 
   test("`CommentConfParser.parse`.") {
@@ -24,8 +26,8 @@ class TestCommentConfParser extends AnyFunSuite {
     )
     // assert(
     // CommentConfParser
-    // .parse(multilineComment.toSeq)
-    // .get === ParsedResult(multilineComment.toSeq, emptyMapSS)
+    // .parse(multilineCommentWithError.toSeq)
+    // .get === ParsedResult(multilineCommentWithError.toSeq, emptyMapSS)
     // )
   }
 
@@ -50,6 +52,25 @@ class TestCommentConfParser extends AnyFunSuite {
         CommentConfParser.partialParse(
           "# Comment 02.\n a"
         )
+    )
+  }
+
+  test(
+    "Test `CommentConfParser` catches multi line comments in a single invokation."
+  ) {
+    val commentAndComment =
+      ParserUtils.and(CommentConfParser, CommentConfParser)
+    // assertThrows[ParseException](
+    assert(
+      (Seq.empty, Failure(ParseException(""))) ===
+        commentAndComment.partialParse(multilineComment01)
+    )
+    assert(
+      (
+        Seq.empty,
+        Success(ParsedResult(multilineComment01.toSeq, emptyMapSS))
+      ) ===
+        CommentConfParser.partialParse(multilineComment01)
     )
   }
 

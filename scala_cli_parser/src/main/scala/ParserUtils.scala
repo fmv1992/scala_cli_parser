@@ -19,8 +19,6 @@ object ParserUtils {
         throw new ParseException(a.toString)
       } else {
         val (rest2: A, parsed2: B) = p2.partialParse(rest1)
-        Console.err.println("→" + rest1.toString + "←")
-        Console.err.println("→" + rest2.toString + "←")
         (rest2, combiner(parsed1, parsed2))
       }
     })
