@@ -17,7 +17,10 @@ object CommentConfParser
   override def parse(
       input: Seq[Char]
   ): Try[ParsedResult[Seq[Char], Map[String, String]]] =
-    super[ParserPartial].parse(input)
+    Try(super[ParserPartial].parse(input)) match {
+      case Failure(_) => Failure(ParseException(input.mkString))
+      case Success(x) => Success(ParsedResult(input, emptyMapSS))
+    }
 
   def partialParse(
       input: Seq[Char]

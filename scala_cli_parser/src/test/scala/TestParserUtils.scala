@@ -38,6 +38,7 @@ class TestParserUtils extends AnyFunSuite {
 //
   val comment1 = "# Comment 01."
   val space1 = " "
+
   val spaceAndComment = space1 ++ comment1
   val commentAndSpace = comment1 ++ "\n" ++ space1
 
@@ -53,21 +54,23 @@ class TestParserUtils extends AnyFunSuite {
       SpaceConfParser
     )
 
-  ignore("`or` valid.") {
-    val parser = ParserUtils.or(CommentConfParser, SpaceConfParser)
+  val parserCommentOrSpace = ParserUtils.or(CommentConfParser, SpaceConfParser)
+
+  test("`or` valid.") {
     assert(
       ParsedResult(
         comment1.toSeq,
         emptyMapSS
-      ) === parser.parse(comment1).get
+      ) === parserCommentOrSpace.parse(comment1).get
     )
     assert(
       ParsedResult(
         space1.toSeq,
         emptyMapSS
-      ) === parser.parse(space1).get
+      ) === parserCommentOrSpace.parse(space1).get
     )
-    assert(parser.parse(spaceAndComment).isFailure)
+    assert(parserCommentOrSpace.parse(spaceAndComment).isFailure)
+    assert(parserCommentOrSpace.parse(commentAndSpace).isFailure)
   }
 
 //
