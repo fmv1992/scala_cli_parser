@@ -3,6 +3,7 @@
 package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
+import scala.util.Success
 
 class TestParserUtils extends AnyFunSuite {
 
@@ -53,11 +54,10 @@ class TestParserUtils extends AnyFunSuite {
     )
 
   val parserCommentOrSpaceWithTry: PWT =
-    ParserUtils.or((CommentConfParser: PWT), (SpaceConfParser: PWT))
+    ParserUtils.or(CommentConfParser, SpaceConfParser)
 
-  // val parserCommentOrSpacePartial = parserWithTryToParserPartial(
-  //   ???
-  // )(ParsedResult(Seq.empty, emptyMapSS))
+  val parserCommentOrSpacePartial: PP =
+    ParserUtils.or(CommentConfParser, SpaceConfParser)
 
   test("`or` valid.") {
     assert(
@@ -145,15 +145,22 @@ class TestParserUtils extends AnyFunSuite {
 //   ignore("`allSubsequencesFromStart` invalid.") {}
 //
 
-  // test("`many` valid.") {
-  //   // This is wrong. The newline causes problem when joining two valid lines.
-  //   val parserMany = ParserUtils.many(parserCommentOrSpacePartial)
-  //   assert(
-  //     parserMany.parse(
-  //       " # Comment 01.\n\t\t # Comment 02.\n# Comment 03.  \n\t"
-  //     ) === 1
-  //   )
-  // }
+  test("`many` valid.") {
+    // This is wrong. The newline causes problem when joining two valid lines.
+    val input =
+      " # Comment 01.\n\t\t # Comment 02.\n# Comment 03.  \n\t".toSeq
+    val parserMany = ParserUtils.many(parserCommentOrSpacePartial)
+    // Console.err.println("-" * 79)
+    // Console.err.println(input.map(_.toInt))
+    // Console.err.println(parserMany.parse(input).get.data.map(_.toInt))
+    // Console.err.println("-" * 79)
+
+    // ???: New lines (char == 10) are missing.
+    assert(
+      Success(ParsedResult(input, emptyMapSS)) ===
+        parserMany.parse(input)
+    )
+  }
 
 //
 //   // Many should not have to guess and decrease the input w any strategy.

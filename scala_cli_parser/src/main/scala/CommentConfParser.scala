@@ -34,7 +34,7 @@ object CommentConfParser extends PP with PWT {
         if (spaceIndex == -1) {
           (Seq.empty, Success(ParsedResult(input, emptyMapSS)))
         } else {
-          go(i.drop(spaceIndex + 1), acc ++ i.take(spaceIndex))
+          go(i.drop(spaceIndex + 1), acc ++ i.take(spaceIndex + 1))
         }
       } else {
         if (acc.isEmpty) {

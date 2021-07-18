@@ -35,7 +35,7 @@ class TestCommentConfParser extends AnyFunSuite {
     assert(
       (
         "name: a_name.".toSeq,
-        Success(ParsedResult("# Line 1.".toSeq, emptyMapSS))
+        Success(ParsedResult("# Line 1.\n".toSeq, emptyMapSS))
       ) ===
         CommentConfParser.partialParse(
           "# Line 1.\nname: a_name."
@@ -48,7 +48,10 @@ class TestCommentConfParser extends AnyFunSuite {
         )
     )
     assert(
-      (" a".toSeq, Success(ParsedResult("# Comment 02.".toSeq, emptyMapSS))) ===
+      (
+        " a".toSeq,
+        Success(ParsedResult("# Comment 02.\n".toSeq, emptyMapSS))
+      ) ===
         CommentConfParser.partialParse(
           "# Comment 02.\n a"
         )
