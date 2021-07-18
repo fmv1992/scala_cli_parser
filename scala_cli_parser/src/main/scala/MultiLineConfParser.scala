@@ -62,16 +62,6 @@ object MultiLineConfParser
     }
   }
 
-  def transform(
-      input: Seq[Char]
-  ): ParsedResult[Seq[Char], Map[String, String]] = {
-    partialParse(input) match {
-      case (_, Success(a)) => a
-      case (_, Failure(_)) => throw new ParseException(input.mkString)
-    }
-    ???
-  }
-
   private def splitOnLines(input: Seq[Char]): Seq[Seq[Char]] = {
     input
       .foldLeft(

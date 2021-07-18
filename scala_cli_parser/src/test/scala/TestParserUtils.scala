@@ -3,6 +3,7 @@
 package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
+import scala.util.Try
 
 class TestParserUtils extends AnyFunSuite {
 
@@ -52,23 +53,28 @@ class TestParserUtils extends AnyFunSuite {
       SpaceConfParser
     )
 
-  val parserCommentOrSpace = ParserUtils.or(CommentConfParser, SpaceConfParser)
+  val parserCommentOrSpaceWithTry: PWT =
+    ParserUtils.or((CommentConfParser: PWT), (SpaceConfParser: PWT))
+
+  // val parserCommentOrSpacePartial = parserWithTryToParserPartial(
+  //   ???
+  // )(ParsedResult(Seq.empty, emptyMapSS))
 
   test("`or` valid.") {
     assert(
       ParsedResult(
         comment1.toSeq,
         emptyMapSS
-      ) === parserCommentOrSpace.parse(comment1).get
+      ) === parserCommentOrSpaceWithTry.parse(comment1).get
     )
     assert(
       ParsedResult(
         space1.toSeq,
         emptyMapSS
-      ) === parserCommentOrSpace.parse(space1).get
+      ) === parserCommentOrSpaceWithTry.parse(space1).get
     )
-    assert(parserCommentOrSpace.parse(spaceAndComment).isFailure)
-    assert(parserCommentOrSpace.parse(commentAndSpace).isFailure)
+    assert(parserCommentOrSpaceWithTry.parse(spaceAndComment).isFailure)
+    assert(parserCommentOrSpaceWithTry.parse(commentAndSpace).isFailure)
   }
 
 //
@@ -139,19 +145,17 @@ class TestParserUtils extends AnyFunSuite {
 //
 //   ignore("`allSubsequencesFromStart` invalid.") {}
 //
-//   ignore("`many` valid.") {
-//     // This is wrong. The newline causes problem when joining two valid lines.
-//     val parserMany = ParserUtils.many(SingleLineConfParser, standardCombiner)
-//     assert(
-//       parserMany.parse(List("n: 10", "required: true").mkString("\n")) ===
-//         Right(
-//           ParsedResult(
-//             "n: 10\nrequired: true".toSeq,
-//             Map("n" -> "10", "required" -> "true")
-//           )
-//         )
-//     )
-//   }
+
+  // test("`many` valid.") {
+  //   // This is wrong. The newline causes problem when joining two valid lines.
+  //   val parserMany = ParserUtils.many(parserCommentOrSpacePartial)
+  //   assert(
+  //     parserMany.parse(
+  //       " # Comment 01.\n\t\t # Comment 02.\n# Comment 03.  \n\t"
+  //     ) === 1
+  //   )
+  // }
+
 //
 //   // Many should not have to guess and decrease the input w any strategy.
 //   ignore("`many` \"b\"s.") {

@@ -19,7 +19,9 @@ trait ParserPartial[A <: Seq[_], +B] {
     if (pp._1.isEmpty) {
       pp._2
     } else {
-      throw new ParseException(input.toString)
+      throw new ParseException(
+        s"${this.getClass.getName}': '${input.toString}'."
+      )
     }
   }
 }
@@ -34,16 +36,14 @@ case class ParserPartialImpl[A <: Seq[_], +B](
 
 trait ParserWithTry[A, +B] extends Parser[A, Try[B]] {
 
-  def parse(input: A): Try[B] = Try(transform(input))
-
-  def transform(input: A): B
+  def parse(input: A): Try[B]
 
 }
 
 case class ParserWithTryImpl[A, +B](private val _transform: A => B)
     extends ParserWithTry[A, B] {
 
-  def transform(input: A): B = _transform(input)
+  def parse(input: A): Try[B] = Try(_transform(input))
 
 }
 

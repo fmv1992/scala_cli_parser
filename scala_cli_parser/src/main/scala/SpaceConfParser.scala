@@ -4,20 +4,17 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-object SpaceConfParser
-    extends ParserPartial[
-      Seq[Char],
-      Try[ParsedResult[Seq[Char], Map[String, String]]]
-    ]
-    with ParserWithTry[
-      Seq[Char],
-      ParsedResult[Seq[Char], Map[String, String]]
-    ] {
+object SpaceConfParser extends PP with PWT {
 
   override def parse(
       input: Seq[Char]
   ): Try[ParsedResult[Seq[Char], Map[String, String]]] =
-    super[ParserPartial].parse(input)
+    Try(super[ParserPartial].parse(input)) match {
+      case Success(_) => Success(ParsedResult(input, emptyMapSS))
+      case Failure(ParseException(m)) =>
+        Failure(ParseException(s"${this.getClass.getName}': '${m}'."))
+      case Failure(t) => Failure(t)
+    }
 
   def partialParse(
       input: Seq[Char]
@@ -38,14 +35,5 @@ object SpaceConfParser
     }
     (parsedNot, parsedResult)
   }
-
-  def transform(
-      input: Seq[Char]
-  ): ParsedResult[Seq[Char], Map[String, String]] =
-    if (input.forall(_.isWhitespace)) {
-      ParsedResult(input, emptyMapSS)
-    } else {
-      throw new ParseException(input.mkString)
-    }
 
 }

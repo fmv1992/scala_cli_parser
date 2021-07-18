@@ -1,5 +1,8 @@
 package fmv1992.scala_cli_parser
 
+import scala.util.Success
+import scala.util.Failure
+
 object ParserUtils {
 
   def or[A, B](
@@ -7,6 +10,20 @@ object ParserUtils {
       p2: ParserWithTry[A, B]
   ): ParserWithTry[A, B] = {
     ParserWithTryImpl((x: A) => p1.parse(x).orElse(p2.parse(x)).get)
+  }
+
+  def or[A <: Seq[_], B](
+      p1: ParserPartial[A, B],
+      p2: ParserPartial[A, B]
+  ): ParserPartial[A, B] = {
+    ParserPartialImpl((a: A) => {
+      val (rest1: A, parsed1: B) = p1.partialParse(a)
+      if (rest1 == a) {
+        p2.partialParse(a)
+      } else {
+        (rest1, parsed1)
+      }
+    })
   }
 
   def and[A <: Seq[_], B](
@@ -104,44 +121,28 @@ object ParserUtils {
 //   }
 //
 //   // ???: I believe there is a lot of redundancy in this method.
-//   def many[A, B](
-//       p: ParserWithTry[Seq[A], B],
-//       combiner: (B, B) => B
-//   ): ParserWithTry[Seq[A], B] = {
-//     def go(
-//         input: Seq[A],
-//         acc: LazyList[Either[Throwable, B]] = LazyList.empty
-//     ): LazyList[Either[Throwable, B]] = {
-//       // Console.err.println("-" * 79)
-//       // Console.err.println("¦" + input.mkString + "¦")
-//       // Console.err.println(acc.toList)
-//       // Console.err.println("-" * 79)
-//       if (input.isEmpty) {
-//         acc
-//       } else {
-//         val parsedOpt = p.getValidSubSequence(input)
-//         parsedOpt match {
-//           case Some(x) => go(input.drop(x.length), acc.appended(p.parse(x)))
-//           case None    => acc
-//         }
-//       }
-//     }
-//     ParserImpl((x: Seq[A]) => {
-//       val parsedAcc = go(x)
-//       val left = parsedAcc.filter(_.isLeft).headOption
-//       if (left.isDefined) {
-//         // ???: This does not feel right.
-//         p.transform(x)
-//       } else {
-//         val rights =
-//           parsedAcc.map(_.getOrElse(throw new Exception())).reduce(combiner)
-//         rights
-//       }
-//     })
-//   }
-//
-//   def allSubsequencesFromStart[A](s: Seq[A]): Seq[Seq[A]] = {
-//     (0 to s.length).map(l1 => s.slice(0, l1))
-//   }
-//
+  def many[A <: Seq[_], B](
+      p: ParserPartial[A, B]
+  )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
+    def go(input: A, acc: Seq[B]): (A, Seq[B]) = {
+      val (rest, res) = p.partialParse(input)
+      if (rest == input) {
+        (input, acc)
+      } else {
+        go(rest, acc.appended(res))
+      }
+    }
+    ParserPartialImpl((x: A) => {
+      val (rest, acc) = (go(x, Seq.empty): (A, Seq[B]))
+      if (rest.isEmpty) {
+        if (acc.length == 1) {
+          (rest, acc.head)
+        } else {
+          (rest, acc.reduce(combiner))
+        }
+      } else {
+        throw new Exception(rest.toString ++ acc.toString)
+      }
+    })
+  }
 }

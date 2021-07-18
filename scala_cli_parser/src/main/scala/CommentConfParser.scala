@@ -4,22 +4,16 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
-object CommentConfParser
-    extends ParserPartial[
-      Seq[Char],
-      Try[ParsedResult[Seq[Char], Map[String, String]]]
-    ]
-    with ParserWithTry[
-      Seq[Char],
-      ParsedResult[Seq[Char], Map[String, String]]
-    ] {
+object CommentConfParser extends PP with PWT {
 
   override def parse(
       input: Seq[Char]
   ): Try[ParsedResult[Seq[Char], Map[String, String]]] =
     Try(super[ParserPartial].parse(input)) match {
-      case Failure(_) => Failure(ParseException(input.mkString))
-      case Success(x) => Success(ParsedResult(input, emptyMapSS))
+      case Success(_) => Success(ParsedResult(input, emptyMapSS))
+      case Failure(ParseException(m)) =>
+        Failure(ParseException(s"${this.getClass.getName}': '${m}'."))
+      case Failure(t) => Failure(t)
     }
 
   def partialParse(
@@ -52,13 +46,5 @@ object CommentConfParser
     }
     go(input, Seq.empty)
   }
-
-  def transform(
-      input: Seq[Char]
-  ): ParsedResult[Seq[Char], Map[String, String]] =
-    partialParse(input) match {
-      case (_, Success(a)) => a
-      case (_, Failure(_)) => throw new ParseException(input.mkString)
-    }
 
 }
