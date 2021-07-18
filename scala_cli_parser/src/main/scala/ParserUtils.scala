@@ -1,6 +1,5 @@
 package fmv1992.scala_cli_parser
 
-
 object ParserUtils {
 
   def or[A, B](
@@ -123,6 +122,9 @@ object ParserUtils {
       p: ParserPartial[A, B]
   )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
     def go(input: A, acc: Seq[B]): (A, Seq[B]) = {
+      // println("-" * 79)
+      // println(input.mkString)
+      // println("-" * 79)
       val (rest, res) = p.partialParse(input)
       if (rest == input) {
         (input, acc)
@@ -139,7 +141,8 @@ object ParserUtils {
           (rest, acc.reduce(combiner))
         }
       } else {
-        throw new Exception(rest.toString ++ acc.toString)
+        // ???: This is undefined at the time being. How should this fail?
+        throw new ParseException(s"Undefined case in `many`: '${rest}'.")
       }
     })
   }

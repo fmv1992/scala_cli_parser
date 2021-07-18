@@ -25,7 +25,10 @@ object MultiLineConfParser
   def partialParse(
       input: Seq[Char]
   ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = {
-    val lines = splitOnLines(input)
+    val lines = trimLeadingWhiteSpacesOnLines(splitOnLines(input))
+    // println("-" * 79)
+    // println(lines.toList)
+    // println("-" * 79)
     // Make sure this is multi line.
     if (lines.length <= 1) {
       (
@@ -35,30 +38,39 @@ object MultiLineConfParser
     } else {
       // Get key.
       val keyPos = lines.head.indexOf(':')
-      val key =
-        if (keyPos == -1) {
-          throw new ParseException(s"Char ':' not found: '${input.mkString}'.")
-        } else {
-          lines.head.take(keyPos)
-        }
-
-      // Get value.
-      val pipePos = lines.head.indexOf('|')
-      val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
-      val value = if (linesWithSamePipePos.length >= 2) {
-        linesWithSamePipePos
-          .map(x => x.drop(pipePos + 1).mkString.strip)
-          .mkString("\n")
+      if (keyPos == -1) {
+        (
+          input,
+          Failure(ParseException(s"Char ':' not found: '${input.mkString}'."))
+        )
       } else {
-        throw new ParseException(
-          s"`MultiLineConfParser` parses multi lines only: '${input.mkString}'."
+        val key =
+          if (keyPos == -1) {
+            throw new ParseException(
+              s"Char ':' not found: '${input.mkString}'."
+            )
+          } else {
+            lines.head.take(keyPos)
+          }
+
+        // Get value.
+        val pipePos = lines.head.indexOf('|')
+        val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
+        val value = if (linesWithSamePipePos.length >= 2) {
+          linesWithSamePipePos
+            .map(x => x.drop(pipePos + 1).mkString.strip)
+            .mkString("\n")
+        } else {
+          throw new ParseException(
+            s"`MultiLineConfParser` parses multi lines only: '${input.mkString}'."
+          )
+        }
+        val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
+        (
+          rest.map(_.mkString).mkString("\n"),
+          Success(ParsedResult(input, Map(key.mkString -> value.trim)))
         )
       }
-      val rest = lines.drop(linesWithSamePipePos.length)
-      (
-        rest.mkString("\n"),
-        Success(ParsedResult(input, Map(key.mkString -> value)))
-      )
     }
   }
 
@@ -79,6 +91,17 @@ object MultiLineConfParser
       case (l, s)     => l.appended(s)
     }
   }
+
+  private def trimLeadingWhiteSpacesOnLines(
+      input: Seq[Seq[Char]]
+  ): Seq[Seq[Char]] = {
+    println("trim" * 79)
+    println(input.toList)
+    println("trim" * 79)
+    val marginSize = input.head.takeWhile(_.isWhitespace).length
+    input.map(_.drop(marginSize))
+  }
+
 //
 //  private val SpacedSolidLineStartingWithPipe
 //      : ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] =

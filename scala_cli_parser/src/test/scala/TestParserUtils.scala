@@ -59,6 +59,15 @@ class TestParserUtils extends AnyFunSuite {
   val parserCommentOrSpacePartial: PP =
     ParserUtils.or(CommentConfParser, SpaceConfParser)
 
+  val parserManyCommentsOrSpaces = ParserUtils.many(parserCommentOrSpacePartial)
+
+  val parserManyCommentsOrSpacesOrMultiLinesConf = ParserUtils.many(
+    ParserUtils.or(
+      MultiLineConfParser,
+      ParserUtils.or(CommentConfParser, SpaceConfParser)
+    )
+  )
+
   test("`or` valid.") {
     assert(
       ParsedResult(
@@ -145,32 +154,49 @@ class TestParserUtils extends AnyFunSuite {
 //   ignore("`allSubsequencesFromStart` invalid.") {}
 //
 
-  test("`many` valid.") {
+  test("`many` valid (simple).") {
     // This is wrong. The newline causes problem when joining two valid lines.
     val input =
       " # Comment 01.\n\t\t # Comment 02.\n# Comment 03.  \n\t".toSeq
-    val parserMany = ParserUtils.many(parserCommentOrSpacePartial)
     assert(
       Success(ParsedResult(input, emptyMapSS)) ===
-        parserMany.parse(input)
+        parserManyCommentsOrSpaces.parse(input)
     )
     val commentOnly = "# Comment 01.\n# Comment 02.\n# Comment 03."
     assert(
       Success(ParsedResult(commentOnly.toSeq, emptyMapSS)) ===
-        parserMany.parse(commentOnly)
+        parserManyCommentsOrSpaces.parse(commentOnly)
     )
     val spaceOnly = "\t \n\n\n \n \t \t\t \n\n"
     assert(
       Success(ParsedResult(spaceOnly.toSeq, emptyMapSS)) ===
-        parserMany.parse(spaceOnly)
+        parserManyCommentsOrSpaces.parse(spaceOnly)
+    )
+  }
+
+  test("`many` valid (complex).") {
+    val input = """
+# This is a comment.
+name:       | name line 01.
+            | name line 02.
+            |
+            | name line 04.
+
+                version: | ver a.b.c
+                         | ver x.y.z
+# Final comment.
+      """.trim
+
+    assert(
+      1 ===
+        parserManyCommentsOrSpacesOrMultiLinesConf.partialParse(input.toSeq)
     )
   }
 
   test("`many` invalid.") {
     val input = "a"
-    assert(
-      Success(ParsedResult(input, emptyMapSS)) ===
-        parserMany.parse(input)
+    assertThrows[ParseException](
+      parserManyCommentsOrSpaces.parse(input)
     )
   }
 
