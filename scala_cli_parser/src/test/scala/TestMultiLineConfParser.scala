@@ -2,11 +2,12 @@
 
 package fmv1992.scala_cli_parser
 
+import scala.util.Success
+
 import org.scalatest.concurrent.TimeLimits
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.Millis
 import org.scalatest.time.Span
-import scala.util.Success
 
 class TestMultiLineConfParser extends AnyFunSuite with TimeLimits {
 

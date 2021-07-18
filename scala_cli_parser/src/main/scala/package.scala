@@ -1,8 +1,8 @@
 /** Notice the "semi" import here. */
 package fmv1992
 
-import scala.util.Success
 import scala.util.Failure
+import scala.util.Success
 import scala.util.Try
 
 /** Provide utilities to parse, check and manipulate CLI arguments. */

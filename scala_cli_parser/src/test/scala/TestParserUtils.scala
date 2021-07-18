@@ -3,7 +3,6 @@
 package fmv1992.scala_cli_parser
 
 import org.scalatest.funsuite.AnyFunSuite
-import scala.util.Try
 
 class TestParserUtils extends AnyFunSuite {
 
