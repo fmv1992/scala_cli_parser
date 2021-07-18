@@ -125,14 +125,15 @@ object ParserUtils {
       p: ParserPartial[A, B]
   )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
     def go(input: A, acc: Seq[B]): (A, Seq[B]) = {
-      println("-" * 79)
-      println(input.mkString)
-      println("-" * 79)
-      val (rest, res) = p.partialParse(input)
-      if (rest == input) {
+      if (input.isEmpty) {
         (input, acc)
       } else {
-        go(rest, acc.appended(res))
+        val (rest, res) = p.partialParse(input)
+        if (rest == input) {
+          (input, acc)
+        } else {
+          go(rest, acc.appended(res))
+        }
       }
     }
     ParserPartialImpl((x: A) => {
@@ -157,7 +158,13 @@ object ParserUtils {
       if (leadingNewLines.isEmpty) {
         (x, Failure(ParseException(x.mkString)))
       } else {
-        (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
+        println("¦" * 79)
+        println(leadingNewLines.toList)
+        println("¦" * 79)
+        (
+          rest,
+          Success(ParsedResult(leadingNewLines.appended('\n'), emptyMapSS))
+        )
       }
     })
 }

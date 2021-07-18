@@ -5,7 +5,12 @@ package fmv1992.scala_cli_parser
 import org.scalatest.funsuite.AnyFunSuite
 import scala.util.Success
 
-class TestParserUtils extends AnyFunSuite {
+import org.scalatest.concurrent.TimeLimits
+import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.time.Millis
+import org.scalatest.time.Span
+
+class TestParserUtils extends AnyFunSuite with TimeLimits {
 
 //   def parserFactory(
 //       x: String
@@ -177,7 +182,7 @@ class TestParserUtils extends AnyFunSuite {
     )
   }
 
-  test("`many` valid (complex).") {
+  test("`many` valid (complex).")(failAfter(Span(200_000, Millis))({
     val input = """
 # This is a comment.
 name:       | name line 01.
@@ -206,7 +211,7 @@ name:       | name line 01.
         ===
           parserManyCommentsOrSpacesOrMultiLinesConf.partialParse(input.toSeq)
     )
-  }
+  }))
 
   test("`many` invalid.") {
     val input = "a"

@@ -26,9 +26,6 @@ object MultiLineConfParser
       input: Seq[Char]
   ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = {
     val lines = splitOnLines(input)
-    // println("-" * 79)
-    // println(lines.toList)
-    // println("-" * 79)
     // Make sure this is multi line.
     if (lines.length <= 1) {
       (
@@ -55,12 +52,7 @@ object MultiLineConfParser
 
         // Get value.
         val pipePos = lines.head.indexOf('|')
-        // We increase by one here as these lines are always multiline.
-        val linesWithSamePipePos = {
-          val lengthLineWithPipes =
-            lines.takeWhile(_.indexOf('|') == pipePos).length
-          lines.take(lengthLineWithPipes + 1)
-        }
+        val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
         val value = if (linesWithSamePipePos.length >= 2) {
           val linesWithSamePipePosTrimmed = trimLeadingWhiteSpacesOnLines(
             linesWithSamePipePos
@@ -76,13 +68,13 @@ object MultiLineConfParser
           )
         }
         val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
-        println("x" * 79)
+        println("-" * 79)
         println(lines.map(_.mkString).mkString("\n"))
         println("y" * 79)
-        println(rest.map(_.mkString).mkString("\n"))
-        println("z" * 79)
         println(linesWithSamePipePos.map(_.mkString).mkString("\n"))
-        println("x" * 79)
+        println("z" * 79)
+        println(rest.map(_.mkString).mkString("\n"))
+        println("-" * 79)
         (
           rest.map(_.mkString).mkString("\n"),
           Success(
