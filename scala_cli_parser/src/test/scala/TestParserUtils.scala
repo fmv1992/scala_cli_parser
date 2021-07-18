@@ -150,12 +150,24 @@ class TestParserUtils extends AnyFunSuite {
     val input =
       " # Comment 01.\n\t\t # Comment 02.\n# Comment 03.  \n\t".toSeq
     val parserMany = ParserUtils.many(parserCommentOrSpacePartial)
-    // Console.err.println("-" * 79)
-    // Console.err.println(input.map(_.toInt))
-    // Console.err.println(parserMany.parse(input).get.data.map(_.toInt))
-    // Console.err.println("-" * 79)
+    assert(
+      Success(ParsedResult(input, emptyMapSS)) ===
+        parserMany.parse(input)
+    )
+    val commentOnly = "# Comment 01.\n# Comment 02.\n# Comment 03."
+    assert(
+      Success(ParsedResult(commentOnly.toSeq, emptyMapSS)) ===
+        parserMany.parse(commentOnly)
+    )
+    val spaceOnly = "\t \n\n\n \n \t \t\t \n\n"
+    assert(
+      Success(ParsedResult(spaceOnly.toSeq, emptyMapSS)) ===
+        parserMany.parse(spaceOnly)
+    )
+  }
 
-    // ???: New lines (char == 10) are missing.
+  test("`many` invalid.") {
+    val input = "a"
     assert(
       Success(ParsedResult(input, emptyMapSS)) ===
         parserMany.parse(input)
