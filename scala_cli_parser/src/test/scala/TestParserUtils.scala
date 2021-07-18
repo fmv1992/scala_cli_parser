@@ -190,13 +190,12 @@ name:       | name line 01.
 # Final comment.
       """.trim
 
-    Thread.sleep(1000)
     assert(
       (
         "".toSeq,
         Success(
           ParsedResult(
-            input.toSeq,
+            input.toList,
             Map(
               "name" -> "name line 01.\nname line 02.\n\nname line 04.",
               "version" -> "ver a.b.c\nver x.y.z"

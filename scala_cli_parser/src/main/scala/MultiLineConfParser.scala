@@ -55,7 +55,12 @@ object MultiLineConfParser
 
         // Get value.
         val pipePos = lines.head.indexOf('|')
-        val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
+        // We increase by one here as these lines are always multiline.
+        val linesWithSamePipePos = {
+          val lengthLineWithPipes =
+            lines.takeWhile(_.indexOf('|') == pipePos).length
+          lines.take(lengthLineWithPipes + 1)
+        }
         val value = if (linesWithSamePipePos.length >= 2) {
           val linesWithSamePipePosTrimmed = trimLeadingWhiteSpacesOnLines(
             linesWithSamePipePos
@@ -82,8 +87,12 @@ object MultiLineConfParser
           rest.map(_.mkString).mkString("\n"),
           Success(
             ParsedResult(
-              linesWithSamePipePos.map(_.mkString).mkString("\n") + "\n",
-              Map(key.mkString.trim -> value): Map[String, String]
+              // CURRENT: The trailing "\n".
+              // linesWithSamePipePos.map(_.mkString).mkString("\n") + "\n",
+              // ???: Found the bug/🐛: the new line right after `name line
+              // 04.`.
+              linesWithSamePipePos.map(_.mkString).mkString("\n"),
+              Map(key.mkString.trim -> value.trim): Map[String, String]
             )
           )
         )
@@ -104,10 +113,11 @@ object MultiLineConfParser
           (accll, accseq.appended(char))
         }
       }) match {
-      case (l, Seq()) => l
-      case (l, s)     => l.appended(s)
+      case (l, s) => l.appended(s)
     }
   }
+  require(splitOnLines("a\nb".toSeq) == Seq(Seq('a'), Seq('b')))
+  require(splitOnLines("a\nb\n".toSeq) == Seq(Seq('a'), Seq('b'), Seq()))
 
   private def trimLeadingWhiteSpacesOnLines(
       input: Seq[Seq[Char]]
@@ -120,108 +130,4 @@ object MultiLineConfParser
     }
   }
 
-//
-//  private val SpacedSolidLineStartingWithPipe
-//      : ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] =
-//    ParserUtils.many(
-//      ParserUtils.and(
-//        SpaceConfParser,
-//        SolidLineStartingWithPipe,
-//        (
-//            x: ParsedResult[Seq[Char], Map[String, String]],
-//            y: ParsedResult[Seq[Char], String]
-//        ) => ParsedResult(x.data ++ y.data, y.result)
-//      ),
-//      (
-//          x: ParsedResult[Seq[Char], String],
-//          y: ParsedResult[Seq[Char], String]
-//      ) => ParsedResult(x.data ++ y.data, x.result ++ y.result)
-//    )
-//
-//  def transform(
-//      input: Seq[Char]
-//  ): ParsedResult[Seq[Char], Map[String, String]] = {
-//    throw new Exception(input.toString)
-//  }
-//
-//  def isValid(input: Seq[Char]) = {
-//    val splitLines = splitOnLines(input)
-//    val firstLine: Seq[Char] = splitLines.head
-//    val otherLines: Seq[Seq[Char]] = splitLines.tail
-//    require(
-//      (firstLine.toList +: otherLines.toList).flatten == input.toList,
-//      (firstLine.toList, otherLines.toList, input.toList)
-//    )
-//    val pipePos = splitLines.map(_.indexOf('|'))
-//    val pipePosAreTheSame: Boolean = pipePos.forall(_ == pipePos.head)
-//    Thread.sleep(1000)
-//    Console.err.println("-" * 79)
-//    Console.err.println(SingleLineConfParser.isValid(firstLine))
-//    Console.err.println(pipePosAreTheSame)
-//    Console.err.println(
-//      otherLines
-//        .forall(
-//          SpacedSolidLineStartingWithPipe.isValid(_)
-//        )
-//    )
-//    Console.err.println("-" * 79)
-//    SingleLineConfParser.isValid(firstLine) && pipePosAreTheSame &&
-//    otherLines
-//      .forall(
-//        SpacedSolidLineStartingWithPipe.isValid(_)
-//      )
-//  }
-//
-//  def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
-//    // Console.err.println("-" * 79)
-//    // Console.err.println("🐛" + input.mkString + "🐛")
-//    // Console.err.println("-" * 79)
-//    val splitLines = splitOnLines(input)
-//    val idx = splitLines.indexWhere(!_.contains('|'))
-//    if (idx == -1) {
-//      if (isValid(input)) {
-//        Some(input)
-//      } else {
-//        ???
-//      }
-//    } else {
-//      val subLines = splitLines.slice(0, idx)
-//      val subStringNew = subLines.mkString("\n")
-//      if (isValid(subStringNew)) {
-//        Some(subStringNew)
-//      } else {
-//        ???
-//      }
-//    }
-//  }
-//
-//}
-//
-//object SolidLineStartingWithPipe
-//    extends ParserWithEither[Seq[Char], ParsedResult[Seq[Char], String]] {
-//
-//  def transform(
-//      input: Seq[Char]
-//  ): ParsedResult[Seq[Char], String] = {
-//    ParsedResult(input, input.tail.mkString)
-//  }
-//
-//  def isValid(input: Seq[Char]) = {
-//    lazy val notEmpty = !input.isEmpty
-//    lazy val isPipeFirst = input.head == '|'
-//    lazy val newLinePos = input.indexOf('\n')
-//    lazy val newLinesOnlyAtEnd =
-//      (newLinePos == -1) || (newLinePos == input.length - 1)
-//    notEmpty && isPipeFirst && newLinesOnlyAtEnd
-//  }
-//
-//  def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
-//    val newLinePos = input.indexOf('\n')
-//    val line = if (newLinePos == -1) input else input.slice(0, newLinePos)
-//    if (isValid(line)) {
-//      Some(line)
-//    } else {
-//      None
-//    }
-//  }
 }

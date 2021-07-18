@@ -77,4 +77,12 @@ class TestCommentConfParser extends AnyFunSuite {
     )
   }
 
+  test("`CommentConfParser` includes the trailing new line.") {
+    val input = "# # Comment 01.\n# Comment 02.\n"
+    assert(
+      input.toSeq ===
+        CommentConfParser.partialParse(input)._2.get.data.toSeq
+    )
+  }
+
 }

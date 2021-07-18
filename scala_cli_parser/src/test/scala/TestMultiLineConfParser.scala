@@ -15,27 +15,31 @@ class TestMultiLineConfParser extends AnyFunSuite with TimeLimits {
 help: | cliarg
       |
       | other line
- """.trim
+""".trim + "\n"
 
   val invalid01 = """
 help: | cliarg
       |
        | other line
- """.trim
+""".trim
 
   test("`MultiLineConfParser.partialParse` valid.")(
     failAfter(Span(200_000, Millis))({
+      val parseResult = MultiLineConfParser.partialParse(valid01)
       assert(
         (
           "".toSeq,
           Success(
-            ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line"))
+            ParsedResult(valid01.toList, Map("help" -> "cliarg\n\nother line"))
           )
         ) ===
-          MultiLineConfParser.partialParse(valid01)
+          parseResult
       )
+      assert(valid01.toSeq === parseResult._2.get.data)
     })
   )
+
+  // test("`MultiLineConfParser.splitOnLines`.") {}
 
   // test("`MultiLineConfParser.transform` valid.")(
   // failAfter(Span(200000, Millis))({
