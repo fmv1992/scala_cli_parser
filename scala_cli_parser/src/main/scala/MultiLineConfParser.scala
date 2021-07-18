@@ -25,7 +25,7 @@ object MultiLineConfParser
   def partialParse(
       input: Seq[Char]
   ): (Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]) = {
-    val lines = trimLeadingWhiteSpacesOnLines(splitOnLines(input))
+    val lines = splitOnLines(input)
     // println("-" * 79)
     // println(lines.toList)
     // println("-" * 79)
@@ -57,8 +57,13 @@ object MultiLineConfParser
         val pipePos = lines.head.indexOf('|')
         val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
         val value = if (linesWithSamePipePos.length >= 2) {
-          linesWithSamePipePos
-            .map(x => x.drop(pipePos + 1).mkString.strip)
+          val linesWithSamePipePosTrimmed = trimLeadingWhiteSpacesOnLines(
+            linesWithSamePipePos
+          )
+          val pipePosNew = linesWithSamePipePosTrimmed.head
+            .indexOf('|')
+          linesWithSamePipePosTrimmed
+            .map(x => x.drop(pipePosNew + 1).mkString.trim)
             .mkString("\n")
         } else {
           throw new ParseException(
@@ -66,9 +71,21 @@ object MultiLineConfParser
           )
         }
         val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
+        println("x" * 79)
+        println(lines.map(_.mkString).mkString("\n"))
+        println("y" * 79)
+        println(rest.map(_.mkString).mkString("\n"))
+        println("z" * 79)
+        println(linesWithSamePipePos.map(_.mkString).mkString("\n"))
+        println("x" * 79)
         (
           rest.map(_.mkString).mkString("\n"),
-          Success(ParsedResult(input, Map(key.mkString -> value.trim)))
+          Success(
+            ParsedResult(
+              linesWithSamePipePos.map(_.mkString).mkString("\n") + "\n",
+              Map(key.mkString.trim -> value): Map[String, String]
+            )
+          )
         )
       }
     }
@@ -82,7 +99,7 @@ object MultiLineConfParser
         val accll = acc._1
         val accseq = acc._2
         if (char == '\n') {
-          (accll.appended(accseq.appended('\n')), Seq.empty)
+          (accll.appended(accseq), Seq.empty)
         } else {
           (accll, accseq.appended(char))
         }
@@ -95,11 +112,12 @@ object MultiLineConfParser
   private def trimLeadingWhiteSpacesOnLines(
       input: Seq[Seq[Char]]
   ): Seq[Seq[Char]] = {
-    println("trim" * 79)
-    println(input.toList)
-    println("trim" * 79)
-    val marginSize = input.head.takeWhile(_.isWhitespace).length
-    input.map(_.drop(marginSize))
+    if (input.isEmpty) {
+      input
+    } else {
+      val marginSize = input.head.takeWhile(_.isWhitespace).length
+      input.map(_.drop(marginSize))
+    }
   }
 
 //

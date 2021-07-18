@@ -63,8 +63,11 @@ class TestParserUtils extends AnyFunSuite {
 
   val parserManyCommentsOrSpacesOrMultiLinesConf = ParserUtils.many(
     ParserUtils.or(
-      MultiLineConfParser,
-      ParserUtils.or(CommentConfParser, SpaceConfParser)
+      ParserUtils.newLines,
+      ParserUtils.or(
+        MultiLineConfParser,
+        ParserUtils.or(CommentConfParser, SpaceConfParser)
+      )
     )
   )
 
@@ -187,9 +190,22 @@ name:       | name line 01.
 # Final comment.
       """.trim
 
+    Thread.sleep(1000)
     assert(
-      1 ===
-        parserManyCommentsOrSpacesOrMultiLinesConf.partialParse(input.toSeq)
+      (
+        "".toSeq,
+        Success(
+          ParsedResult(
+            input.toSeq,
+            Map(
+              "name" -> "name line 01.\nname line 02.\n\nname line 04.",
+              "version" -> "ver a.b.c\nver x.y.z"
+            )
+          )
+        )
+      )
+        ===
+          parserManyCommentsOrSpacesOrMultiLinesConf.partialParse(input.toSeq)
     )
   }
 

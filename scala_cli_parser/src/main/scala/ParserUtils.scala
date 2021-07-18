@@ -1,5 +1,8 @@
 package fmv1992.scala_cli_parser
 
+import scala.util.Success
+import scala.util.Failure
+
 object ParserUtils {
 
   def or[A, B](
@@ -122,9 +125,9 @@ object ParserUtils {
       p: ParserPartial[A, B]
   )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
     def go(input: A, acc: Seq[B]): (A, Seq[B]) = {
-      // println("-" * 79)
-      // println(input.mkString)
-      // println("-" * 79)
+      println("-" * 79)
+      println(input.mkString)
+      println("-" * 79)
       val (rest, res) = p.partialParse(input)
       if (rest == input) {
         (input, acc)
@@ -146,4 +149,15 @@ object ParserUtils {
       }
     })
   }
+
+  def newLines: PP =
+    ParserPartialImpl((x: Seq[Char]) => {
+      val leadingNewLines = x.takeWhile(_ == '\n')
+      val rest = x.drop(leadingNewLines.length)
+      if (leadingNewLines.isEmpty) {
+        (x, Failure(ParseException(x.mkString)))
+      } else {
+        (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
+      }
+    })
 }
