@@ -25,10 +25,6 @@ object SolidLineConfParser extends PP with PWT {
       Seq[Char],
       Try[ParsedResult[Seq[Char], Map[String, String]]]
   ) = {
-    println("-" * 79)
-    println(input.mkString)
-    println("-" * 79)
-
     val startsWithNonSpace = !input.head.isWhitespace
     if (startsWithNonSpace) {
       val firstLineIdx = input.indexOf('\n')

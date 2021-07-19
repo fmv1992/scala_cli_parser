@@ -37,7 +37,7 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
     })
   )
 
-  ignore("`ConfParser` full example.")(failAfter(Span(500, Millis))({
+  test("`ConfParser` full example.")(failAfter(Span(500, Millis))({
     val fullConfig =
       scala.io.Source
         .fromResource("test_multiline_01.txt")
