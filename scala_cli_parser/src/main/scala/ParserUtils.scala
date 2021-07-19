@@ -175,6 +175,6 @@ object ParserUtils {
           )
         )
       )
-    )()
+    )(CombinerFullConfigParser)
 
 }

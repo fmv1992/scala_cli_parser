@@ -23,11 +23,10 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
             ParsedResult(
               fullConfig.toSeq,
               Map(
-                "debug" -> Map(
-                  "n" -> "0",
-                  "type" -> "int",
-                  "help" -> "Turn on debugging."
-                )
+                "name" -> "debug",
+                "n" -> "0",
+                "type" -> "int",
+                "help" -> "Turn on debugging."
               )
             )
           )
@@ -38,7 +37,7 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
     })
   )
 
-  ignore("`fullConfigParser` applied to `test_multiline_01.txt`.")(
+  test("`fullConfigParser` applied to `test_multiline_01.txt`.")(
     failAfter(Span(500, Millis))({
       val fullConfig =
         scala.io.Source
@@ -73,6 +72,7 @@ This just contains a perchance aligned '|' on this line. It is a single line.
     })
   )
 
+  // This reveals that the current code is buggy. Multiple "names" collide.
   ignore("`fullConfigParser` applied to `test_cli_example_01.txt`.")(
     failAfter(Span(500, Millis))({
       val fullConfig =
