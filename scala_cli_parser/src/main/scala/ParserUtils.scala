@@ -129,6 +129,7 @@ object ParserUtils {
         (input, acc)
       } else {
         val (rest, res) = p.partialParse(input)
+        // If no progress.
         if (rest == input) {
           (input, acc)
         } else {
@@ -153,18 +154,16 @@ object ParserUtils {
 
   def newLines: PP =
     ParserPartialImpl((x: Seq[Char]) => {
+      println("NL" * 79)
+      println(x.toList)
+      println("NL" * 79)
       val leadingNewLines = x.takeWhile(_ == '\n')
       val rest = x.drop(leadingNewLines.length)
+      require(x == leadingNewLines ++ rest)
       if (leadingNewLines.isEmpty) {
         (x, Failure(ParseException(x.mkString)))
       } else {
-        println("¦" * 79)
-        println(leadingNewLines.toList)
-        println("¦" * 79)
-        (
-          rest,
-          Success(ParsedResult(leadingNewLines.appended('\n'), emptyMapSS))
-        )
+        (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
       }
     })
 }
