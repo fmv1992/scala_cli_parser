@@ -1,7 +1,7 @@
 package fmv1992.scala_cli_parser
 
-import scala.util.Success
 import scala.util.Failure
+import scala.util.Success
 
 object ParserUtils {
 
