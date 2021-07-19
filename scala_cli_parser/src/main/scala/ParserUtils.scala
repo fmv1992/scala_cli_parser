@@ -158,7 +158,23 @@ object ParserUtils {
       if (leadingNewLines.isEmpty) {
         (x, Failure(ParseException(x.mkString)))
       } else {
+
         (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
       }
     })
+
+  def fullConfigParser: PP =
+    ParserUtils.many(
+      ParserUtils.or(
+        newLines,
+        ParserUtils.or(
+          CommentConfParser,
+          ParserUtils.or(
+            SolidLineConfParser,
+            ParserUtils.or(MultiLineConfParser, SpaceConfParser)
+          )
+        )
+      )
+    )
+
 }

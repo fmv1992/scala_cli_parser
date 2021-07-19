@@ -44,12 +44,4 @@ help: | cliarg
 
   ignore("`MultiLineConfParser.splitOnLines`.") {}
 
-  ignore("`ConfParser` full example.")(failAfter(Span(500, Millis))({
-    scala.io.Source
-        .fromResource("test_multiline_01.txt")
-        .getLines()
-        .mkString("\n")
-    // assert(ConfParser.parse(fullConfig) === Map.empty)
-  }))
-
 }

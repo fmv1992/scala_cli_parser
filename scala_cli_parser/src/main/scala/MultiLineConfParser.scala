@@ -52,36 +52,43 @@ object MultiLineConfParser
 
         // Get value.
         val pipePos = lines.head.indexOf('|')
-        val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
-        val value = if (linesWithSamePipePos.length >= 2) {
-          val linesWithSamePipePosTrimmed = trimLeadingWhiteSpacesOnLines(
-            linesWithSamePipePos
+        if (pipePos == -1) {
+          (
+            input,
+            Failure(ParseException(s"Char '|' not found: '${input.mkString}'."))
           )
-          val pipePosNew = linesWithSamePipePosTrimmed.head
-            .indexOf('|')
-          linesWithSamePipePosTrimmed
-            .map(x => x.drop(pipePosNew + 1).mkString.trim)
-            .mkString("\n")
         } else {
-          throw new ParseException(
-            s"`MultiLineConfParser` parses multi lines only: '${input.mkString}'."
-          )
-        }
-        val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
-        (
-          // if (rest.isEmpty) {
-          //   ""
-          // } else {
-          //   rest.prepended(Seq()).map(_.mkString).mkString("\n")
-          // },
-          rest.prepended(Seq()).map(_.mkString).mkString("\n"),
-          Success(
-            ParsedResult(
-              linesWithSamePipePos.map(_.mkString).mkString("\n"),
-              Map(key.mkString.trim -> value.trim): Map[String, String]
+          val linesWithSamePipePos = lines.takeWhile(_.indexOf('|') == pipePos)
+          val value = if (linesWithSamePipePos.length >= 2) {
+            val linesWithSamePipePosTrimmed = trimLeadingWhiteSpacesOnLines(
+              linesWithSamePipePos
+            )
+            val pipePosNew = linesWithSamePipePosTrimmed.head
+              .indexOf('|')
+            linesWithSamePipePosTrimmed
+              .map(x => x.drop(pipePosNew + 1).mkString.trim)
+              .mkString("\n")
+          } else {
+            throw new ParseException(
+              s"`MultiLineConfParser` parses multi lines only: '${input.mkString}'."
+            )
+          }
+          val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
+          (
+            // if (rest.isEmpty) {
+            //   ""
+            // } else {
+            //   rest.prepended(Seq()).map(_.mkString).mkString("\n")
+            // },
+            rest.prepended(Seq()).map(_.mkString).mkString("\n"),
+            Success(
+              ParsedResult(
+                linesWithSamePipePos.map(_.mkString).mkString("\n"),
+                Map(key.mkString.trim -> value.trim): Map[String, String]
+              )
             )
           )
-        )
+        } // --
       }
     }
   }
