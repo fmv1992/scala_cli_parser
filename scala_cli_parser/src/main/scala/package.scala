@@ -16,16 +16,10 @@ package object scala_cli_parser {
 
   val emptyMapSS: Map[String, String] = Map.empty
 
-  implicit val combiner: (
-      scala.util.Try[
-        fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]]
-      ],
-      scala.util.Try[
-        fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]]
-      ]
-  ) => scala.util.Try[
-    fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]]
-  ] = (a, b) =>
+  implicit val combinerSimple: (
+      Try[ParsedResult[Seq[Char], Map[String, String]]],
+      Try[ParsedResult[Seq[Char], Map[String, String]]]
+  ) => Try[ParsedResult[Seq[Char], Map[String, String]]] = (a, b) =>
     // a match {
     //   case Success(x) =>
     //     b match {
@@ -42,10 +36,10 @@ package object scala_cli_parser {
         )
     )
 
-  implicit val combinerParsedResult: (
-      fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]],
-      fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]]
-  ) => fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]] =
+  implicit val combinerParsedResultSimple: (
+      ParsedResult[Seq[Char], Map[String, String]],
+      ParsedResult[Seq[Char], Map[String, String]]
+  ) => ParsedResult[Seq[Char], Map[String, String]] =
     (a, b) =>
       ParsedResult(
         a.data ++ b.data,

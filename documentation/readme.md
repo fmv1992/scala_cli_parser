@@ -66,6 +66,10 @@ And its usages are as follows:
 
     *   Improve parsing process. Parsers can actually fail and provide a useful error message.
 
+## Discussion
+
+Interesting to notice that a parser behavior is influenced by the parsers and the combiners (e.g.: [`???`]()).
+
 ### Backlog
 
 *   Add [scalacheck](https://www.scalacheck.org/) to testing.
