@@ -68,27 +68,27 @@ object MultiLineConfParser
           )
         }
         val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
-        val linesWithSamePipePosWithAdditionalNL =
-          linesWithSamePipePos
-            .map(_.mkString)
-            .appended("\n")
-            .mkString("\n")
+        // val restNLCorrection = if (rest.lengthCompare(1) == 0) {
+        // rest.prepended(Seq())
+        // } else {
+        // rest
+        // }
         println("-" * 79)
-        print(lines.map(_.mkString).mkString("\n"))
+        println(lines.toList)
         println("y" * 79)
-        print(linesWithSamePipePosWithAdditionalNL)
+        println(linesWithSamePipePos.toList)
         println("z" * 79)
-        print(rest.map(_.mkString).mkString("\n"))
+        println(rest.toList)
         println("-" * 79)
         (
-          rest.map(_.mkString).mkString("\n"),
+          rest.prepended(Seq()).map(_.mkString).mkString("\n"),
           Success(
             ParsedResult(
               // CURRENT: The trailing "\n".
               // linesWithSamePipePos.map(_.mkString).mkString("\n") + "\n",
               // ???: Found the bug/🐛: the new line right after `name line
               // 04.`.
-              linesWithSamePipePosWithAdditionalNL,
+              linesWithSamePipePos.map(_.mkString).mkString("\n"),
               Map(key.mkString.trim -> value.trim): Map[String, String]
             )
           )

@@ -154,15 +154,15 @@ object ParserUtils {
 
   def newLines: PP =
     ParserPartialImpl((x: Seq[Char]) => {
-      println("NL" * 79)
-      println(x.toList)
-      println("NL" * 79)
       val leadingNewLines = x.takeWhile(_ == '\n')
       val rest = x.drop(leadingNewLines.length)
       require(x == leadingNewLines ++ rest)
       if (leadingNewLines.isEmpty) {
         (x, Failure(ParseException(x.mkString)))
       } else {
+        // println("NL" * 79)
+        // println(leadingNewLines.length)
+        // println("NL" * 79)
         (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
       }
     })
