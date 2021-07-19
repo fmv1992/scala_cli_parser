@@ -30,7 +30,6 @@ object SpaceConfParser extends PP with PWT {
     val parsedResult = if (parsed.isEmpty) {
       Failure(ParseException(input.mkString))
     } else {
-      // Console.err.println("|" + parsed.mkString + "|")
       Success(ParsedResult(parsed, emptyMapSS))
     }
     (parsedNot, parsedResult)

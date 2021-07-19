@@ -10,9 +10,6 @@
 //     ] {
 //
 //   def isValid(input: Seq[Char]): Boolean = {
-//     // Console.err.println("-" * 79)
-//     // Console.err.println(input.mkString)
-//     // Console.err.println("-" * 79)
 //     lazy val isNotEmpty = !input.isEmpty
 //     lazy val headIsSolidAndContainsColon =
 //       (!input.head.isWhitespace && input.tail.exists(_ == ':'))
@@ -39,7 +36,6 @@
 //   }
 //
 //   def getValidSubSequence(input: Seq[Char]): Option[Seq[Char]] = {
-//     // Console.err.println(input)
 //     val newLinePos = input.indexOf('\n')
 //     val line = if (newLinePos == -1) input else input.slice(0, newLinePos)
 //     if (isValid(line)) {

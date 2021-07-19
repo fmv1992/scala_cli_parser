@@ -28,14 +28,17 @@ help: | cliarg
       val parseResult = MultiLineConfParser.partialParse(valid01)
       assert(
         (
-          "".toSeq,
+          "\n".toSeq,
           Success(
-            ParsedResult(valid01.toList, Map("help" -> "cliarg\n\nother line"))
+            ParsedResult(
+              valid01.dropRight(1).toSeq,
+              Map("help" -> "cliarg\n\nother line")
+            )
           )
         ) ===
           parseResult
       )
-      assert(valid01.toSeq === parseResult._2.get.data)
+      assert(valid01.dropRight(1).toSeq === parseResult._2.get.data)
     })
   )
 

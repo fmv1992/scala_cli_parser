@@ -54,8 +54,6 @@ object ParserUtils {
 //           case Some(x1) => {
 //             val inputRemaining = x.drop(x1.length)
 //             val parsedOpt2 = p2.getValidSubSequence(inputRemaining)
-//             Console.err.println(parsedOpt1)
-//             Console.err.println(parsedOpt2)
 //             parsedOpt2 match {
 //               case Some(x2) if inputRemaining.drop(x2.length).length == 0 =>
 //                 combiner(p1.transform(x1), p2.transform(x2))
@@ -160,9 +158,6 @@ object ParserUtils {
       if (leadingNewLines.isEmpty) {
         (x, Failure(ParseException(x.mkString)))
       } else {
-        // println("NL" * 79)
-        // println(leadingNewLines.length)
-        // println("NL" * 79)
         (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
       }
     })

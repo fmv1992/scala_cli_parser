@@ -194,6 +194,8 @@ name:       | name line 01.
                          | ver x.y.z
 # Final comment.
       """.trim
+    val parsed =
+      parserManyCommentsOrSpacesOrMultiLinesConf.partialParse(input.toSeq)
 
     assert(
       (
@@ -209,8 +211,9 @@ name:       | name line 01.
         )
       )
         ===
-          parserManyCommentsOrSpacesOrMultiLinesConf.partialParse(input.toSeq)
+          parsed
     )
+    assert(input.toSeq === parsed._2.get.data)
   }))
 
   test("`many` invalid.") {
