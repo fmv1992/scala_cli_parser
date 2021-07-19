@@ -24,11 +24,11 @@ class TestCommentConfParser extends AnyFunSuite {
           .parse(comment1)
           .get
     )
-    // assert(
-    // CommentConfParser
-    // .parse(multilineCommentWithError.toSeq)
-    // .get === ParsedResult(multilineCommentWithError.toSeq, emptyMapSS)
-    // )
+    assertThrows[ParseException](
+      CommentConfParser
+        .parse(multilineCommentWithError.toSeq)
+        .get
+    )
   }
 
   test("`CommentConfParser.partialParse`.") {
@@ -63,7 +63,6 @@ class TestCommentConfParser extends AnyFunSuite {
   ) {
     val commentAndComment =
       ParserUtils.and(CommentConfParser, CommentConfParser)
-    // assertThrows[ParseException](
     assert(
       (Seq.empty, Failure(ParseException(""))) ===
         commentAndComment.partialParse(multilineComment01)

@@ -42,38 +42,15 @@ help: | cliarg
     })
   )
 
-  // test("`MultiLineConfParser.splitOnLines`.") {}
+  ignore("`MultiLineConfParser.splitOnLines`.") {}
 
-  // test("`MultiLineConfParser.transform` valid.")(
-  // failAfter(Span(200000, Millis))({
-  // assert(
-  // ParsedResult(valid01.toSeq, Map("help" -> "cliarg\n\nother line")) ===
-  // MultiLineConfParser.transform(valid01)
-  // )
-  // })
-  // )
-
-  // test("`MultiLineConfParser.transform` invalid.")(
-  // failAfter(Span(200_000, Millis))({
-  // assertThrows[ParseException](
-  // MultiLineConfParser.transform(invalid01)
-  // )
-  // })
-  // )
-
-  // test("`MultiLineConfParser` invalid.")(failAfter(Span(200000, Millis))({
-  // assert(
-  // !MultiLineConfParser.isValid(inValid01)
-  // )
-  // }))
-
-  // ignore("`ConfParser` full example.")(failAfter(Span(500, Millis))({
-  //   val fullConfig =
-  //     scala.io.Source
-  //       .fromResource("test_multiline_01.txt")
-  //       .getLines()
-  //       .mkString("\n")
-  //   // assert(ConfParser.parse(fullConfig) === Map.empty)
-  // }))
+  ignore("`ConfParser` full example.")(failAfter(Span(500, Millis))({
+    val fullConfig =
+      scala.io.Source
+        .fromResource("test_multiline_01.txt")
+        .getLines()
+        .mkString("\n")
+    // assert(ConfParser.parse(fullConfig) === Map.empty)
+  }))
 
 }

@@ -93,9 +93,8 @@ class TestParserUtils extends AnyFunSuite with TimeLimits {
     assert(parserCommentOrSpaceWithTry.parse(commentAndSpace).isFailure)
   }
 
-//
-//   ignore("`or` invalid.") {}
-//
+  ignore("`or` invalid.") {}
+
   test("`and` valid.") {
     assert(
       parserSpaceAndComment
