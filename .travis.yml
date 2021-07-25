@@ -1,6 +1,6 @@
 language: scala
 
-dist: xenial
+dist: focal
 
 jdk: openjdk8
 
