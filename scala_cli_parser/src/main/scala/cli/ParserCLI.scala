@@ -7,16 +7,15 @@ trait Argument {
 
   def name: String
 
-  def description: String
-
   override def toString: String = {
-    s"Argument '${this.getClass.getSimpleName}': '${name}'.\n${description}"
+    s"Argument '${this.getClass.getSimpleName}': '${name}'."
   }
 
 }
 
 trait ArgumentCLI extends Argument {
 
+  // ???: This should go as the type in values.
   def argumentType: String
 
   def values: Seq[String]
@@ -27,28 +26,28 @@ object ArgumentCLI {
 
   private case class ArgumentCLIImpl(
       name: String,
-      description: String,
       argumentType: String,
       values: Seq[String]
   ) extends ArgumentCLI
 
   def apply(
       name: String,
-      description: String,
       argumentType: String,
       values: Seq[String]
-  ): ArgumentCLI = ArgumentCLIImpl(name, description, argumentType, values)
+  ): ArgumentCLI = ArgumentCLIImpl(name, argumentType, values)
 
 }
 
 trait ArgumentConf extends Argument {
 
+  def description: String
+
   def argumentType: String
 
   def n: Int
 
-  override def equals(x: Any): Boolean = {
-    x match {
+  override def equals(that: Any): Boolean = {
+    that match {
       case a: ArgumentConf =>
         (this.argumentType == a.argumentType) && (this.n == a.n)
       case _ => false
@@ -83,8 +82,8 @@ trait ParserCLI extends Parser[Seq[String], Set[ArgumentCLI]] {
 
   def parse(input: Seq[String]): Set[ArgumentCLI]
 
-  override def equals(x: Any): Boolean = {
-    x match {
+  override def equals(that: Any): Boolean = {
+    that match {
       case p: ParserCLI => this.arguments == p.arguments
       case _            => false
     }
@@ -123,7 +122,6 @@ object ParserCLI {
                     Right(
                       (x + ArgumentCLI(
                         argumentCLIName,
-                        argConf.description,
                         argConf.argumentType,
                         values_
                       ))
@@ -131,7 +129,14 @@ object ParserCLI {
                   )
               }
             } else {
-              ???
+              val msgError =
+                s"Argument '${h}' is not part of '${arguments.toSeq.sortBy(_.name).toString}'."
+              acc match {
+                case Left(x) => {
+                  Left(x.appended(msgError))
+                }
+                case Right(_) => Left(Seq(msgError))
+              }
             }
           } else {
             ???
@@ -152,15 +157,9 @@ object ParserCLI {
     val args = input.map(t => {
       val k = t._1
       val vv = t._2
-      new ArgumentConf() {
-        val name = k
-        val description = vv("help")
-        val argumentType = vv("type")
-        val n = vv("n").toInt
-      }
+      ArgumentConf(k, vv("help"), vv("type"), vv("n").toInt)
     })
     ParserCLIImpl(args.toSet)
-
   }
 
   def apply(input: Set[ArgumentConf]): ParserCLI = ParserCLIImpl(input)

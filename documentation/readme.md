@@ -50,6 +50,10 @@ And its usages are as follows:
     make --quiet -B SCALA_CLI_ARGUMENTS='TestSum.main(Array("--sum", "1992", "1"))' tmp/test_sum.scala
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+## Config specification
+
+*   ???
+
 ## Links
 
 *   [How to force case class constructors to have a pre defined signature in Scala?](https://stackoverflow.com/questions/65544763/how-to-force-case-class-constructors-to-have-a-pre-defined-signature-in-scala).
@@ -76,6 +80,8 @@ And its usages are as follows:
 
 *   `dev_unstable`:
 
+    *   (Ongoing): Add config specification.
+
     *   (Ongoing): On the part of parsing config files everything but `fullConfigParser` should be private.
 
     *   (Ongoing): Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
@@ -91,3 +97,5 @@ Interesting to notice that a parser behavior is influenced by the parsers and th
 ### Backlog
 
 *   Add [scalacheck](https://www.scalacheck.org/) to testing.
+
+<!-- vim: set foldexpr=0 filetype=pandoc fileformat=unix nowrap spell spelllang=en: -->
