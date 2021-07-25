@@ -8,8 +8,7 @@ import fmv1992.scala_cli_parser.cli.ParserCLI
 object ParserConfigFile extends Parser[Path, ParserCLI] {
 
   def parse(input: Path): ParserCLI = {
-    // fullConfigParser.parse(
-    ???
+    parse(scala.io.Source.fromFile(input.toFile).getLines().mkString("\n"))
   }
 
   def parse(input: String): ParserCLI = {
