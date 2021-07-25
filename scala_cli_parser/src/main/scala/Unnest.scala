@@ -1,7 +1,7 @@
 package fmv1992.scala_cli_parser
 
-import scala.util.Try
 import scala.util.Success
+import scala.util.Try
 
 /** Combine Map[String, String] into Map[String, Map[String, String]] where the
   * new key is given by `name`, which stands for the CLI name.
@@ -72,7 +72,7 @@ object MapperFullConfigParser
 
           // If we get a "name" we save `macc` and start a new one.
           if (pr.result.get("name").isDefined) {
-            val newMacc = Map(pr.result("name") -> Map.empty): Map[
+            Map(pr.result("name") -> Map.empty): Map[
               String,
               Map[String, String]
             ]
