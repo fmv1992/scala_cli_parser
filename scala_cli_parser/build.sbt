@@ -1,5 +1,7 @@
 import xerial.sbt.Sonatype._
 
+Global / onChangedBuildSource := ReloadOnSourceChanges
+
 lazy val scala213 = "2.13.4"
 
 val versionsJVM = Seq(scala213)
@@ -8,7 +10,18 @@ val versionsNative = Seq(scala213)
 inThisBuild(
   List(
     scalaVersion := scala213,
-    scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3"
+    scalafixDependencies += "com.github.liancheng" %% "organize-imports" % "0.4.3",
+    // https://index.scala-lang.org/ohze/scala-rewrites/scala-rewrites/0.1.10-sd?target=_2.13
+    semanticdbEnabled := true,
+    semanticdbOptions += "-P:semanticdb:synthetics:on", // make sure to add this
+    semanticdbVersion := scalafixSemanticdb.revision,
+    libraryDependencies += "org.scalameta" % "semanticdb-scalac-core" % "4.4.6" cross CrossVersion.full,
+    scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
+      scalaVersion.value
+    )
+    // fork in Test := false,
+    // fork in test := false,
+    // fork in run := false
   )
 )
 
@@ -22,7 +35,7 @@ lazy val commonSettings = Seq(
   // coverageFailOnMinimum := true
   //
   // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-  // resolvers += Resolver.mavenLocal,
+  resolvers += Resolver.mavenLocal,
   //
   scalacOptions ++= (Seq("-feature", "-deprecation")
     ++
@@ -43,6 +56,7 @@ lazy val commonSettings = Seq(
   // Ship resource files with each jar.
   resourceDirectory in Compile := file(".") / "./src/main/resources",
   resourceDirectory in Runtime := file(".") / "./src/main/resources",
+  resourceDirectory in Test := file(".") / "./src/test/resources",
   // fmv1992_scala_utilities:33e41c7:fmv1992_scala_utilities/build.sbt:29
   test in assembly := {},
   assemblyMergeStrategy in assembly := {
@@ -110,20 +124,13 @@ lazy val commonSettings = Seq(
   //
   // <https://scalacenter.github.io/scalafix/docs/users/installation.html>.
   libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
-  semanticdbEnabled := true,
-  semanticdbOptions += "-P:semanticdb:synthetics:on",
-  semanticdbVersion := scalafixSemanticdb.revision,
   scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
     scalaVersion.value
-  ),
-  addCompilerPlugin(
-    "org.scalameta" % "semanticdb-scalac" % "4.3.24" cross CrossVersion.full
-  ),
-  addCompilerPlugin(scalafixSemanticdb)
+  )
 )
 
 lazy val commonDependencies = Seq(
-  libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.0",
+  libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.1",
   libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.0",
   libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test
 )

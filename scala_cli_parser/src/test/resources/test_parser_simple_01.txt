@@ -1,0 +1,8 @@
+# Well formated cli config file.
+
+name: debug
+    n: 0
+    type: int
+    help: Turn on debugging.
+
+# vim: set filetype=config fileformat=unix wrap spell spelllang=en:
