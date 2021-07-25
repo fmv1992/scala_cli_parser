@@ -29,58 +29,75 @@ object MapperFullConfigParser
   def apply(
       v1: Seq[Try[ParsedResult[Seq[Char], Map[String, String]]]]
   ): Seq[Try[ParsedResult[Seq[Char], Map[String, Map[String, String]]]]] = {
-    v1.foldLeft(
-      (
-        // Seq accumulator.
-        Seq(Success(ParsedResult(Seq.empty, Map.empty))),
-        // Nested map accumulator.
-        Map("" -> Map())
-      ): Tuple2[Seq[Try[
-        ParsedResult[Seq[Char], Map[String, Map[String, String]]]
-      ]], Map[String, Map[String, String]]]
-    )(
-      (
-          x: Tuple2[
-            Seq[scala.util.Try[fmv1992.scala_cli_parser.ParsedResult[Seq[
+    // Process the sequence of `ParsedResult`s merging them when a block
+    // **starting** with `name:` appears.
+    val folded = v1
+      .foldLeft(
+        (
+          // Seq of parsed results accumulator.
+          Seq(Success(ParsedResult(Seq.empty, Map.empty))),
+          // `ParsedResult.data` accumulator.
+          Seq.empty,
+          // Nested map accumulator.
+          Map("" -> Map())
+        ): Tuple3[Seq[Try[
+          ParsedResult[Seq[Char], Map[String, Map[String, String]]]
+        ]], Seq[Char], Map[String, Map[String, String]]]
+      )(
+        (
+            x: Tuple3[
+              Seq[scala.util.Try[fmv1992.scala_cli_parser.ParsedResult[Seq[
+                Char
+              ], Map[String, Map[String, String]]]]],
+              Seq[Char],
+              Map[String, Map[String, String]]
+            ],
+            elem: scala.util.Try[fmv1992.scala_cli_parser.ParsedResult[Seq[
               Char
-            ], Map[String, Map[String, String]]]]],
-            Map[String, Map[String, String]]
-          ],
-          elem: scala.util.Try[fmv1992.scala_cli_parser.ParsedResult[Seq[
-            Char
-          ], Map[
-            String,
-            String
-          ]]]
-      ) => {
-        val sacc = x._1
-        val macc = x._2
-        val pr = elem.get
+            ], Map[
+              String,
+              String
+            ]]]
+        ) => {
+          val spracc = x._1
+          val schar = x._2
+          val macc = x._3
+          val pr = elem.get
 
-        // Console.err.println("-" * 79)
-        // Console.err.println(x.toString)
-        // Console.err.println("-" * 79)
-        // Console.err.println(elem.toString)
-        // Console.err.println("-" * 79)
+          // Console.err.println("-" * 79)
+          // Console.err.println(x.toString)
+          // Console.err.println("-" * 79)
+          // Console.err.println(elem.toString)
+          // Console.err.println("-" * 79)
 
-        // Trigger addition of macc.
-        if (pr.result.isEmpty) {
-          if (macc.isEmpty) {
-            (sacc, Map("" -> Map.empty))
-          } else {
+          // If we get a "name" we save `macc` and start a new one.
+          if (pr.result.get("name").isDefined) {
+            val newMacc = Map(pr.result("name") -> Map.empty): Map[
+              String,
+              Map[String, String]
+            ]
             (
-              sacc.appended(
-                Success(ParsedResult(pr.data, getMaccUpdated(macc, pr.result)))
+              spracc.appended(
+                Success(
+                  ParsedResult(
+                    schar,
+                    macc
+                  )
+                )
               ),
-              Map("" -> Map.empty)
+              pr.data,
+              getMaccUpdated(Map.empty, pr.result)
             )
+            // Otherwise we just accumulate `macc`.
+          } else {
+            (spracc, schar ++ pr.data, getMaccUpdated(macc, pr.result))
           }
-          // Update macc accumulator.
-        } else {
-          (sacc, getMaccUpdated(macc, pr.result))
+
         }
-      }
-    )._1
-    // ()._1
+      )
+    // Manage last not folded block.
+    val (retIncomplete, dataLeft, mapLeft) = folded
+    // ???.
+    retIncomplete.appended(Success(ParsedResult(dataLeft, mapLeft)))
   }
 }
