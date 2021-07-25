@@ -86,7 +86,7 @@ object MapperFullConfigParser
                 )
               ),
               pr.data,
-              getMaccUpdated(Map.empty, pr.result)
+              getMaccUpdated(Map("" -> Map()), pr.result)
             )
             // Otherwise we just accumulate `macc`.
           } else {
