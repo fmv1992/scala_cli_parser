@@ -78,13 +78,15 @@ And its usages are as follows:
 
     *   (Ongoing): On the part of parsing config files everything but `fullConfigParser` should be private.
 
+    *   (Ongoing): Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
+
     *   (Backlog): Improve parsing process. Parsers can actually fail and provide a useful error message.
 
 *   `master`:
 
 ## Discussion
 
-Interesting to notice that a parser behavior is influenced by the parsers and the combiners (e.g.: [`???`]()).
+Interesting to notice that a parser behavior is influenced by the parsers and the combiners (e.g.: [`mapper`](https://github.com/fmv1992/scala_cli_parser/blob/e62ad7327eb7e46406bb94bf40ad82e418f4550b/scala_cli_parser/src/main/scala/conf/ParserUtils.scala#L125)).
 
 ### Backlog
 
