@@ -7,6 +7,14 @@ import fmv1992.scala_cli_parser._
 
 // ???: This is a workaround since Scala Native does not give access to
 // `Resources`.
+//
+// ???: This should be mixed in with `fmv1992.scala_cli_parser`:
+//
+// ```
+// package object test extends fmv1992.scala_cli_parser {
+// ```
+//
+// See also: <https://docs.scala-lang.org/tour/package-objects.html>.
 package object test {
 
   def loadTestResource(basename: String): String = {
