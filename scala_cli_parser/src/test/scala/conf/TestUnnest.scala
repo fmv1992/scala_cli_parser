@@ -22,7 +22,7 @@
 //          )
 //        )
 //          ===
-//            ParserUtils.fullConfigParser.partialParse(fullConfig)
+//            ParserConfUtils.fullConfigParser.partialParse(fullConfig)
 //      )
 //    })
 //  )

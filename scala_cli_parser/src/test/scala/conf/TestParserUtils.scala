@@ -1,15 +1,16 @@
-// project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestParserUtils
+// project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestParserConfUtils
 package fmv1992.scala_cli_parser.conf.test
 
 import scala.util.Success
 
+import fmv1992.scala_cli_parser._
 import fmv1992.scala_cli_parser.conf._
 import org.scalatest.concurrent.TimeLimits
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.Millis
 import org.scalatest.time.Span
 
-class TestParserUtils extends AnyFunSuite with TimeLimits {
+class TestParserConfUtils extends AnyFunSuite with TimeLimits {
 
 //   def parserFactory(
 //       x: String
@@ -46,31 +47,32 @@ class TestParserUtils extends AnyFunSuite with TimeLimits {
   val commentAndSpace = comment1 ++ "\n" ++ space1
 
   val parserSpaceAndComment =
-    ParserUtils.and(
+    ParserConfUtils.and(
       SpaceConfParser,
       CommentConfParser
     )
 
   val parserCommentAndSpace =
-    ParserUtils.and(
+    ParserConfUtils.and(
       CommentConfParser,
       SpaceConfParser
     )
 
   val parserCommentOrSpaceWithTry: PWT =
-    ParserUtils.or(CommentConfParser, SpaceConfParser)
+    ParserConfUtils.or(CommentConfParser, SpaceConfParser)
 
   val parserCommentOrSpacePartial: PP =
-    ParserUtils.or(CommentConfParser, SpaceConfParser)
+    ParserConfUtils.or(CommentConfParser, SpaceConfParser)
 
-  val parserManyCommentsOrSpaces = ParserUtils.many(parserCommentOrSpacePartial)
+  val parserManyCommentsOrSpaces =
+    ParserConfUtils.many(parserCommentOrSpacePartial)
 
-  val parserManyCommentsOrSpacesOrMultiLinesConf = ParserUtils.many(
-    ParserUtils.or(
-      ParserUtils.newLines,
-      ParserUtils.or(
+  val parserManyCommentsOrSpacesOrMultiLinesConf = ParserConfUtils.many(
+    ParserConfUtils.or(
+      ParserConfUtils.newLines,
+      ParserConfUtils.or(
         MultiLineConfParser,
-        ParserUtils.or(CommentConfParser, SpaceConfParser)
+        ParserConfUtils.or(CommentConfParser, SpaceConfParser)
       )
     )
   )
@@ -130,12 +132,12 @@ class TestParserUtils extends AnyFunSuite with TimeLimits {
 //   }
 //
 //   test("`tryAll` valid.") {
-//     val parser1 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
+//     val parser1 = ParserConfUtils.tryAll(CommentConfParser, SpaceConfParser)
 //     assert(
 //       parser1.parse(comment1).right.value ===
 //         List(ParsedResult(comment1.toList, emptyMapSS))
 //     )
-//     val parser2 = ParserUtils.tryAll(CommentConfParser, SpaceConfParser)
+//     val parser2 = ParserConfUtils.tryAll(CommentConfParser, SpaceConfParser)
 //     assert(
 //       parser2.parse(spaceAndComment).right.value === List(
 //         ParsedResult((comment1 + '\n').toList, emptyMapSS),
@@ -148,7 +150,7 @@ class TestParserUtils extends AnyFunSuite with TimeLimits {
 //
 //   test("`allSubsequencesFromStart` valid.") {
 //     assert(
-//       Seq("", "a", "ab", "abc").toSet === ParserUtils
+//       Seq("", "a", "ab", "abc").toSet === ParserConfUtils
 //         .allSubsequencesFromStart(
 //           "abc"
 //         )
@@ -224,13 +226,13 @@ name:       | name line 01.
 //
 //   // Many should not have to guess and decrease the input w any strategy.
 //   ignore("`many` \"b\"s.") {
-//     val manyBsParser = ParserUtils.many(bParser, combinerString)
+//     val manyBsParser = ParserConfUtils.many(bParser, combinerString)
 //     assert(manyBsParser.parse("b").right.value.result === Map("b" -> 1))
 //     assert(manyBsParser.parse("bbbb").right.value.result === Map("b" -> 4))
 //
-//     val manyAsParser = ParserUtils.many(aParser, combinerString)
-//     val manyAsOrBsParser = ParserUtils.many(
-//       ParserUtils.or(manyAsParser, manyBsParser),
+//     val manyAsParser = ParserConfUtils.many(aParser, combinerString)
+//     val manyAsOrBsParser = ParserConfUtils.many(
+//       ParserConfUtils.or(manyAsParser, manyBsParser),
 //       combinerString
 //     )
 //     assert(

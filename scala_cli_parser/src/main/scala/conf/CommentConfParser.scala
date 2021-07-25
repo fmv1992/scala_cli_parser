@@ -4,6 +4,8 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
+import fmv1992.scala_cli_parser._
+
 object CommentConfParser extends PP with PWT {
 
   override def parse(

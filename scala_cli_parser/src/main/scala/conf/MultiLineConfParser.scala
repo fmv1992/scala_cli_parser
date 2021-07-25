@@ -4,6 +4,8 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
+import fmv1992.scala_cli_parser._
+
 /** Parse a **single** config that spans multiple lines.
   *  It **must** span more than 1 line.
   */

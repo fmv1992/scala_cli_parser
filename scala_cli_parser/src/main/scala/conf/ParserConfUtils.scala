@@ -3,7 +3,9 @@ package fmv1992.scala_cli_parser.conf
 import scala.util.Failure
 import scala.util.Success
 
-object ParserUtils {
+import fmv1992.scala_cli_parser._
+
+object ParserConfUtils {
 
   def or[A, B](
       p1: ParserWithTry[A, B],
@@ -161,19 +163,5 @@ object ParserUtils {
         (rest, Success(ParsedResult(leadingNewLines, emptyMapSS)))
       }
     })
-
-  def fullConfigParser =
-    ParserUtils.many(
-      ParserUtils.or(
-        newLines,
-        ParserUtils.or(
-          CommentConfParser,
-          ParserUtils.or(
-            SolidLineConfParser,
-            ParserUtils.or(MultiLineConfParser, SpaceConfParser)
-          )
-        )
-      )
-    )(MapperFullConfigParser, CombinerFullConfigParser)
 
 }

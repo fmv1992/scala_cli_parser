@@ -1,4 +1,4 @@
-package fmv1992.scala_cli_parser.conf
+package fmv1992.scala_cli_parser
 
 case class ParseException(
     val message: String = ""

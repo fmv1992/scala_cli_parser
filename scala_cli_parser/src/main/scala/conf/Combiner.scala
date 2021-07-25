@@ -2,6 +2,8 @@ package fmv1992.scala_cli_parser.conf
 
 import scala.util.Try
 
+import fmv1992.scala_cli_parser._
+
 /** Combine Map[String, Map[String, String]] into Map[String, Map[String, Map[String, String]]] where the
   * new key is given by `name`, which stands for the CLI name.
   */

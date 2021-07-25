@@ -4,6 +4,8 @@ import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
+import fmv1992.scala_cli_parser._
+
 /** Parse a solid line (with no leading spaces). It includes the new line at
   * the end if it is present.
   */
