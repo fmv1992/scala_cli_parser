@@ -1,4 +1,3 @@
-/** Notice the "semi" import here. */
 package fmv1992
 
 import scala.util.Failure
@@ -12,7 +11,9 @@ package object scala_cli_parser {
     ParserWithTry[Seq[Char], ParsedResult[Seq[Char], Map[String, String]]]
 
   type PP =
-    ParserPartial[Seq[Char], Try[ParsedResult[Seq[Char], Map[String, String]]]]
+    ParserPartial[Seq[Char], Try[
+      ParsedResult[Seq[Char], Map[String, String]]
+    ]]
 
   val emptyMapSS: Map[String, String] = Map.empty
 
@@ -71,5 +72,4 @@ package object scala_cli_parser {
       }
     })
   }
-
 }

@@ -35,7 +35,7 @@ lazy val commonSettings = Seq(
   // coverageFailOnMinimum := true
   //
   // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-  // resolvers += Resolver.mavenLocal,
+  resolvers += Resolver.mavenLocal,
   //
   scalacOptions ++= (Seq("-feature", "-deprecation")
     ++
@@ -130,7 +130,7 @@ lazy val commonSettings = Seq(
 )
 
 lazy val commonDependencies = Seq(
-  libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.0",
+  libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.1",
   libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.0",
   libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test
 )

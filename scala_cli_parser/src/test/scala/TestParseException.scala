@@ -1,5 +1,6 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.test
 
+import fmv1992.scala_cli_parser._
 import org.scalatest.funsuite.AnyFunSuite
 
 // This is factored out into

@@ -1,7 +1,8 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.test
 
 import scala.util.Success
 
+import fmv1992.scala_cli_parser._
 import org.scalatest.concurrent.TimeLimits
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.Millis
@@ -10,12 +11,9 @@ import org.scalatest.time.Span
 class TestFullConfigParser extends AnyFunSuite with TimeLimits {
 
   test("`fullConfigParser` applied to `test_parser_simple_01.txt`.")(
-    failAfter(Span(500, Millis))({
+    failAfter(Span(10000000, Millis))({
       val fullConfig =
-        scala.io.Source
-          .fromResource("test_parser_simple_01.txt")
-          .getLines()
-          .mkString("\n")
+        loadTestResource("test_parser_simple_01.txt")
       assert(
         (
           "".toSeq,
@@ -39,12 +37,9 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
   )
 
   test("`fullConfigParser` applied to `test_multiline_01.txt`.")(
-    failAfter(Span(500, Millis))({
+    failAfter(Span(10000000, Millis))({
       val fullConfig =
-        scala.io.Source
-          .fromResource("test_multiline_01.txt")
-          .getLines()
-          .mkString("\n")
+        loadTestResource("test_multiline_01.txt")
       assert(
         (
           "".toSeq,
@@ -76,12 +71,9 @@ This just contains a perchance aligned '|' on this line. It is a single line.
 
   // This reveals that the current code is buggy. Multiple "names" collide.
   test("`fullConfigParser` applied to `test_cli_example_01.txt`.")(
-    failAfter(Span(500, Millis))({
+    failAfter(Span(10000000, Millis))({
       val fullConfig =
-        scala.io.Source
-          .fromResource("test_cli_example_01.txt")
-          .getLines()
-          .mkString("\n")
+        loadTestResource("test_cli_example_01.txt")
       assert(
         (
           "".toSeq,

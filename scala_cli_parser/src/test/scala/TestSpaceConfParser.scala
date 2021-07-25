@@ -1,10 +1,10 @@
 // project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestSpaceConfParser
-
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.test
 
 import scala.util.Failure
 import scala.util.Success
 
+import fmv1992.scala_cli_parser._
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestSpaceConfParser extends AnyFunSuite {
