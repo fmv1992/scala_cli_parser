@@ -17,7 +17,7 @@ object ParserUtils {
       p2: ParserPartial[A, B]
   ): ParserPartial[A, B] = {
     ParserPartialImpl((a: A) => {
-      val (rest1: A, parsed1: B) = p1.partialParse(a)
+      val (rest1, parsed1) = p1.partialParse(a)
       if (rest1 == a) {
         p2.partialParse(a)
       } else {
@@ -31,11 +31,11 @@ object ParserUtils {
       p2: ParserPartial[A, B]
   )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
     ParserPartialImpl((a: A) => {
-      val (rest1: A, parsed1: B) = p1.partialParse(a)
+      val (rest1, parsed1) = p1.partialParse(a)
       if (rest1 == a) {
         throw new ParseException(a.toString)
       } else {
-        val (rest2: A, parsed2: B) = p2.partialParse(rest1)
+        val (rest2, parsed2) = p2.partialParse(rest1)
         (rest2, combiner(parsed1, parsed2))
       }
     })
@@ -119,9 +119,12 @@ object ParserUtils {
 //   }
 //
 //   // ???: I believe there is a lot of redundancy in this method.
-  def many[A <: Seq[_], B](
+  def many[A <: Seq[_], B, C](
       p: ParserPartial[A, B]
-  )(implicit combiner: (B, B) => B): ParserPartial[A, B] = {
+  )(implicit
+      mapper: Seq[B] => Seq[C],
+      combiner: (C, C) => C
+  ): ParserPartial[A, C] = {
     def go(input: A, acc: Seq[B]): (A, Seq[B]) = {
       if (input.isEmpty) {
         (input, acc)
@@ -138,11 +141,7 @@ object ParserUtils {
     ParserPartialImpl((x: A) => {
       val (rest, acc) = (go(x, Seq.empty): (A, Seq[B]))
       if (rest.isEmpty) {
-        if (acc.length == 1) {
-          (rest, acc.head)
-        } else {
-          (rest, acc.reduce(combiner))
-        }
+        (rest, mapper(acc).reduce(combiner))
       } else {
         // ???: This is undefined at the time being. How should this fail?
         throw new ParseException(s"Undefined case in `many`: '${rest}'.")
@@ -163,7 +162,7 @@ object ParserUtils {
       }
     })
 
-  def fullConfigParser: PP =
+  def fullConfigParser =
     ParserUtils.many(
       ParserUtils.or(
         newLines,
@@ -175,6 +174,6 @@ object ParserUtils {
           )
         )
       )
-    )(CombinerFullConfigParser)
+    )(MapperFullConfigParser, CombinerFullConfigParser)
 
 }
