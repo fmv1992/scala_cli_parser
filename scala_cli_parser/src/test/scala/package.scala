@@ -1,9 +1,9 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.conf
 
 import java.nio.file.Paths
 
 import fmv1992.fmv1992_scala_utilities.util.Utilities.findAllFiles
-import fmv1992.scala_cli_parser._
+import fmv1992.scala_cli_parser.conf._
 
 // ???: This is a workaround since Scala Native does not give access to
 // `Resources`.

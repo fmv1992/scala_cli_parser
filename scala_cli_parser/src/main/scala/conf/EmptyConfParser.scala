@@ -1,4 +1,4 @@
-// package fmv1992.scala_cli_parser
+// package fmv1992.scala_cli_parser.conf
 //
 // object EmptyConfParser
 //     extends ParserWithEither[
@@ -12,7 +12,7 @@
 //
 //   def transform(
 //       input: Seq[Char]
-//   ): fmv1992.scala_cli_parser.ParsedResult[Seq[Char], Map[String, String]] = {
+//   ): ParsedResult[Seq[Char], Map[String, String]] = {
 //     ParsedResult(input, Map.empty)
 //   }
 //

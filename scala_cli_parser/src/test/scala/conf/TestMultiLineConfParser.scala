@@ -1,9 +1,9 @@
 // project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestMultiLineConfParser
-package fmv1992.scala_cli_parser.test
+package fmv1992.scala_cli_parser.conf.test
 
 import scala.util.Success
 
-import fmv1992.scala_cli_parser._
+import fmv1992.scala_cli_parser.conf._
 import org.scalatest.concurrent.TimeLimits
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.Millis

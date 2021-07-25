@@ -1,12 +1,8 @@
-package fmv1992.scala_cli_parser.test
+package fmv1992.scala_cli_parser.conf.test
 
 import scala.util.Success
 
-// ???: This in all `Test*` classes is a remnant of
-// <https://github.com/fmv1992/scala_cli_parser/blob/9cbbb97bae6e19f4f7b54ae9f3d7a6075f5868ce/scala_cli_parser/src/test/scala/package.scala#L8>
-// this limitation.
-import fmv1992.scala_cli_parser._
-
+import fmv1992.scala_cli_parser.conf._
 import org.scalatest.concurrent.TimeLimits
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.time.Millis

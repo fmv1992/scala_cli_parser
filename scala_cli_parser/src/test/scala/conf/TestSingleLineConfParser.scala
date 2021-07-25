@@ -1,4 +1,4 @@
-// package fmv1992.scala_cli_parser.test
+// package fmv1992.scala_cli_parser.conf.test
 //
 // import org.scalatest.funsuite.AnyFunSuite
 //

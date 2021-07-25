@@ -1,4 +1,4 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.conf
 
 import scala.util.Failure
 import scala.util.Success

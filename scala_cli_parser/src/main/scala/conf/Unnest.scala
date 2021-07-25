@@ -1,4 +1,4 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.conf
 
 import scala.util.Success
 import scala.util.Try
@@ -46,13 +46,13 @@ object MapperFullConfigParser
       )(
         (
             x: Tuple3[
-              Seq[scala.util.Try[fmv1992.scala_cli_parser.ParsedResult[Seq[
+              Seq[scala.util.Try[ParsedResult[Seq[
                 Char
               ], Map[String, Map[String, String]]]]],
               Seq[Char],
               Map[String, Map[String, String]]
             ],
-            elem: scala.util.Try[fmv1992.scala_cli_parser.ParsedResult[Seq[
+            elem: scala.util.Try[ParsedResult[Seq[
               Char
             ], Map[
               String,
