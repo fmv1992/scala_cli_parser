@@ -30,52 +30,47 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
     })
   )
 
-  ignore("`fullConfigParser` applied to `test_multiline_01.txt`.")(
+  test("`fullConfigParser` applied to `test_multiline_01.txt`.")(
     failAfter(Span(500, Millis))({
       val fullConfig =
         loadTestResource("test_multiline_01.txt")
       assert(
-        ParsedResult(
-          fullConfig.toSeq,
-          Map(
-            "multiline" -> Map(
-              "n" -> "1",
-              "type" -> "int",
-              "help" -> """
+        ParserCLI(
+          Set(
+            ArgumentConf(
+              "multiline",
+              """
 This is a multi line help string.
 
 It may also contain examples and etc...
 This just contains a perchance aligned '|' on this line. It is a single line.
 """.trim,
-              "default" -> "yes"
+              "int",
+              1
             )
           )
-        ) === ParserConfigFile.parse(fullConfig)
+        )
+          === ParserConfigFile.parse(fullConfig)
       )
     })
   )
 
-  // This reveals that the current code is buggy. Multiple "names" collide.
-  ignore("`fullConfigParser` applied to `test_cli_example_01.txt`.")(
+  test("`fullConfigParser` applied to `test_cli_example_01.txt`.")(
     failAfter(Span(500, Millis))({
       val fullConfig =
         loadTestResource("test_cli_example_01.txt")
       assert(
-        ParsedResult(
-          fullConfig.toSeq,
-          Map(
-            "debug" -> Map(
-              "n" -> "0",
-              "type" -> "int",
-              "help" -> "Turn on debug flag."
+        ParserCLI(
+          Set(
+            ArgumentConf(
+              "debug",
+              "Turn on debug flag.",
+              "int",
+              1
             ),
-            "verbose" -> Map(
-              "n" -> "0",
-              "type" -> "int",
-              "help" -> "Help text."
-            ),
-            "help" -> Map.empty,
-            "version" -> Map.empty
+            ArgumentConf("verbose", "Help text.", "int", 0),
+            ArgumentConf("help", "Help text.", "int", 0),
+            ArgumentConf("version", "Help text.", "int", 0)
           )
         ) === ParserConfigFile.parse(fullConfig)
       )

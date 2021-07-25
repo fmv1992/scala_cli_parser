@@ -84,9 +84,6 @@ trait ParserCLI extends Parser[Seq[String], Set[ArgumentCLI]] {
   def parse(input: Seq[String]): Set[ArgumentCLI]
 
   override def equals(x: Any): Boolean = {
-    Console.err.println("-" * 79)
-    Console.err.println(x)
-    Console.err.println("-" * 79)
     x match {
       case p: ParserCLI => this.arguments == p.arguments
       case _            => false
@@ -149,6 +146,8 @@ object ParserCLI {
     }
   }
 
+  /** This defines how the CLI gets defined. For instance, by having a `map("help")` it enforces this field being defined.
+    */
   def apply(input: Map[String, Map[String, String]]): ParserCLI = {
     val args = input.map(t => {
       val k = t._1
