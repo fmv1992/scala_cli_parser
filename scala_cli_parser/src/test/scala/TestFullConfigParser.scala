@@ -15,7 +15,7 @@ import org.scalatest.time.Span
 class TestFullConfigParser extends AnyFunSuite with TimeLimits {
 
   test("`fullConfigParser` applied to `test_parser_simple_01.txt`.")(
-    failAfter(Span(10000000, Millis))({
+    failAfter(Span(500, Millis))({
       val fullConfig =
         loadTestResource("test_parser_simple_01.txt")
       assert(
@@ -41,7 +41,7 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
   )
 
   test("`fullConfigParser` applied to `test_multiline_01.txt`.")(
-    failAfter(Span(10000000, Millis))({
+    failAfter(Span(500, Millis))({
       val fullConfig =
         loadTestResource("test_multiline_01.txt")
       assert(
@@ -75,7 +75,7 @@ This just contains a perchance aligned '|' on this line. It is a single line.
 
   // This reveals that the current code is buggy. Multiple "names" collide.
   test("`fullConfigParser` applied to `test_cli_example_01.txt`.")(
-    failAfter(Span(10000000, Millis))({
+    failAfter(Span(500, Millis))({
       val fullConfig =
         loadTestResource("test_cli_example_01.txt")
       assert(
