@@ -1,10 +1,11 @@
 package fmv1992.scala_cli_parser.util.test
 
-import org.scalatest.funsuite.AnyFunSuite
+import java.nio.file.Paths
+
+import fmv1992.scala_cli_parser.cli.ArgumentCLI
 import fmv1992.scala_cli_parser.cli.ParserCLI
 import fmv1992.scala_cli_parser.conf.ParserConfigFile
-import java.nio.file.Paths
-import fmv1992.scala_cli_parser.cli.ArgumentCLI
+import org.scalatest.funsuite.AnyFunSuite
 
 class TestMainTestableConfBased extends AnyFunSuite {
 
