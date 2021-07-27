@@ -5,7 +5,7 @@ import scala.util.Success
 
 import fmv1992.scala_cli_parser._
 
-object ParserConfUtils {
+private object ParserConfUtils {
 
   def or[A, B](
       p1: ParserWithTry[A, B],

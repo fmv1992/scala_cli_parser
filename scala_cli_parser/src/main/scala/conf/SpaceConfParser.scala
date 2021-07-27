@@ -6,7 +6,7 @@ import scala.util.Try
 
 import fmv1992.scala_cli_parser._
 
-object SpaceConfParser extends PP with PWT {
+private object SpaceConfParser extends PP with PWT {
 
   override def parse(
       input: Seq[Char]

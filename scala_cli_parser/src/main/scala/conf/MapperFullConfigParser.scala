@@ -8,7 +8,7 @@ import fmv1992.scala_cli_parser._
 /** Combine Map[String, String] into Map[String, Map[String, String]] where the
   * new key is given by `name`, which stands for the CLI name.
   */
-object MapperFullConfigParser
+private object MapperFullConfigParser
     extends Function1[
       Seq[Try[ParsedResult[Seq[Char], Map[String, String]]]],
       Seq[Try[ParsedResult[Seq[Char], Map[String, Map[String, String]]]]]

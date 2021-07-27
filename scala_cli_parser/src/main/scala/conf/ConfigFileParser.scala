@@ -5,6 +5,10 @@ import java.nio.file.Path
 import fmv1992.scala_cli_parser._
 import fmv1992.scala_cli_parser.cli.ParserCLI
 
+/** Config file parser.
+  *
+  *  One of the few publicly accessible objects in this package.
+  */
 object ParserConfigFile extends Parser[Path, ParserCLI] {
 
   def parse(input: Path): ParserCLI = {
@@ -30,5 +34,3 @@ object ParserConfigFile extends Parser[Path, ParserCLI] {
     )(MapperFullConfigParser, CombinerFullConfigParser)
 
 }
-
-// `ParserConfUtils` -> `ParserConfUtils`.

@@ -6,17 +6,17 @@ package object conf {
   import scala.util.Success
   import scala.util.Try
 
-  type PWT =
+  private[conf] type PWT =
     ParserWithTry[Seq[Char], ParsedResult[Seq[Char], Map[String, String]]]
 
-  type PP =
+  private[conf] type PP =
     ParserPartial[Seq[Char], Try[
       ParsedResult[Seq[Char], Map[String, String]]
     ]]
 
-  val emptyMapSS: Map[String, String] = Map.empty
+  private[conf] val emptyMapSS: Map[String, String] = Map.empty
 
-  implicit val combinerSimple: (
+  private[conf] implicit val combinerSimple: (
       Try[ParsedResult[Seq[Char], Map[String, String]]],
       Try[ParsedResult[Seq[Char], Map[String, String]]]
   ) => Try[ParsedResult[Seq[Char], Map[String, String]]] = (a, b) =>
@@ -36,7 +36,7 @@ package object conf {
         )
     )
 
-  implicit val combinerParsedResultSimple: (
+  private[conf] implicit val combinerParsedResultSimple: (
       ParsedResult[Seq[Char], Map[String, String]],
       ParsedResult[Seq[Char], Map[String, String]]
   ) => ParsedResult[Seq[Char], Map[String, String]] =
@@ -46,7 +46,7 @@ package object conf {
         a.result ++ b.result
       )
 
-  def parserPartialToParserWithTry[A <: Seq[_], B](
+  private[conf] def parserPartialToParserWithTry[A <: Seq[_], B](
       p: ParserPartial[A, B]
   ): ParserWithTry[A, B] = {
     ParserWithTryImpl((x: A) => {
@@ -61,7 +61,7 @@ package object conf {
     })
   }
 
-  def parserWithTryToParserPartial[A <: Seq[_], B](
+  private[conf] def parserWithTryToParserPartial[A <: Seq[_], B](
       p: ParserWithTry[A, B]
   )(zero: B): ParserPartial[A, B] = {
     ParserPartialImpl((x: A) => {

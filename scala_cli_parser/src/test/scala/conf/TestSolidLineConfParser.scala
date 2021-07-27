@@ -1,4 +1,3 @@
-// project scala_cli_parserCrossProjectJVM;~testOnly fmv1992.scala_cli_parser.TestSolidLineConfParser
 package fmv1992.scala_cli_parser.conf.test
 
 import scala.util.Success

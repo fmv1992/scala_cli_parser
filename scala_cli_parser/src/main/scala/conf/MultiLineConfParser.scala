@@ -9,7 +9,7 @@ import fmv1992.scala_cli_parser._
 /** Parse a **single** config that spans multiple lines.
   *  It **must** span more than 1 line.
   */
-object MultiLineConfParser
+private object MultiLineConfParser
     extends ParserPartial[
       Seq[Char],
       Try[ParsedResult[Seq[Char], Map[String, String]]]
