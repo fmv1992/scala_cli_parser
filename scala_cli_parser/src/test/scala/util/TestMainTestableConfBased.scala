@@ -48,4 +48,8 @@ TestSum --debug --help --sum --version
 """.trim === TestSum.printHelp.mkString("\n"))
   }
 
+  test("Test `printVersion`.") {
+    assert(Seq("TestSum 0.0.0") === TestSum.printVersion)
+  }
+
 }
