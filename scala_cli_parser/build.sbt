@@ -1,5 +1,13 @@
 import xerial.sbt.Sonatype._
 
+//
+// libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.1.7" % "provided"
+
+/* autoCompilerPlugins := true*/
+/* */
+/* addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.1.7")*/
+//
+
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val scala213 = "2.13.4"
@@ -37,7 +45,7 @@ lazy val commonSettings = Seq(
   // resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
   resolvers += Resolver.mavenLocal,
   //
-  scalacOptions ++= (Seq("-feature", "-deprecation")
+  scalacOptions ++= (Seq("-feature", "-deprecation", "-P:acyclic:force")
     ++
       Seq(
         "-P:semanticdb:synthetics:on",
@@ -126,10 +134,14 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.scalameta" %% "scalameta" % "4.3.24",
   scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
     scalaVersion.value
-  )
+  ),
+  // https://github.com/com-lihaoyi/acyclic: not working. See <https://github.com/com-lihaoyi/acyclic/issues/36>.
+  autoCompilerPlugins := true,
+  addCompilerPlugin("com.lihaoyi" %% "acyclic" % "0.2.1")
 )
 
 lazy val commonDependencies = Seq(
+  libraryDependencies += "com.lihaoyi" %% "acyclic" % "0.2.1" % "provided",
   libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.1",
   libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.0",
   libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test
