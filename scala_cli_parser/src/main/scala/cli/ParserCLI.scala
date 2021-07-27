@@ -7,9 +7,9 @@ trait Argument {
 
   def name: String
 
-  override def toString: String = {
-    s"Argument '${this.getClass.getSimpleName}': '${name}'."
-  }
+  // override def toString: String = {
+  // s"Argument '${this.getClass.getSimpleName}': '${name}'."
+  // }
 
 }
 
@@ -45,14 +45,6 @@ trait ArgumentConf extends Argument {
   def argumentType: String
 
   def n: Int
-
-  override def equals(that: Any): Boolean = {
-    that match {
-      case a: ArgumentConf =>
-        (this.argumentType == a.argumentType) && (this.n == a.n)
-      case _ => false
-    }
-  }
 
 }
 
@@ -159,11 +151,14 @@ object ParserCLI {
   /** This defines how the CLI gets defined. For instance, by having a `map("help")` it enforces this field being defined.
     */
   def apply(input: Map[String, Map[String, String]]): ParserCLI = {
-    val args = input.map(t => {
-      val k = t._1
-      val vv = t._2
-      ArgumentConf(k, vv("help"), vv("type"), vv("n").toInt)
-    })
+    val args: Iterable[ArgumentConf] = input
+      .map(t => {
+        val k = t._1
+        val vv = t._2
+        ArgumentConf(k, vv("help"), vv("type"), vv("n").toInt)
+      })
+      .toList
+    require(args.size == args.toSet.size, s"'${args}' and '${args.toSet}'.")
     ParserCLIImpl(args.toSet)
   }
 

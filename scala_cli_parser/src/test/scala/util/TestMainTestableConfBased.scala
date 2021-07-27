@@ -19,17 +19,20 @@ class TestMainTestableConfBased extends AnyFunSuite {
   // val parsed: Set[ArgumentCLI] = parserCLI.parse(defaultArgs)
 
   test("Most basic test: test the idea.") {
-    throw new Exception(parserCLI.arguments.size.toString)
-    // val parsed = ParserConfigFile
-    // .parse(
-    // Paths.get(
-    // "src/test/resources/test_cli_example_05_sum.txt"
-    // )
-    // )
-    // .parse(defaultArgs)
-    // assert(
-    // parsed === 1
-    // )
+    // assert(3 === parserCLI.arguments.size)
+    val parsed = ParserConfigFile
+      .parse(
+        Paths.get(
+          "src/test/resources/test_cli_example_05_sum.txt"
+        )
+      )
+      .parse(defaultArgs)
+    assert(
+      Set(
+        ArgumentCLI("version", "int", List()),
+        ArgumentCLI("help", "int", List())
+      ) === parsed
+    )
   }
 
 //  test("Test functionality with TestMainExample01.") {
