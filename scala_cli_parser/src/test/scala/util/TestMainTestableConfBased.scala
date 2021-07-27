@@ -45,11 +45,14 @@ TestSum --debug --help --sum --version
 
            Use multiline.
     --version: Show the program version.
-""".trim === TestSum.printHelp.mkString("\n"))
+""".trim === TestSum.testableMain(List("--help")).mkString("\n"))
   }
 
   test("Test `printVersion`.") {
-    assert(Seq("TestSum 0.0.0") === TestSum.printVersion)
+    assert(
+      Seq("TestSum 0.0.0") === TestSum
+        .testableMain(List("--version"))
+    )
   }
 
 }

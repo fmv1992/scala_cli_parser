@@ -13,15 +13,16 @@ object TestSum extends MainTestableConfBased {
   val CLIConfigContents =
     S.putfile("./src/test/resources/test_cli_example_02_gnu.txt")
 
-  def testableMain(args: Set[ArgumentCLI]): List[String] = {
-
-    val res = args.foldLeft(0)((l, x) => {
-      x match {
-        case y: ArgumentCLI if y.name == "sum" => x.values.map(_.toInt).sum + l
-        case _                                 => throw new Exception()
-      }
-    })
-
-    List(res.toString)
+  def testableMain(args: Set[ArgumentCLI]): Seq[String] = {
+    args
+      .find(_.name == "help")
+      .orElse(args.find(_.name == "version"))
+      .orElse(args.find(_.name == "sum"))
+      .getOrElse(throw new Exception()) match {
+      case a: ArgumentCLI if (a.name == "help")    => getHelp
+      case a: ArgumentCLI if (a.name == "version") => getVersion
+      case a: ArgumentCLI if (a.name == "sum") =>
+        Seq(a.values.map(_.toInt).sum.toString)
+    }
   }
 }

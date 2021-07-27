@@ -9,7 +9,7 @@ import fmv1992.scala_cli_parser.conf.ParserConfigFile
   */
 trait MainTestableConfBased extends TestableMain {
 
-  val CLIConfigContents: String
+  protected[this] val CLIConfigContents: String
 
   lazy private val parserConf = ParserConfigFile.parse(CLIConfigContents)
 
@@ -21,15 +21,15 @@ trait MainTestableConfBased extends TestableMain {
     *
     * @see [[https://www.gnu.org/prep/standards/html_node/_002d_002dversion.html#g_t_002d_002dversion]]
     */
-  def printVersion: Seq[String] = {
-    List(s"$programName $version")
+  protected[this] def getVersion: Seq[String] = {
+    Seq(s"$programName $version")
   }
 
   /** Get help string.
     *
     * @see [[https://www.gnu.org/prep/standards/html_node/_002d_002dhelp.html#g_t_002d_002dhelp]]
     */
-  def printHelp: Seq[String] = {
+  protected[this] def getHelp: Seq[String] = {
     val parserConfDeterministic = parserConf.arguments.toSeq.sortBy(_.name)
     val usage: String =
       s"$programName " + parserConfDeterministic
@@ -54,6 +54,10 @@ trait MainTestableConfBased extends TestableMain {
     Seq(usage, description)
   }
 
+  def testableMain(args: Seq[String]): Iterable[String] = {
+    testableMain(parserConf.parse(args.toList))
+  }
+
   /** Parse arguments, read stdin process and output to stdout.
     *
     * @see https://en.wikipedia.org/wiki/Standard_streams
@@ -62,9 +66,9 @@ trait MainTestableConfBased extends TestableMain {
     val parsed: Set[ArgumentCLI] = parserConf.parse(args.toList)
     // Check if either version of help are given.
     val res = if (parsed.exists(_.name == "help")) {
-      printHelp
+      getHelp
     } else if (parsed.exists(_.name == "version")) {
-      printVersion
+      getVersion
     } else {
       testableMain(parsed)
     }
