@@ -7,10 +7,6 @@ trait Argument {
 
   def name: String
 
-  override def toString: String = {
-    s"Argument '${this.getClass.getSimpleName}': '${name}'."
-  }
-
 }
 
 trait ArgumentCLI extends Argument {

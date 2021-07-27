@@ -18,7 +18,7 @@ class TestMainTestableConfBased extends AnyFunSuite {
     )
   )
 
-  test("Most basic test: test the idea.") {
+  test("Test `parse`.") {
     assert(
       Set(
         ArgumentCLI("version", "int", List()),
@@ -27,13 +27,24 @@ class TestMainTestableConfBased extends AnyFunSuite {
     )
   }
 
-  test("Test functionality with TestMainExample01.") {
+  test("Test functionality with `TestSum`.") {
     assert(
       TestSum.testableMain(
         parserCLI.parse("--sum 2 7".split(" ").toList)
       )
         === List("9")
     )
+  }
+
+  test("Test `printHelp`.") {
+    assert("""
+TestSum --debug --help --sum --version
+    --debug: Turn on debugging.
+    --help: Help text.
+    --sum: Sum arguments.
+           Use multiline.
+    --version: Show the program version.
+""".trim === TestSum.printHelp.mkString("\n"))
   }
 
 }

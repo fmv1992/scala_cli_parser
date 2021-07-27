@@ -13,6 +13,8 @@ trait MainTestableConfBased extends TestableMain {
 
   val CLIConfigContents: String
 
+  lazy private val parserConf = ParserConfigFile.parse(CLIConfigContents)
+
   val version: String
 
   val programName: String
@@ -29,14 +31,27 @@ trait MainTestableConfBased extends TestableMain {
     *
     * @see [[https://www.gnu.org/prep/standards/html_node/_002d_002dhelp.html#g_t_002d_002dhelp]]
     */
-  def printHelp(format: Set[ArgumentConf]): Seq[String] = {
-    val usage: String = s"$programName " + format.toList
-      .sortBy(_.name)
-      .map(x => "--" + x.name)
-      .mkString(" ")
-    val description: String = format.toList
-      .sortBy(_.name)
-      .map(x => " " * 4 + "--" + x + ": " + x.description)
+  def printHelp: Seq[String] = {
+    val parserConfDeterministic = parserConf.arguments.toSeq.sortBy(_.name)
+    val usage: String =
+      s"$programName " + parserConfDeterministic
+        .map(x => "--" + x.name)
+        .mkString(" ")
+    val description: String = parserConfDeterministic.toList
+      .map(x => {
+        val headOfFirstLine = " " * 4 + "--" + x.name + ": "
+        val descriptionLines = x.description.linesIterator.toList
+        val (descriptionHead, descriptionTail) =
+          (descriptionLines.head, descriptionLines.tail)
+        val descriptionIndented = descriptionHead + descriptionTail
+          .map(
+            x =>
+              if (x.isEmpty) ""
+              else ((" " * headOfFirstLine.length) + x)
+          )
+          .mkString("\n")
+        headOfFirstLine + descriptionIndented
+      })
       .mkString("\n")
     Seq(usage, description)
   }
@@ -46,11 +61,10 @@ trait MainTestableConfBased extends TestableMain {
     * @see https://en.wikipedia.org/wiki/Standard_streams
     */
   def main(args: Array[String]): Unit = {
-    val parser: ParserCLI = ParserConfigFile.parse(CLIConfigContents)
-    val parsed: Set[ArgumentCLI] = parser.parse(args.toList)
+    val parsed: Set[ArgumentCLI] = parserConf.parse(args.toList)
     // Check if either version of help are given.
     val res = if (parsed.exists(_.name == "help")) {
-      printHelp(parser.arguments)
+      printHelp
     } else if (parsed.exists(_.name == "version")) {
       printVersion
     } else {
