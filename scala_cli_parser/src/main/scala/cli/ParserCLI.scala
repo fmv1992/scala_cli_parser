@@ -93,7 +93,8 @@ trait ParserCLI extends Parser[Seq[String], Set[ArgumentCLI]] {
 
 object ParserCLI {
 
-  private case class ParserCLIImpl(arguments: Set[ArgumentConf])
+  // ???: CURRENT: The test error is here!
+  private case class ParserCLIImpl(val arguments: Set[ArgumentConf])
       extends ParserCLI {
 
     def parse(input: Seq[String]): Set[ArgumentCLI] = {

@@ -76,4 +76,25 @@ This just contains a perchance aligned '|' on this line. It is a single line.
     })
   )
 
+  test("`fullConfigParser` applied to `test_cli_example_05_sum.txt`.")(
+    failAfter(Span(500, Millis))({
+      val fullConfig =
+        loadTestResource("test_cli_example_05_sum.txt")
+      assert(
+        ParserCLI(
+          Set(
+            ArgumentConf(
+              "version",
+              "Help text.",
+              "int",
+              0
+            ),
+            ArgumentConf("help", "Help text.", "int", 0),
+            ArgumentConf("sum", "Sum arguments.", "int", 2)
+          )
+        ) === ParserConfigFile.parse(fullConfig)
+      )
+    })
+  )
+
 }
