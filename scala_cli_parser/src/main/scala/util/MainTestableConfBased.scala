@@ -43,14 +43,14 @@ trait MainTestableConfBased extends TestableMain {
         val descriptionLines = x.description.linesIterator.toList
         val (descriptionHead, descriptionTail) =
           (descriptionLines.head, descriptionLines.tail)
-        val descriptionIndented = descriptionHead + descriptionTail
+        val descriptionTailIndented = descriptionTail
           .map(
             x =>
               if (x.isEmpty) ""
               else ((" " * headOfFirstLine.length) + x)
           )
+        ((headOfFirstLine + descriptionHead) :: descriptionTailIndented)
           .mkString("\n")
-        headOfFirstLine + descriptionIndented
       })
       .mkString("\n")
     Seq(usage, description)

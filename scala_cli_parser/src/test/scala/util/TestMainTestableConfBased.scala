@@ -42,6 +42,7 @@ TestSum --debug --help --sum --version
     --debug: Turn on debugging.
     --help: Help text.
     --sum: Sum arguments.
+
            Use multiline.
     --version: Show the program version.
 """.trim === TestSum.printHelp.mkString("\n"))

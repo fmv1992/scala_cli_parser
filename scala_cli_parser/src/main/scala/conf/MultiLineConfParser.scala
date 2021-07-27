@@ -77,11 +77,6 @@ private object MultiLineConfParser
           }
           val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
           (
-            // if (rest.isEmpty) {
-            //   ""
-            // } else {
-            //   rest.prepended(Seq()).map(_.mkString).mkString("\n")
-            // },
             rest.prepended(Seq()).map(_.mkString).mkString("\n"),
             Success(
               ParsedResult(
