@@ -53,23 +53,32 @@ class TestParserCLI extends AnyFunSuite with TimeLimits {
   test("Test `ParserCLI.parse` complex.")(
     failAfter(Span(500, Millis))({
       assert(
-        Set(ArgumentCLI("help", "string", Seq.empty)) ===
+        Set(
+          ArgumentCLI("sum", "int", List("1", "5")),
+          ArgumentCLI("cast", "boolean", Seq("true"))
+        ) ===
           ParserCLI(
             Set(
               ArgumentConf(
-                "help",
+                "sum",
                 "",
-                "string",
-                0
+                "int",
+                2
               ),
               ArgumentConf(
                 "version",
                 "",
                 "string",
                 0
+              ),
+              ArgumentConf(
+                "cast",
+                "",
+                "boolean",
+                1
               )
             )
-          ).parse(List("--help"))
+          ).parse("--sum 1 5 --cast true".split(" "))
       )
     })
   )

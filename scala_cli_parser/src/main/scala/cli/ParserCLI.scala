@@ -114,6 +114,10 @@ object ParserCLI {
               val n: Int = argConf.n
               val (values_, remainingNew) =
                 (remaining.tail.take(n), remaining.tail.drop(n))
+              require(
+                values_.length == n,
+                s"'${values_}' should have '${n}' elements. It has '${values_.length}'."
+              )
               acc match {
                 case Left(x) => go(remainingNew, Left(x))
                 case Right(x) =>
