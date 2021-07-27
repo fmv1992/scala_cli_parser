@@ -88,6 +88,8 @@ And its usages are as follows:
 
     *   (Backlog): Improve parsing process. Parsers can actually fail and provide a useful error message.
 
+    *   (Backlog): add lihaoyi's scala compiler `acyclic` plugin. See `commaefa4ec`.
+
 *   `master`:
 
 ## Discussion
