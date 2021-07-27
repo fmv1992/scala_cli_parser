@@ -7,9 +7,9 @@ trait Argument {
 
   def name: String
 
-  // override def toString: String = {
-  // s"Argument '${this.getClass.getSimpleName}': '${name}'."
-  // }
+  override def toString: String = {
+    s"Argument '${this.getClass.getSimpleName}': '${name}'."
+  }
 
 }
 
@@ -85,7 +85,6 @@ trait ParserCLI extends Parser[Seq[String], Set[ArgumentCLI]] {
 
 object ParserCLI {
 
-  // ???: CURRENT: The test error is here!
   private case class ParserCLIImpl(val arguments: Set[ArgumentConf])
       extends ParserCLI {
 
@@ -157,7 +156,6 @@ object ParserCLI {
         val vv = t._2
         ArgumentConf(k, vv("help"), vv("type"), vv("n").toInt)
       })
-      .toList
     require(args.size == args.toSet.size, s"'${args}' and '${args.toSet}'.")
     ParserCLIImpl(args.toSet)
   }

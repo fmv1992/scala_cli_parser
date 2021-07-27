@@ -39,7 +39,7 @@ class TestParserCLI extends AnyFunSuite with TimeLimits {
               0
             ),
             ArgumentConf(
-              "version",
+              "debug",
               "",
               "string",
               0
