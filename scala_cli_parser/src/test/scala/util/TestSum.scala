@@ -1,7 +1,8 @@
-package fmv1992.scala_cli_parser.util
+package fmv1992.scala_cli_parser.util.test
 
 import fmv1992.fmv1992_scala_utilities.util.S
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
+import fmv1992.scala_cli_parser.util.MainTestableConfBased
 
 object TestSum extends MainTestableConfBased {
 
@@ -17,7 +18,7 @@ object TestSum extends MainTestableConfBased {
     val res = args.foldLeft(0)((l, x) => {
       x match {
         case y: ArgumentCLI if y.name == "sum" => x.values.map(_.toInt).sum + l
-        case _                                 => println(x); throw new Exception()
+        case _                                 => throw new Exception()
       }
     })
 
