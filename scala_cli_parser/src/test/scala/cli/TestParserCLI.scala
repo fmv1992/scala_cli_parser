@@ -12,13 +12,12 @@ class TestParserCLI extends AnyFunSuite with TimeLimits {
   test("Test `ParserCLI.parse` simple.")(
     failAfter(Span(500, Millis))({
       assert(
-        Set(ArgumentCLI("help", "string", Seq.empty)) ===
+        Set(ArgumentCLI("help", Seq.empty)) ===
           ParserCLI(
             Set(
               ArgumentConf(
                 "help",
                 "",
-                "string",
                 0
               )
             )
@@ -35,13 +34,11 @@ class TestParserCLI extends AnyFunSuite with TimeLimits {
             ArgumentConf(
               "help",
               "",
-              "string",
               0
             ),
             ArgumentConf(
               "debug",
               "",
-              "string",
               0
             )
           )
@@ -54,27 +51,24 @@ class TestParserCLI extends AnyFunSuite with TimeLimits {
     failAfter(Span(500, Millis))({
       assert(
         Set(
-          ArgumentCLI("sum", "int", List("1", "5")),
-          ArgumentCLI("cast", "boolean", Seq("true"))
+          ArgumentCLI("sum", List("1", "5")),
+          ArgumentCLI("cast", Seq("true"))
         ) ===
           ParserCLI(
             Set(
               ArgumentConf(
                 "sum",
                 "",
-                "int",
                 2
               ),
               ArgumentConf(
                 "version",
                 "",
-                "string",
                 0
               ),
               ArgumentConf(
                 "cast",
                 "",
-                "boolean",
                 1
               )
             )

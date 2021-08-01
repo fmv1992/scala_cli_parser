@@ -11,9 +11,6 @@ trait Argument {
 
 trait ArgumentCLI extends Argument {
 
-  // ???: This should go as the type in values.
-  def argumentType: String
-
   def values: Seq[String]
 
 }
@@ -22,23 +19,19 @@ object ArgumentCLI {
 
   private case class ArgumentCLIImpl(
       name: String,
-      argumentType: String,
       values: Seq[String]
   ) extends ArgumentCLI
 
   def apply(
       name: String,
-      argumentType: String,
       values: Seq[String]
-  ): ArgumentCLI = ArgumentCLIImpl(name, argumentType, values)
+  ): ArgumentCLI = ArgumentCLIImpl(name, values)
 
 }
 
 trait ArgumentConf extends Argument {
 
   def description: String
-
-  def argumentType: String
 
   def n: Int
 
@@ -49,17 +42,15 @@ object ArgumentConf {
   private case class ArgumentConfImpl(
       name: String,
       description: String,
-      argumentType: String,
       n: Int
   ) extends ArgumentConf
 
   def apply(
       name: String,
       description: String,
-      argumentType: String,
       n: Int
   ): ArgumentConf = {
-    ArgumentConfImpl(name, description, argumentType, n)
+    ArgumentConfImpl(name, description, n)
   }
 
 }
@@ -114,7 +105,6 @@ object ParserCLI {
                     Right(
                       (x + ArgumentCLI(
                         argumentCLIName,
-                        argConf.argumentType,
                         values_
                       ))
                     )
@@ -150,7 +140,7 @@ object ParserCLI {
       .map(t => {
         val k = t._1
         val vv = t._2
-        ArgumentConf(k, vv("description"), vv("type"), vv("n").toInt)
+        ArgumentConf(k, vv("description"), vv("n").toInt)
       })
     require(args.size == args.toSet.size, s"'${args}' and '${args.toSet}'.")
     ParserCLIImpl(args.toSet)

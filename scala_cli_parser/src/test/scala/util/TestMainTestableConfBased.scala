@@ -21,8 +21,8 @@ class TestMainTestableConfBased extends AnyFunSuite {
   test("Test `parse`.") {
     assert(
       Set(
-        ArgumentCLI("version", "int", List()),
-        ArgumentCLI("help", "int", List())
+        ArgumentCLI("version", List()),
+        ArgumentCLI("help", List())
       ) === parserCLI.parse(defaultArgs)
     )
   }

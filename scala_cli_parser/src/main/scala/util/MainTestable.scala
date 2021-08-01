@@ -2,7 +2,6 @@ package fmv1992.scala_cli_parser.util
 
 import scala.Iterable
 
-import fmv1992.scala_cli_parser.cli.Argument
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
 
 /** Provide a testable main interface: Read lines, process and output lines. */

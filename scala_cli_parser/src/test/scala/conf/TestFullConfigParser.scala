@@ -19,7 +19,6 @@ class TestFullConfigParser extends AnyFunSuite with TimeLimits {
             ArgumentConf(
               "debug",
               "Turn on debugging.",
-              "int",
               0
             )
           )
@@ -44,7 +43,6 @@ This is a multi line help string.
 It may also contain examples and etc...
 This just contains a perchance aligned '|' on this line. It is a single line.
 """.trim,
-              "int",
               1
             )
           )
@@ -64,12 +62,11 @@ This just contains a perchance aligned '|' on this line. It is a single line.
             ArgumentConf(
               "debug",
               "Turn on debug flag.",
-              "int",
               1
             ),
-            ArgumentConf("verbose", "Help text.", "int", 0),
-            ArgumentConf("help", "Help text.", "int", 0),
-            ArgumentConf("version", "Help text.", "int", 0)
+            ArgumentConf("verbose", "Help text.", 0),
+            ArgumentConf("help", "Help text.", 0),
+            ArgumentConf("version", "Help text.", 0)
           )
         ) === ParserConfigFile.parse(fullConfig)
       )
@@ -86,11 +83,10 @@ This just contains a perchance aligned '|' on this line. It is a single line.
             ArgumentConf(
               "version",
               "Help text.",
-              "int",
               0
             ),
-            ArgumentConf("help", "Help text.", "int", 0),
-            ArgumentConf("sum", "Sum arguments.", "int", 2)
+            ArgumentConf("help", "Help text.", 0),
+            ArgumentConf("sum", "Sum arguments.", 2)
           )
         ) === ParserConfigFile.parse(fullConfig)
       )

@@ -1,8 +1,9 @@
 package fmv1992.scala_cli_parser.util
 
+import scala.reflect.ClassTag
+
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
 import fmv1992.scala_cli_parser.conf.ParserConfigFile
-import scala.reflect.ClassTag
 
 /** Testable main trait with a configurable file CLI implementation.
   *
