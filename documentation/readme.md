@@ -80,6 +80,8 @@ And its usages are as follows:
 
 *   `dev_unstable`:
 
+    *   (Ongoing): Add a `default` subsection to be parsed.
+
     *   (Ongoing): Add config specification.
 
     *   (Ongoing): On the part of parsing config files everything but `fullConfigParser` should be private.
