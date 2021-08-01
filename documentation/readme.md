@@ -52,7 +52,9 @@ And its usages are as follows:
 
 ## Config specification
 
-*   ???
+The source of truth is the full `.conf` [fullConfigParser](https://github.com/fmv1992/scala_cli_parser/blob/4d0e4ab10951b81cec7f2fe8d8c0ce5e08a1308a/scala_cli_parser/src/main/scala/conf/ConfigFileParser.scala#L22).
+
+Also the current options are considered around [here](https://github.com/fmv1992/scala_cli_parser/blob/4d0e4ab10951b81cec7f2fe8d8c0ce5e08a1308a/scala_cli_parser/src/main/scala/cli/ParserCLI.scala#L153).
 
 ## Links
 
@@ -82,15 +84,17 @@ And its usages are as follows:
 
     *   (Ongoing): Add a `default` subsection to be parsed.
 
-    *   (Ongoing): Add config specification.
+    *   (Backlog): Add config specification.
 
-    *   (Ongoing): On the part of parsing config files everything but `fullConfigParser` should be private.
+    *   (Backlog): On the part of parsing config files everything but `fullConfigParser` should be private.
 
-    *   (Ongoing): Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
+    *   (Backlog): Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
 
     *   (Backlog): Improve parsing process. Parsers can actually fail and provide a useful error message.
 
     *   (Backlog): add lihaoyi's scala compiler `acyclic` plugin. See `commaefa4ec`.
+
+    *   (Backlog): The `type` subsection seems hard to implement. Using `str` or `int` would make `ArgumentCLI` → `ArgumentCLI[String]` for instance. Uniform usage of it in a `Set[ArgumentCLI]` would be cumbersome. Maybe ok by using pattern matching? In any case this is not a priority right now.
 
 *   `master`:
 

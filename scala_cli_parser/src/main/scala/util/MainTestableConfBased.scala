@@ -10,6 +10,8 @@ import scala.reflect.ClassTag
   */
 trait MainTestableConfBased extends TestableMain {
 
+  // ???: The contents are pasted here since Scala Native cannot use java
+  // resources at this point.
   protected[this] val CLIConfigContents: String
 
   lazy private val parserConf = ParserConfigFile.parse(CLIConfigContents)
