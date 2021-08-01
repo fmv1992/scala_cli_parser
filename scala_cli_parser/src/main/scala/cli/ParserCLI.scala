@@ -150,7 +150,7 @@ object ParserCLI {
       .map(t => {
         val k = t._1
         val vv = t._2
-        ArgumentConf(k, vv("help"), vv("type"), vv("n").toInt)
+        ArgumentConf(k, vv("description"), vv("type"), vv("n").toInt)
       })
     require(args.size == args.toSet.size, s"'${args}' and '${args.toSet}'.")
     ParserCLIImpl(args.toSet)

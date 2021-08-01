@@ -12,15 +12,15 @@ import org.scalatest.time.Span
 class TestMultiLineConfParser extends AnyFunSuite with TimeLimits {
 
   val valid01 = """
-help: | cliarg
-      |
-      | other line
+description: | cliarg
+             |
+             | other line
 """.trim + "\n"
 
   val invalid01 = """
-help: | cliarg
-      |
-       | other line
+description: | cliarg
+            |
+             | other line
 """.trim
 
   test("`MultiLineConfParser.partialParse` valid.")(
@@ -32,7 +32,7 @@ help: | cliarg
           Success(
             ParsedResult(
               valid01.dropRight(1).toSeq,
-              Map("help" -> "cliarg\n\nother line")
+              Map("description" -> "cliarg\n\nother line")
             )
           )
         ) ===
