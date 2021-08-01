@@ -80,9 +80,11 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
     *   Used to devise new strategy for `dev_unstable`. Delete it soon.
 
-*   `dev_unstable`:
+*   `dev_add_default_to_argumentconf`:
 
     *   (Ongoing): Add a `default` subsection to be parsed.
+
+*   `dev_unstable`:
 
     *   (Backlog): Add config specification.
 
