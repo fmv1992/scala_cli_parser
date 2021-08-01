@@ -15,13 +15,13 @@ A library for parsing command line arguments.
 It's main feature is that CLI parsing is defined on a config file. For example consider a very simple sum program:
 
 ~~~~ {#mycode .scala .numberLines pipe="bash" startFrom="1"}
-tail -n +3 scala_cli_parser/src/test/scala/TestSum.scala
+cat scala_cli_parser/src/test/scala/util/TestSum.scala
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It can be configured with the following config file:
 
 ~~~~ {#mycode .default .numberLines pipe="bash" startFrom="1"}
-cat ./scala_cli_parser/src/test/resources/test_cli_example_05_sum.txt
+cat ./scala_cli_parser/src/test/resources/test_cli_example_02_gnu.txt
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 And its usages are as follows:

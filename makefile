@@ -125,17 +125,13 @@ tmp/scala_pandoc.jar:
         make && find . -iname "*.jar" -print0 | head -n 1 | xargs -0 mv -t $$(dirname $$abspathtaget) ; \
     touch -m $@ ; \
     cd $(ROOT_DIR) ; \
-    rm -rf "$${tempd}" ; \
     }
 
 tmp/test_sum.scala:
 	rm $@ || true
 	command -V scala_script >/dev/stderr 2>&1
-	@# echo -e ":silent" >> $@
 	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
-	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
-	tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
-	tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
+	tail -n +3 ./scala_cli_parser/src/test/scala/util/TestSum.scala >> $@
 	echo -e '$(SCALA_CLI_ARGUMENTS)' >> $@
 	abspath=$(shell readlink -f $@) \
             && cat "$$abspath" | scala_script
