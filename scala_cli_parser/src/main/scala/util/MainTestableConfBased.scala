@@ -2,6 +2,7 @@ package fmv1992.scala_cli_parser.util
 
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
 import fmv1992.scala_cli_parser.conf.ParserConfigFile
+import scala.reflect.ClassTag
 
 /** Testable main trait with a configurable file CLI implementation.
   *
@@ -54,9 +55,13 @@ trait MainTestableConfBased extends TestableMain {
     Seq(usage, description)
   }
 
-  def testableMain(args: Seq[String]): Iterable[String] = {
+  // The `ClassTag` here removes: "ambiguous reference to overloaded
+  // definition".
+  def testableMain[X: ClassTag](args: Seq[String]): Iterable[String] = {
     testableMain(parserConf.parse(args.toList))
   }
+
+  def testableMain(args: Set[ArgumentCLI]): Iterable[String]
 
   /** Parse arguments, read stdin process and output to stdout.
     *
