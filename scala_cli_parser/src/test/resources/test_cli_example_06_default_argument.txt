@@ -3,7 +3,6 @@
 
 name: execute
     n: 1
-    type: int
     description: Help text.
     default: yes
 

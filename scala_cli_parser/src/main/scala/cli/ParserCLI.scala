@@ -136,6 +136,7 @@ object ParserCLI {
   /** This defines how the CLI gets defined. For instance, by having a `map("help")` it enforces this field being defined.
     */
   def apply(input: Map[String, Map[String, String]]): ParserCLI = {
+    // require(input(input.keySet.head).keySet == Set("description", "n"), input)
     val args: Iterable[ArgumentConf] = input
       .map(t => {
         val k = t._1

@@ -3,7 +3,6 @@
 
 name: multiline
     n: 1
-    type: int
     description:   | This is a multi line help string.
                    |
                    | It may also contain examples and etc...

@@ -3,7 +3,6 @@
 
 name: debug
     n: 1
-    type: int
     description: Turn on debug flag.
 
 
@@ -12,15 +11,12 @@ name: debug
 
 name: verbose
     n: 0
-    type: int
     description: Help text.
 
 name: help
     n: 0
-    type: int
     description: Help text.
 
 name: version
     n: 0
-    type: int
     description: Help text.
