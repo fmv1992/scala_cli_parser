@@ -2,7 +2,8 @@ language: scala
 
 dist: focal
 
-jdk: openjdk8
+# https://docs.scala-lang.org/overviews/jdk-compatibility/overview.html
+jdk: openjdk11
 
 scala:
    - 2.12.8
@@ -19,7 +20,7 @@ before_install:
     - make publishlocal
 
 script:
-    - make docker_build
+    - travis_wait 60 make docker_build
     - make docker_test
     - make format
 # ???: #   - make coverage
