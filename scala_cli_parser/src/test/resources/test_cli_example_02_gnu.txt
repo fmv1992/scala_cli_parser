@@ -1,4 +1,6 @@
 # Well formated cli config file.
+# Used in tests:
+#   1.  Used to test `default`.
 
 name: debug
     n: 0
@@ -15,6 +17,7 @@ name: sum
     description: | Sum arguments.
                  |
                  | Use multiline.
+    default: 0,0
 
 name: help
     n: 0

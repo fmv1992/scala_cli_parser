@@ -35,6 +35,8 @@ trait ArgumentConf extends Argument {
 
   def n: Int
 
+  def default: Option[Seq[String]]
+
 }
 
 object ArgumentConf {
@@ -42,15 +44,17 @@ object ArgumentConf {
   private case class ArgumentConfImpl(
       name: String,
       description: String,
-      n: Int
+      n: Int,
+      default: Option[Seq[String]] = None
   ) extends ArgumentConf
 
   def apply(
       name: String,
       description: String,
-      n: Int
+      n: Int,
+      default: Option[Seq[String]] = None
   ): ArgumentConf = {
-    ArgumentConfImpl(name, description, n)
+    ArgumentConfImpl(name, description, n, default)
   }
 
 }
@@ -81,7 +85,24 @@ object ParserCLI {
           acc: Either[Seq[String], Set[ArgumentCLI]]
       ): Either[Seq[String], Set[ArgumentCLI]] = {
         if (remaining.isEmpty) {
-          acc
+          // CURRENT: We should add the defaults here if they are not
+          // specified.
+          acc.map(r => {
+            val namesAppeared = r.map(_.name)
+            arguments
+              .filter(
+                // x => !namesAppeared.contains(x.name) && x.default.isDefined
+                x => x.default.isDefined
+              )
+              .map(x => {
+                x.default match {
+                  case Some(y) => {
+                    ArgumentCLI(x.name, y)
+                  }
+                }
+              })
+              .union(r)
+          })
         } else {
           val h = remaining.head
           if (h.startsWith("--")) {
@@ -133,7 +154,8 @@ object ParserCLI {
     }
   }
 
-  /** This defines how the CLI gets defined. For instance, by having a `map("help")` it enforces this field being defined.
+  /** This defines how the CLI gets defined. For instance, by having a
+    * `map("help")` it enforces this field being defined.
     */
   def apply(input: Map[String, Map[String, String]]): ParserCLI = {
     // require(input(input.keySet.head).keySet == Set("description", "n"), input)
@@ -141,7 +163,12 @@ object ParserCLI {
       .map(t => {
         val k = t._1
         val vv = t._2
-        ArgumentConf(k, vv("description"), vv("n").toInt)
+        val default = if (vv.contains("default")) {
+          Some(vv("default").split(",").toSeq)
+        } else {
+          None
+        }
+        ArgumentConf(k, vv("description"), vv("n").toInt, default)
       })
     require(args.size == args.toSet.size, s"'${args}' and '${args.toSet}'.")
     ParserCLIImpl(args.toSet)

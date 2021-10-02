@@ -36,6 +36,13 @@ class TestMainTestableConfBased extends AnyFunSuite {
     )
   }
 
+  test("Test default functionality with `TestSum`.") {
+    assert(
+      TestSum.testableMain(Seq.empty)
+        === List("0")
+    )
+  }
+
   test("Test `printHelp`.") {
     assert("""
 TestSum --debug --help --sum --version

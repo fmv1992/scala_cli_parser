@@ -23,7 +23,6 @@ private object CombinerFullConfigParser
       a_ =>
         v2.map(
           b_ => {
-            // CURRENT: Nest the maps with `lookup(name)` as their key.
             val intersection = a_.result.keySet.intersect(b_.result.keySet)
             if (intersection.isEmpty) {
               ParsedResult(

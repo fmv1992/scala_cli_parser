@@ -2,7 +2,7 @@
 
 *   `dev`:
 
-    *   ![Build status](https://travis-ci.org/fmv1992/scala_cli_parser.svg?branch=dev)
+    *   ![Build status](https://travis-ci.com/fmv1992/scala_cli_parser.svg?branch=dev)
 
     *   [![codecov](https://codecov.io/gh/fmv1992/scala_cli_parser/branch/dev/graph/badge.svg)](https://codecov.io/gh/fmv1992/scala_cli_parser)
 
@@ -80,9 +80,11 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
     *   Used to devise new strategy for `dev_unstable`. Delete it soon.
 
-*   `dev_unstable`:
+*   `dev_add_default_to_argumentconf`:
 
     *   (Ongoing): Add a `default` subsection to be parsed.
+
+*   `dev_unstable`:
 
     *   (Backlog): Add config specification.
 
