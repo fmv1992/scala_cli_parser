@@ -43,7 +43,8 @@ This is a multi line help string.
 It may also contain examples and etc...
 This just contains a perchance aligned '|' on this line. It is a single line.
 """.trim,
-              1
+              1,
+              Some(Seq("yes"))
             )
           )
         )
@@ -91,10 +92,6 @@ This just contains a perchance aligned '|' on this line. It is a single line.
         ) === ParserConfigFile.parse(fullConfig)
       )
     })
-  )
-
-  test("Test the default argument implementation.")(
-    assert(false)
   )
 
 }

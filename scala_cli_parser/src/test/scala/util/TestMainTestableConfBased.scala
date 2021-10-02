@@ -18,7 +18,7 @@ class TestMainTestableConfBased extends AnyFunSuite {
     )
   )
 
-  ignore("Test `parse`.") {
+  test("Test `parse`.") {
     assert(
       Set(
         ArgumentCLI("version", List()),
@@ -27,7 +27,7 @@ class TestMainTestableConfBased extends AnyFunSuite {
     )
   }
 
-  ignore("Test functionality with `TestSum`.") {
+  test("Test functionality with `TestSum`.") {
     assert(
       TestSum.testableMain(
         parserCLI.parse("--sum 2 7".split(" ").toList)
@@ -43,7 +43,7 @@ class TestMainTestableConfBased extends AnyFunSuite {
     )
   }
 
-  ignore("Test `printHelp`.") {
+  test("Test `printHelp`.") {
     assert("""
 TestSum --debug --help --sum --version
     --debug: Turn on debugging.
@@ -55,7 +55,7 @@ TestSum --debug --help --sum --version
 """.trim === TestSum.testableMain(List("--help")).mkString("\n"))
   }
 
-  ignore("Test `printVersion`.") {
+  test("Test `printVersion`.") {
     assert(
       Seq("TestSum 0.0.0") === TestSum
         .testableMain(List("--version"))

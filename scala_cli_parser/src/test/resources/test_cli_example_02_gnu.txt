@@ -2,22 +2,22 @@
 # Used in tests:
 #   1.  Used to test `default`.
 
-name: debuggg
+name: debug
     n: 0
     description: Turn on debugging.
 
 
-name: versionn
+name: version
     n: 0
     description: Show the program version.
 # This is a comment.
 
 name: sum
     n: 2
-    default: 0,0
     description: | Sum arguments.
                  |
                  | Use multiline.
+    default: 0,0
 
 name: help
     n: 0
