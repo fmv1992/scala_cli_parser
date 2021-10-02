@@ -51,9 +51,10 @@ object ArgumentConf {
   def apply(
       name: String,
       description: String,
-      n: Int
+      n: Int,
+      default: Option[Seq[String]] = None
   ): ArgumentConf = {
-    ArgumentConfImpl(name, description, n)
+    ArgumentConfImpl(name, description, n, default)
   }
 
 }
@@ -84,6 +85,8 @@ object ParserCLI {
           acc: Either[Seq[String], Set[ArgumentCLI]]
       ): Either[Seq[String], Set[ArgumentCLI]] = {
         if (remaining.isEmpty) {
+          // CURRENT: We should add the defaults here if they are not
+          // specified.
           acc
         } else {
           val h = remaining.head
@@ -144,7 +147,12 @@ object ParserCLI {
       .map(t => {
         val k = t._1
         val vv = t._2
-        ArgumentConf(k, vv("description"), vv("n").toInt)
+        val default = if (vv.contains("default")) {
+          Some(vv("default").split(",").toSeq)
+        } else {
+          None
+        }
+        ArgumentConf(k, vv("description"), vv("n").toInt, default)
       })
     require(args.size == args.toSet.size, s"'${args}' and '${args.toSet}'.")
     ParserCLIImpl(args.toSet)
