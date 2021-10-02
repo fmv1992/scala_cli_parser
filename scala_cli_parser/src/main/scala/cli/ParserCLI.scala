@@ -87,7 +87,22 @@ object ParserCLI {
         if (remaining.isEmpty) {
           // CURRENT: We should add the defaults here if they are not
           // specified.
-          acc
+          acc.map(r => {
+            val namesAppeared = r.map(_.name)
+            arguments
+              .filter(
+                // x => !namesAppeared.contains(x.name) && x.default.isDefined
+                x => x.default.isDefined
+              )
+              .map(x => {
+                x.default match {
+                  case Some(y) => {
+                    ArgumentCLI(x.name, y)
+                  }
+                }
+              })
+              .union(r)
+          })
         } else {
           val h = remaining.head
           if (h.startsWith("--")) {
@@ -139,14 +154,19 @@ object ParserCLI {
     }
   }
 
-  /** This defines how the CLI gets defined. For instance, by having a `map("help")` it enforces this field being defined.
+  /** This defines how the CLI gets defined. For instance, by having a
+    * `map("help")` it enforces this field being defined.
     */
   def apply(input: Map[String, Map[String, String]]): ParserCLI = {
     // require(input(input.keySet.head).keySet == Set("description", "n"), input)
+    // † throw new Exception(input.toString)
     val args: Iterable[ArgumentConf] = input
       .map(t => {
         val k = t._1
         val vv = t._2
+        Console.err.println("-" * 79)
+        Console.err.println(input)
+        Console.err.println("-" * 79)
         val default = if (vv.contains("default")) {
           Some(vv("default").split(",").toSeq)
         } else {
