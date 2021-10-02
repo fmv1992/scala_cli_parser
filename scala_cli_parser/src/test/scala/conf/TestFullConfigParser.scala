@@ -93,4 +93,8 @@ This just contains a perchance aligned '|' on this line. It is a single line.
     })
   )
 
+  test("Test the default argument implementation.")(
+    assert(false)
+  )
+
 }

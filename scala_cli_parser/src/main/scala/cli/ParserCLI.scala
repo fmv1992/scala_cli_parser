@@ -35,6 +35,8 @@ trait ArgumentConf extends Argument {
 
   def n: Int
 
+  def default: Option[Seq[String]]
+
 }
 
 object ArgumentConf {
@@ -42,7 +44,8 @@ object ArgumentConf {
   private case class ArgumentConfImpl(
       name: String,
       description: String,
-      n: Int
+      n: Int,
+      default: Option[Seq[String]] = None
   ) extends ArgumentConf
 
   def apply(
