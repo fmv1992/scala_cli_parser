@@ -66,6 +66,8 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
 ## TODO
 
+*   Add a `Main` class to this project. It should check the validity of `.conf` files (by reading the stdin).
+
 *   Improve the documentation of this project. Good `scaladoc` references:
 
     1.  <https://gist.github.com/JohnStarich/6d8ba934828180cdcc502f571cefecd8>.
