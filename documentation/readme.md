@@ -1,5 +1,7 @@
 # `scala_cli_parser`
 
+[Documentation](http://fmv1992.github.io/scala_cli_parser/latest/api).
+
 *   `dev`:
 
     *   ![Build status](https://travis-ci.com/fmv1992/scala_cli_parser.svg?branch=dev)

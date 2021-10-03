@@ -28,7 +28,7 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 
 # High level actions. --- {{{
 
-all: dev test assembly publishlocal doc coverage
+all: dev test assembly publishlocal format readme.md doc_build doc_upload coverage
 
 format:
 	scalafmt --config ./scala_cli_parser/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
@@ -39,6 +39,9 @@ doc_build:
 
 doc_show:
 	qutebrowser "file://$(shell find $(PWD) -iname 'index.html' -type f -printf '%d\t%p\n' | sort -r -nk1 | cut -f2- | tail -n 1)"
+
+doc_upload:
+	cd $(PROJECT_NAME) && sbt 'project root;ghpagesPushSite'
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
@@ -102,7 +105,6 @@ test_sbt:
 
 nativelink:
 	cd $(PROJECT_NAME) && sbt 'nativeLink'
-
 
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(PROJECT_NAME) && sbt '+ compile'
