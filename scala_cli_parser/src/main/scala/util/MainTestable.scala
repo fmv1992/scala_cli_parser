@@ -4,7 +4,10 @@ import scala.Iterable
 
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
 
-/** Provide a testable main interface: Read lines, process and output lines. */
+/** Provide a testable main interface: Read lines, process and output lines.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 trait TestableMain {
 
   def main(args: Array[String]): Unit

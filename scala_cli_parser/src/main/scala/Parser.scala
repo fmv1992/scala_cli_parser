@@ -34,7 +34,7 @@ private case class ParserPartialImpl[A <: Seq[_], +B](
   def partialParse(input: A): (A, B) = _partialParse(input)
 }
 
-trait ParserWithTry[A, +B] extends Parser[A, Try[B]] {
+private trait ParserWithTry[A, +B] extends Parser[A, Try[B]] {
 
   def parse(input: A): Try[B]
 
@@ -47,4 +47,4 @@ private case class ParserWithTryImpl[A, +B](private val _transform: A => B)
 
 }
 
-private case class ParsedResult[A, +B](data: A, result: B)
+case class ParsedResult[A, +B](data: A, result: B)
