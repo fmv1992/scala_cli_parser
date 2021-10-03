@@ -34,8 +34,11 @@ format:
 	scalafmt --config ./scala_cli_parser/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
 	cd $(PROJECT_NAME) && sbt 'scalafixAll'
 
-doc:
+doc_build:
 	cd $(PROJECT_NAME) && sbt '+ doc'
+
+doc_show:
+	qutebrowser "file://$(shell find $(PWD) -iname 'index.html' -type f | sort -u | head -n 1)"
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
