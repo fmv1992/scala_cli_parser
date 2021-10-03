@@ -137,18 +137,32 @@ Also the current options are considered around
 
 ### Short term
 
-  - (Ongoing) Create an interface for this package (newly created
+  - Create an interface for this package (newly created
     `fmv1992.scala_cli_parser.conf`) so that other packages might use it
     **through a well defined interface**.
     
     CURRENT: needs verification.
 
-  - (Ongoing) Add config specification (this is somewhat in the docs).
+  - Add config specification (this is somewhat in the docs).
 
-  - (Ongoing) Add a `Main` class to this project. It should check the
-    validity of `.conf` files (by reading the stdin).
+  - Add config specification (this is somewhat in the docs).
 
-  - (Ongoing) Review permissions for util entities like `ParserWithTry`.
+  - Add a `Main` class to this project. It should check the validity of
+    `.conf` files (by reading the stdin).
+
+  - Review permissions for util entities like `ParserWithTry`.
+
+  - Stop using the:
+    
+        object Obj {
+        
+        private case class TraitImpl() ⋯
+        
+        def apply ⋯
+        
+        }
+    
+    Pattern. It disallows pattern matching.
 
 ### Long term
 
@@ -169,18 +183,6 @@ Also the current options are considered around
     1.  <https://gist.github.com/JohnStarich/6d8ba934828180cdcc502f571cefecd8>.
     
     2.  <https://github.com/scala/docs.scala-lang/blob/main/_style/scaladoc.md>.
-
-  - Stop using the:
-    
-        object Obj {
-        
-        private case class TraitImpl() ⋯
-        
-        def apply ⋯
-        
-        }
-    
-    Pattern. It disallows pattern matching.
 
   - When Scala 2.11 support is dropped: between
     `0022b3e0a0198d4c970531db3a74c25e0b055f98` and
