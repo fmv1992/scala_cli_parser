@@ -22,10 +22,6 @@ inThisBuild(
     libraryDependencies += "org.scalameta" % "semanticdb-scalac-core" % "4.4.6" cross CrossVersion.full,
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
       scalaVersion.value
-    )
-    // fork in Test := false,
-    // fork in test := false,
-    // fork in run := false
     ),
     // fork in Test := false,
     // fork in test := false,
