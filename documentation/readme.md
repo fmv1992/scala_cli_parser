@@ -72,13 +72,11 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
     CURRENT: needs verification.
 
-*   Add config specification (this is somewhat in the docs).
+    *   Review permissions for util entities like `ParserWithTry`.
 
 *   Add config specification (this is somewhat in the docs).
 
-*   Add a `Main` class to this project. It should check the validity of `.conf` files (by reading the stdin).
-
-*   Review permissions for util entities like `ParserWithTry`.
+*̶   A̶d̶d̶ a̶ `̶M̶a̶i̶n̶`̶ c̶l̶a̶s̶s̶ t̶o̶ t̶h̶i̶s̶ p̶r̶o̶j̶e̶c̶t̶.̶ I̶t̶ s̶h̶o̶u̶l̶d̶ c̶h̶e̶c̶k̶ t̶h̶e̶ v̶a̶l̶i̶d̶i̶t̶y̶ o̶f̶ `̶.̶c̶o̶n̶f̶`̶ f̶i̶l̶e̶s̶ (̶b̶y̶ r̶e̶a̶d̶i̶n̶g̶ t̶h̶e̶ s̶t̶d̶i̶n̶)̶.̶
 
 *   Stop using the:
 
