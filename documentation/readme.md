@@ -64,6 +64,12 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
 ## TODO
 
+*   Improve the documentation of this project. Good `scaladoc` references:
+
+    1.  <https://gist.github.com/JohnStarich/6d8ba934828180cdcc502f571cefecd8>.
+
+    1.  <https://github.com/scala/docs.scala-lang/blob/main/_style/scaladoc.md>.
+
 *   Stop using the:
 
     ```

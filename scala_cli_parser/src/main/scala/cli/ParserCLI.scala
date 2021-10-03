@@ -59,6 +59,10 @@ object ArgumentConf {
 
 }
 
+/** Parser for command line arguments.
+  *
+  * One of the few publicly accessible objects in this package.
+  */
 trait ParserCLI extends Parser[Seq[String], Set[ArgumentCLI]] {
 
   def arguments: Set[ArgumentConf]

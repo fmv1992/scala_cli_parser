@@ -6,7 +6,6 @@ name: debug
     n: 0
     description: Turn on debugging.
 
-
 name: version
     n: 0
     description: Show the program version.
