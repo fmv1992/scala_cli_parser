@@ -6,8 +6,8 @@ import scala.util.Try
 
 import fmv1992.scala_cli_parser._
 
-/** Parse a solid line (with no leading spaces). It includes the new line at
-  * the end if it is present.
+/** Parse a solid line (with no leading spaces). It includes the new line at the
+  * end if it is present.
   */
 private object SolidLineConfParser extends PP with PWT {
 

@@ -1,4 +1,5 @@
-/** Provide utilities to parse, check and manipulate Conf defined and CLI parsed arguments.
+/** Provide utilities to parse, check and manipulate Conf defined and CLI parsed
+  * arguments.
   */
 package fmv1992.scala_cli_parser
 

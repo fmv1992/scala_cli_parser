@@ -23,7 +23,8 @@ trait MainTestableConfBased extends TestableMain {
 
   /** Get program version name.
     *
-    * @see [[https://www.gnu.org/prep/standards/html_node/_002d_002dversion.html#g_t_002d_002dversion]]
+    * @see
+    *   [[https://www.gnu.org/prep/standards/html_node/_002d_002dversion.html#g_t_002d_002dversion]]
     */
   protected[this] def getVersion: Seq[String] = {
     Seq(s"$programName $version")
@@ -31,7 +32,8 @@ trait MainTestableConfBased extends TestableMain {
 
   /** Get help string.
     *
-    * @see [[https://www.gnu.org/prep/standards/html_node/_002d_002dhelp.html#g_t_002d_002dhelp]]
+    * @see
+    *   [[https://www.gnu.org/prep/standards/html_node/_002d_002dhelp.html#g_t_002d_002dhelp]]
     */
   protected[this] def getHelp: Seq[String] = {
     val parserConfDeterministic = parserConf.arguments.toSeq.sortBy(_.name)
@@ -68,7 +70,8 @@ trait MainTestableConfBased extends TestableMain {
 
   /** Parse arguments, read stdin process and output to stdout.
     *
-    * @see https://en.wikipedia.org/wiki/Standard_streams
+    * @see
+    *   https://en.wikipedia.org/wiki/Standard_streams
     */
   def main(args: Array[String]): Unit = {
     val parsed: Set[ArgumentCLI] = parserConf.parse(args.toList)
