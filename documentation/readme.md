@@ -66,17 +66,31 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
 ## TODO
 
+### Short term
+
 *   (Ongoing) Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
 
     CURRENT: needs verification.
 
-*   (Ongoing) Add config specification.
+*   (Ongoing) Add config specification (this is somewhat in the docs).
 
-*   (Ongoing) Add [scalacheck](https://www.scalacheck.org/) to testing.
+*   (Ongoing) Add a `Main` class to this project. It should check the validity of `.conf` files (by reading the stdin).
+
+*   (Ongoing) Review permissions for util entities like `ParserWithTry`.
+
+### Long term
+
+*   Add richer interactions between CLI arguments. Eg:
+
+    ```
+    rule_01:
+        type: mutually_exclusive
+        args: version,help
+    ```
+
+*   Add [scalacheck](https://www.scalacheck.org/) to testing.
 
 *   On the part of parsing config files everything but `fullConfigParser` should be private.
-
-*   Add a `Main` class to this project. It should check the validity of `.conf` files (by reading the stdin).
 
 *   Improve the documentation of this project. Good `scaladoc` references:
 
