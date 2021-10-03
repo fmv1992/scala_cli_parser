@@ -2,6 +2,8 @@
 
 # `scala_cli_parser`
 
+[Documentation](http://fmv1992.github.io/scala_cli_parser/latest/api).
+
   - `dev`:
     
       - ![Build
@@ -110,7 +112,7 @@ And its usages are as follows:
     ```
     
     ``` default numberLines
-    0
+    1993
     ```
 
 ## Config specification
@@ -132,6 +134,22 @@ Also the current options are considered around
     > they also have some weird limitations normal methods do not have.
 
 ## TODO
+
+  - (Ongoing) Create an interface for this package (newly created
+    `fmv1992.scala_cli_parser.conf`) so that other packages might use it
+    **through a well defined interface**.
+    
+    CURRENT: needs verification.
+
+  - (Ongoing) Add config specification.
+
+  - (Ongoing) Add [scalacheck](https://www.scalacheck.org/) to testing.
+
+  - On the part of parsing config files everything but
+    `fullConfigParser` should be private.
+
+  - Add a `Main` class to this project. It should check the validity of
+    `.conf` files (by reading the stdin).
 
   - Improve the documentation of this project. Good `scaladoc`
     references:
@@ -161,6 +179,24 @@ Also the current options are considered around
   - On project
     [`one`](https://github.com/SemanticSugar/one/blob/947e498e0b46ce7a27a5fb2d6e7ba67685c85b7e/one/src/main/scala/One.scala#L15):
     the design of `CLIConfigTestableMain` is conflicting with `zio.App`.
+    
+    <!-- Fix wrong vim highlighting [](www) -->
+
+  - Improve parsing process. Parsers can actually fail and provide a
+    useful error message.
+
+  - Add lihaoyi’s scala compiler `acyclic` plugin. See `commaefa4ec`.
+
+  - The `type` subsection seems hard to implement. Using `str` or `int`
+    would make `ArgumentCLI` → `ArgumentCLI[String]` for instance.
+    Uniform usage of it in a `Set[ArgumentCLI]` would be cumbersome.
+    Maybe ok by using pattern matching? In any case this is not a
+    priority right now.
+
+## Discussion
+
+Interesting to notice that a parser behavior is influenced by the
+parsers and the combiners (e.g.: [`???`]()).
 
 ### Branches
 
@@ -176,30 +212,19 @@ Also the current options are considered around
 
   - `dev_add_default_to_argumentconf`:
     
-      - (Ongoing): Add a `default` subsection to be parsed.
+      - Add a `default` subsection to be parsed. Done. Delete it soon.
 
   - `dev_unstable`:
     
-      - (Backlog): Add config specification.
+    \*̶ (̶B̶a̶c̶k̶l̶o̶g̶)̶:̶ O̶n̶ t̶h̶e̶ p̶a̶r̶t̶ o̶f̶ p̶a̶r̶s̶i̶n̶g̶
+    c̶o̶n̶f̶i̶g̶ f̶i̶l̶e̶s̶ e̶v̶e̶r̶y̶t̶h̶i̶n̶g̶ b̶u̶t̶
+    `̶f̶u̶l̶l̶C̶o̶n̶f̶i̶g̶P̶a̶r̶s̶e̶r̶`̶ s̶h̶o̶u̶l̶d̶ b̶e̶
+    p̶r̶i̶v̶a̶t̶e̶.̶
     
-      - (Backlog): On the part of parsing config files everything but
-        `fullConfigParser` should be private.
-    
-      - (Backlog): Create an interface for this package (newly created
-        `fmv1992.scala_cli_parser.conf`) so that other packages might
-        use it **through a well defined interface**.
-    
-      - (Backlog): Improve parsing process. Parsers can actually fail
-        and provide a useful error message.
-    
-      - (Backlog): add lihaoyi’s scala compiler `acyclic` plugin. See
-        `commaefa4ec`.
-    
-      - (Backlog): The `type` subsection seems hard to implement. Using
-        `str` or `int` would make `ArgumentCLI` → `ArgumentCLI[String]`
-        for instance. Uniform usage of it in a `Set[ArgumentCLI]` would
-        be cumbersome. Maybe ok by using pattern matching? In any case
-        this is not a priority right now.
+    \*̶ (̶B̶a̶c̶k̶l̶o̶g̶)̶:̶ I̶m̶p̶r̶o̶v̶e̶ p̶a̶r̶s̶i̶n̶g̶
+    p̶r̶o̶c̶e̶s̶s̶.̶ P̶a̶r̶s̶e̶r̶s̶ c̶a̶n̶ a̶c̶t̶u̶a̶l̶l̶y̶
+    f̶a̶i̶l̶ a̶n̶d̶ p̶r̶o̶v̶i̶d̶e̶ a̶ u̶s̶e̶f̶u̶l̶ e̶r̶r̶o̶r̶
+    m̶e̶s̶s̶a̶g̶e̶.̶
 
   - `master`:
 
@@ -208,9 +233,5 @@ Also the current options are considered around
 Interesting to notice that a parser behavior is influenced by the
 parsers and the combiners (e.g.:
 [`mapper`](https://github.com/fmv1992/scala_cli_parser/blob/e62ad7327eb7e46406bb94bf40ad82e418f4550b/scala_cli_parser/src/main/scala/conf/ParserUtils.scala#L125)).
-
-### Backlog
-
-  - Add [scalacheck](https://www.scalacheck.org/) to testing.
 
 <!-- vim: set foldexpr=0 filetype=pandoc fileformat=unix nowrap spell spelllang=en: -->
