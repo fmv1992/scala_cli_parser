@@ -3,13 +3,17 @@ package fmv1992.scala_cli_parser.cli
 import fmv1992.scala_cli_parser.ParseException
 import fmv1992.scala_cli_parser.Parser
 
+/** ???: Document this.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 trait Argument {
 
   def name: String
 
 }
 
-/** A CLI argument.
+/** ???: Document this.
   *
   * One of the few publicly accessible entities in this package.
   */
@@ -19,6 +23,10 @@ trait ArgumentCLI extends Argument {
 
 }
 
+/** ???: Document this.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 object ArgumentCLI {
 
   private case class ArgumentCLIImpl(
@@ -47,6 +55,10 @@ trait ArgumentConf extends Argument {
 
 }
 
+/** ???: Document this.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 object ArgumentConf {
 
   private case class ArgumentConfImpl(
@@ -90,6 +102,10 @@ trait ParserCLI extends Parser[Seq[String], Set[ArgumentCLI]] {
 
 }
 
+/** ???: Document this.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 object ParserCLI {
 
   private case class ParserCLIImpl(val arguments: Set[ArgumentConf])

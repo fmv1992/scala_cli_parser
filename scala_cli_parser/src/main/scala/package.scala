@@ -2,10 +2,12 @@ package fmv1992
 
 /** Provide a config file based CLI parsing library.
   *
-  * Steps to do that:
+  * How to do that:
   *
   *   1. Define your `.conf` file. See the syntax
   *      [[fmv1992.scala_cli_parser.conf.ParserConfigFile here (ParserConfigFile)]].
+  *      Example:
+  *      [[https://github.com/fmv1992/scala_cli_parser/tree/dev/scala_cli_parser/src/test/resources/test_cli_example_02_gnu.txt here]].
   *   1. Get a [[fmv1992.scala_cli_parser.cli.ParserCLI CLI parser]] from the
   *      [[fmv1992.scala_cli_parser.conf.ParserConfigFile the conf parser (ParserConfigFile)]].
   *   1. Apply the CLI parser to a given command line flags.

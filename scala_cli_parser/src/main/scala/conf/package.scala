@@ -1,6 +1,7 @@
-package fmv1992
-package scala_cli_parser
+package fmv1992.scala_cli_parser
 
+/** ???: Document this.
+  */
 package object conf {
   import scala.util.Failure
   import scala.util.Success

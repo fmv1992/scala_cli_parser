@@ -2,12 +2,16 @@ package fmv1992.scala_cli_parser
 
 import scala.util.Try
 
+/** ???: Document this.
+  */
 trait Parser[-A, +B] {
 
   def parse(input: A): B
 
 }
 
+/** ???: Document this.
+  */
 trait ParserPartial[A <: Seq[_], +B] {
   this: Parser[A, B] =>
 
@@ -47,4 +51,6 @@ private case class ParserWithTryImpl[A, +B](private val _transform: A => B)
 
 }
 
+/** ???: Document this.
+  */
 case class ParsedResult[A, +B](data: A, result: B)
