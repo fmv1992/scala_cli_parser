@@ -12,6 +12,14 @@ package fmv1992
   *
   * Public entities:
   *
-  *   1. ???.
+  *   1. [[fmv1992.scala_cli_parser.conf.ParserConfigFile]].
+  *      1. Which outputs [[fmv1992.scala_cli_parser.cli.ParserCLI]].
+  *         1. Which uses [[fmv1992.scala_cli_parser.cli.ArgumentConf]].
+  *            1. Which uses ("private trait Argument escapes its defining scope
+  *               as part of type...")
+  *               [[fmv1992.scala_cli_parser.cli.Argument]].
+  *         1. Which ouputs [[fmv1992.scala_cli_parser.cli.ArgumentCLI]].
+  *   1. [[fmv1992.scala_cli_parser.ParseException]] (not really used at the
+  *      moment).
   */
 package object scala_cli_parser
