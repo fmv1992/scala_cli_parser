@@ -35,10 +35,10 @@ format:
 	cd $(PROJECT_NAME) && sbt 'scalafixAll'
 
 doc_build:
-	cd $(PROJECT_NAME) && sbt '+ doc'
+	cd $(PROJECT_NAME) && sbt 'project scala_cli_parserCrossProjectJVM;++2.13.4;+ doc'
 
 doc_show:
-	qutebrowser "file://$(shell find $(PWD) -iname 'index.html' -type f | sort -u | head -n 1)"
+	qutebrowser "file://$(shell find $(PWD) -iname 'index.html' -type f -printf '%d\t%p\n' | sort -r -nk1 | cut -f2- | tail -n 1)"
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
