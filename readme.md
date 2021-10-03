@@ -112,7 +112,7 @@ And its usages are as follows:
     ```
     
     ``` default numberLines
-    1993
+    0
     ```
 
 ## Config specification
