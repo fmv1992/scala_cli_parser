@@ -68,15 +68,31 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
 ### Short term
 
-*   (Ongoing) Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
+*   Create an interface for this package (newly created `fmv1992.scala_cli_parser.conf`) so that other packages might use it **through a well defined interface**.
 
     CURRENT: needs verification.
 
-*   (Ongoing) Add config specification (this is somewhat in the docs).
+*   Add config specification (this is somewhat in the docs).
 
-*   (Ongoing) Add a `Main` class to this project. It should check the validity of `.conf` files (by reading the stdin).
+*   Add config specification (this is somewhat in the docs).
 
-*   (Ongoing) Review permissions for util entities like `ParserWithTry`.
+*   Add a `Main` class to this project. It should check the validity of `.conf` files (by reading the stdin).
+
+*   Review permissions for util entities like `ParserWithTry`.
+
+*   Stop using the:
+
+    ```
+    object Obj {
+
+    private case class TraitImpl() ⋯
+
+    def apply ⋯
+
+    }
+    ```
+
+    Pattern. It disallows pattern matching.
 
 ### Long term
 
@@ -97,20 +113,6 @@ Also the current options are considered around [here](https://github.com/fmv1992
     1.  <https://gist.github.com/JohnStarich/6d8ba934828180cdcc502f571cefecd8>.
 
     1.  <https://github.com/scala/docs.scala-lang/blob/main/_style/scaladoc.md>.
-
-*   Stop using the:
-
-    ```
-    object Obj {
-
-    private case class TraitImpl() ⋯
-
-    def apply ⋯
-
-    }
-    ```
-
-    Pattern. It disallows pattern matching.
 
 *   When Scala 2.11 support is dropped: between `0022b3e0a0198d4c970531db3a74c25e0b055f98` and `37424215d82a77ca618333521bce4827394bee66` some shims had to be introduced to make 2.11 compatible with future versions. Revert this when dropping support for Scala 2.11.
 
