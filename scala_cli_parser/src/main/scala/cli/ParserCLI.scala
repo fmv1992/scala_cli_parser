@@ -9,6 +9,10 @@ trait Argument {
 
 }
 
+/** A CLI argument.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 trait ArgumentCLI extends Argument {
 
   def values: Seq[String]
@@ -29,6 +33,10 @@ object ArgumentCLI {
 
 }
 
+/** An argument configuration which lives inside a configuration file.
+  *
+  * One of the few publicly accessible entities in this package.
+  */
 trait ArgumentConf extends Argument {
 
   def description: String
@@ -60,6 +68,10 @@ object ArgumentConf {
 }
 
 /** Parser for command line arguments.
+  *
+  * This parser is defined as a
+  * [[https://www.scala-lang.org/api/current/scala/collection/Set.html Set]] of
+  * [[ArgumentConf]]s.
   *
   * One of the few publicly accessible objects in this package.
   */
