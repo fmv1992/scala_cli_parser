@@ -15,7 +15,7 @@ export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
 export SCALA_CLI_ARGUMENTS
 
 # Build files.
-FINAL_TARGET := target/scala-2.13/scala_cli_parser-assembly-0.4.3.jar
+FINAL_TARGET := ./scala_cli_parser/.jvm/target/scala-2.13/scala_cli_parser-assembly-0.4.3.jar
 
 # Test files.
 BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -print)
