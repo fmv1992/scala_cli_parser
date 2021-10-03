@@ -20,23 +20,20 @@ private object CombinerFullConfigParser
       v2: Try[ParsedResult[Seq[Char], Map[String, Map[String, String]]]]
   ): Try[ParsedResult[Seq[Char], Map[String, Map[String, String]]]] = {
 
-    v1.flatMap(
-      a_ =>
-        v2.map(
-          b_ => {
-            val intersection = a_.result.keySet.intersect(b_.result.keySet)
-            if (intersection.isEmpty) {
-              ParsedResult(
-                a_.data ++ b_.data,
-                (a_.result ++ b_.result).removed("")
-              )
-            } else {
-              throw new RuntimeException(
-                s"Intersection of dictionary keys is not empty: s'${intersection.toList.sorted}'. "
-              )
-            }
-          }
-        )
+    v1.flatMap(a_ =>
+      v2.map(b_ => {
+        val intersection = a_.result.keySet.intersect(b_.result.keySet)
+        if (intersection.isEmpty) {
+          ParsedResult(
+            a_.data ++ b_.data,
+            (a_.result ++ b_.result).removed("")
+          )
+        } else {
+          throw new RuntimeException(
+            s"Intersection of dictionary keys is not empty: s'${intersection.toList.sorted}'. "
+          )
+        }
+      })
     )
   }
 

@@ -29,11 +29,8 @@ package object conf {
     //     }
     //   case Failure(_) => throw new Exception()
     // }
-    a.flatMap(
-      a_ =>
-        b.map(
-          b_ => ParsedResult(a_.data ++ b_.data, a_.result ++ b_.result)
-        )
+    a.flatMap(a_ =>
+      b.map(b_ => ParsedResult(a_.data ++ b_.data, a_.result ++ b_.result))
     )
 
   private[conf] implicit val combinerParsedResultSimple: (

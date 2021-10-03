@@ -48,10 +48,9 @@ trait MainTestableConfBased extends TestableMain {
         val (descriptionHead, descriptionTail) =
           (descriptionLines.head, descriptionLines.tail)
         val descriptionTailIndented = descriptionTail
-          .map(
-            x =>
-              if (x.isEmpty) ""
-              else ((" " * headOfFirstLine.length) + x)
+          .map(x =>
+            if (x.isEmpty) ""
+            else ((" " * headOfFirstLine.length) + x)
           )
         ((headOfFirstLine + descriptionHead) :: descriptionTailIndented)
           .mkString("\n")

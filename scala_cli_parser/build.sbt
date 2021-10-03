@@ -48,7 +48,7 @@ lazy val commonSettings = Seq(
         // "-Xfatal-warnings",
         // "-Ywarn-unuse"
       )
-    ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq),
+      ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq),
   licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html"),
   version := IO
     .readLines(new File("./src/main/resources/version"))

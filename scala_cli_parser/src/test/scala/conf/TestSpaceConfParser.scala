@@ -31,7 +31,7 @@ class TestSpaceConfParser extends AnyFunSuite {
         === (
           "a\t".toSeq,
           Success(ParsedResult(" ".toSeq, emptyMapSS))
-      )
+        )
     )
     // Test failure for a string that starts with no space.
     val parseFailureExpected: Tuple2[Seq[Char], scala.util.Try[
