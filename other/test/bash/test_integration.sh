@@ -15,6 +15,6 @@ java -jar ${jar_file} --help | grep -E '[-]-version'
 
 java -jar ${jar_file} --version | one --n 1 | grep -E '^scala_cli_parser [0-9]\.'
 
-find ./scala_cli_parser/src -iname 'scala_cli_parser_config.conf'
+find ./scala_cli_parser/src -iname 'scala_cli_parser_config.conf' | one | xargs --verbose cat | java -jar ${jar_file}
 
 # vim: set filetype=sh fileformat=unix nowrap:
