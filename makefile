@@ -98,7 +98,7 @@ test: docker_test test_host
 test_host: test_sbt test_bash
 
 test_bash: $(FINAL_TARGET)
-	find ./test/bash/ -iname '*.sh' -print0 | xargs -0 -I % -n 1 -- bash -xv %
+	find ./other/test/bash/ -iname '*.sh' -print0 | xargs -0 -I % -n 1 -- bash -xv %
 
 test_sbt:
 	cd $(PROJECT_NAME) && sbt '+ test'
