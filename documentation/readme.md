@@ -64,7 +64,7 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
 ## TODO
 
-*   Make `ParseException` and similar private.
+*̶   M̶a̶k̶e̶ `̶P̶a̶r̶s̶e̶E̶x̶c̶e̶p̶t̶i̶o̶n̶`̶ a̶n̶d̶ s̶i̶m̶i̶l̶a̶r̶ p̶r̶i̶v̶a̶t̶e̶.̶
 
 *   Improve the documentation of this project. Good `scaladoc` references:
 
