@@ -1,16 +1,16 @@
 package fmv1992.scala_cli_parser
 
-case class ParseException(
+private case class ParseException(
     val message: String = ""
 ) extends java.lang.Exception(message)
 
-trait ErrorPosition
+private trait ErrorPosition
 
-case class ErrorPositionExisting(line: Int, column: Int, position: Int)
+private case class ErrorPositionExisting(line: Int, column: Int, position: Int)
     extends ErrorPosition
-case object ErrorPositionUnexisting extends ErrorPosition
+private case object ErrorPositionUnexisting extends ErrorPosition
 
-object ParseException {
+private object ParseException {
 
   def getExceptionPosition[A](
       input: Seq[A],

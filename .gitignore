@@ -22,8 +22,9 @@
 !*/
 
 # But do ignore these directories
-tmp/
-target/
+.metals/
 project/
+target/
+tmp/
 
 # vim: set fileformat=unix filetype=conf wrap :

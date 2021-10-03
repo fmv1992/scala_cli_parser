@@ -7,6 +7,10 @@ lazy val scala213 = "2.13.4"
 val versionsJVM = Seq(scala213)
 val versionsNative = Seq(scala213)
 
+// https://github.com/sbt/sbt-ghpages
+enablePlugins(SiteScaladocPlugin)
+enablePlugins(GhpagesPlugin)
+
 inThisBuild(
   List(
     scalaVersion := scala213,
@@ -22,6 +26,11 @@ inThisBuild(
     // fork in Test := false,
     // fork in test := false,
     // fork in run := false
+    ),
+    // fork in Test := false,
+    // fork in test := false,
+    // fork in run := false
+    git.remoteRepo := "https://github.com/fmv1992/scala_cli_parser"
   )
 )
 
@@ -48,7 +57,7 @@ lazy val commonSettings = Seq(
         // "-Xfatal-warnings",
         // "-Ywarn-unuse"
       )
-    ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq),
+      ++ sys.env.get("SCALAC_OPTS").getOrElse("").split(" ").toSeq),
   licenses += "GPLv2" -> url("https://www.gnu.org/licenses/gpl-2.0.html"),
   version := IO
     .readLines(new File("./src/main/resources/version"))

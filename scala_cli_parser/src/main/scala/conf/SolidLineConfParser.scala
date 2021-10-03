@@ -1,13 +1,15 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.conf
 
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
+import fmv1992.scala_cli_parser._
+
 /** Parse a solid line (with no leading spaces). It includes the new line at the
   * end if it is present.
   */
-object SolidLineConfParser extends PP with PWT {
+private object SolidLineConfParser extends PP with PWT {
 
   override def parse(
       input: Seq[Char]

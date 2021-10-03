@@ -1,16 +1,13 @@
 name: version
     n: 0
-    type: int
-    help: Help text.
+    description: Help text.
 
 name: help
     n: 0
-    type: int
-    help: Help text.
+    description: Help text.
 
 name: sum
     n: 2
-    type: int
-    help: Sum arguments.
+    description: Sum arguments.
 
 # vim: set filetype=config fileformat=unix wrap:

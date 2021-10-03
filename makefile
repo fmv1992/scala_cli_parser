@@ -28,14 +28,20 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 
 # High level actions. --- {{{
 
-all: dev test assembly publishlocal doc coverage
+all: dev test assembly publishlocal format readme.md doc_build doc_upload coverage
 
 format:
 	scalafmt --config ./scala_cli_parser/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
 	cd $(PROJECT_NAME) && sbt 'scalafixAll'
 
-doc:
-	cd $(PROJECT_NAME) && sbt '+ doc'
+doc_build:
+	cd $(PROJECT_NAME) && sbt 'project scala_cli_parserCrossProjectJVM;++2.13.4;+ doc'
+
+doc_show:
+	qutebrowser "file://$(shell find $(PWD) -iname 'index.html' -type f -printf '%d\t%p\n' | sort -r -nk1 | cut -f2- | tail -n 1)"
+
+doc_upload:
+	cd $(PROJECT_NAME) && sbt 'project root;ghpagesPushSite'
 
 clean:
 	find . -iname 'target' -print0 | xargs -0 rm -rf
@@ -100,7 +106,6 @@ test_sbt:
 nativelink:
 	cd $(PROJECT_NAME) && sbt 'nativeLink'
 
-
 compile: $(SBT_FILES) $(SCALA_FILES)
 	cd $(PROJECT_NAME) && sbt '+ compile'
 
@@ -125,17 +130,13 @@ tmp/scala_pandoc.jar:
         make && find . -iname "*.jar" -print0 | head -n 1 | xargs -0 mv -t $$(dirname $$abspathtaget) ; \
     touch -m $@ ; \
     cd $(ROOT_DIR) ; \
-    rm -rf "$${tempd}" ; \
     }
 
 tmp/test_sum.scala:
 	rm $@ || true
 	command -V scala_script >/dev/stderr 2>&1
-	@# echo -e ":silent" >> $@
 	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
-	echo -e "\nimport fmv1992.scala_cli_parser._\n" >> $@
-	tail -n +3 ./scala_cli_parser/src/test/scala/Example.scala >> $@
-	tail -n +3 ./scala_cli_parser/src/test/scala/TestSum.scala >> $@
+	tail -n +3 ./scala_cli_parser/src/test/scala/util/TestSum.scala >> $@
 	echo -e '$(SCALA_CLI_ARGUMENTS)' >> $@
 	abspath=$(shell readlink -f $@) \
             && cat "$$abspath" | scala_script

@@ -1,12 +1,14 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.conf
 
 import scala.util.Try
+
+import fmv1992.scala_cli_parser._
 
 /** Combine Map[String, Map[String, String]] into Map[String, Map[String,
   * Map[String, String]]] where the new key is given by `name`, which stands for
   * the CLI name.
   */
-object CombinerFullConfigParser
+private object CombinerFullConfigParser
     extends Function2[Try[
       ParsedResult[Seq[Char], Map[String, Map[String, String]]]
     ], Try[
@@ -20,7 +22,6 @@ object CombinerFullConfigParser
 
     v1.flatMap(a_ =>
       v2.map(b_ => {
-        // CURRENT: Nest the maps with `lookup(name)` as their key.
         val intersection = a_.result.keySet.intersect(b_.result.keySet)
         if (intersection.isEmpty) {
           ParsedResult(

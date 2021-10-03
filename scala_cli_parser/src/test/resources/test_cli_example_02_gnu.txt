@@ -1,25 +1,25 @@
 # Well formated cli config file.
+# Used in tests:
+#   1.  Used to test `default`.
 
 name: debug
     n: 0
-    type: int
-    help: Turn on debugging.
-
+    description: Turn on debugging.
 
 name: version
     n: 0
-    type: int
-    help: Show the program version.
+    description: Show the program version.
 # This is a comment.
 
 name: sum
     n: 2
-    type: int
-    help: Sum arguments.
+    description: | Sum arguments.
+                 |
+                 | Use multiline.
+    default: 0,0
 
 name: help
     n: 0
-    type: int
-    help: Help text.
+    description: Help text.
 
 # vim: set filetype=config fileformat=unix wrap spell spelllang=en:

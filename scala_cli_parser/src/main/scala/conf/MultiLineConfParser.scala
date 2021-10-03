@@ -1,13 +1,15 @@
-package fmv1992.scala_cli_parser
+package fmv1992.scala_cli_parser.conf
 
 import scala.util.Failure
 import scala.util.Success
 import scala.util.Try
 
+import fmv1992.scala_cli_parser._
+
 /** Parse a **single** config that spans multiple lines. It **must** span more
   * than 1 line.
   */
-object MultiLineConfParser
+private object MultiLineConfParser
     extends ParserPartial[
       Seq[Char],
       Try[ParsedResult[Seq[Char], Map[String, String]]]
@@ -75,11 +77,6 @@ object MultiLineConfParser
           }
           val rest: Seq[Seq[Char]] = lines.drop(linesWithSamePipePos.length)
           (
-            // if (rest.isEmpty) {
-            //   ""
-            // } else {
-            //   rest.prepended(Seq()).map(_.mkString).mkString("\n")
-            // },
             rest.prepended(Seq()).map(_.mkString).mkString("\n"),
             Success(
               ParsedResult(

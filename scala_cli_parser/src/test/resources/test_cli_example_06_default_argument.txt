@@ -3,8 +3,7 @@
 
 name: execute
     n: 1
-    type: int
-    help: Help text.
+    description: Help text.
     default: yes
 
 # vim: set filetype=config fileformat=unix wrap:

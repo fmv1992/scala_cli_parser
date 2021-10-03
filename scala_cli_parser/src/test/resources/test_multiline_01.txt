@@ -3,11 +3,10 @@
 
 name: multiline
     n: 1
-    type: int
-    help:   | This is a multi line help string.
-            |
-            | It may also contain examples and etc...
-    other:  | This just contains a perchance aligned '|' on this line. It is a single line.
+    description:   | This is a multi line help string.
+                   |
+                   | It may also contain examples and etc...
+    other:         | This just contains a perchance aligned '|' on this line. It is a single line.
     default: yes
 
 # vim: set filetype=config fileformat=unix wrap:
