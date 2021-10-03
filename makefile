@@ -15,7 +15,7 @@ export _JAVA_OPTIONS ?= -Xms2048m -Xmx4096m
 export SCALA_CLI_ARGUMENTS
 
 # Build files.
-FINAL_TARGET := ./scala_cli_parser/target/scala-2.11/scala_cli_parser.jar
+FINAL_TARGET := target/scala-2.13/scala_cli_parser-assembly-0.4.3.jar
 
 # Test files.
 BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -print)
@@ -115,10 +115,9 @@ compile: $(SBT_FILES) $(SCALA_FILES)
 
 # Specific targets. --- {{{
 
-$(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES)
+$(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES) .PRECIOUS
 	cd ./scala_cli_parser && sbt '+ assembly'
-	@# find . -iname "*assembly*.jar" | head -n 1 | xargs -I % mv % $@
-	@# touch --no-create -m $@
+	test -f '$(FINAL_TARGET)'
 
 tmp/scala_pandoc.jar:
 	{ \
