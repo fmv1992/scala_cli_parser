@@ -104,11 +104,10 @@ object ParserCLI {
           // CURRENT: We should add the defaults here if they are not
           // specified.
           acc.map(r => {
-            r.map(_.name)
+            val namesAppeared = r.map(_.name)
             arguments
-              .filter(
-                // x => !namesAppeared.contains(x.name) && x.default.isDefined
-                x => x.default.isDefined
+              .filter(x =>
+                !namesAppeared.contains(x.name) && x.default.isDefined
               )
               .map(x => {
                 x.default match {
