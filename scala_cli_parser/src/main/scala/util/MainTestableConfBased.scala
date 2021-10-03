@@ -8,6 +8,8 @@ import fmv1992.scala_cli_parser.conf.ParserConfigFile
 /** Testable main trait with a configurable file CLI implementation.
   *
   * Combine testability with modularity.
+  *
+  * One of the few publicly accessible entities in this package.
   */
 trait MainTestableConfBased extends TestableMain {
 

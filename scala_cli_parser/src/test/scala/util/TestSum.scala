@@ -4,7 +4,7 @@ import fmv1992.fmv1992_scala_utilities.util.S
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
 import fmv1992.scala_cli_parser.util.MainTestableConfBased
 
-object TestSum extends MainTestableConfBased {
+private object TestSum extends MainTestableConfBased {
 
   val version = "0.0.0"
 

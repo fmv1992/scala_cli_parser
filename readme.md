@@ -29,7 +29,7 @@ import fmv1992.fmv1992_scala_utilities.util.S
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
 import fmv1992.scala_cli_parser.util.MainTestableConfBased
 
-object TestSum extends MainTestableConfBased {
+private object TestSum extends MainTestableConfBased {
 
   val version = "0.0.0"
 
@@ -90,7 +90,6 @@ And its usages are as follows:
     ```
     
     ``` default numberLines
-    TestSum 0.0.0
     ```
 
 2.  ``` default numberLines
@@ -98,13 +97,6 @@ And its usages are as follows:
     ```
     
     ``` default numberLines
-    TestSum --debug --help --sum --version
-        --debug: Turn on debugging.
-        --help: Help text.
-        --sum: Sum arguments.
-    
-               Use multiline.
-        --version: Show the program version.
     ```
 
 3.  ``` default numberLines
@@ -112,7 +104,6 @@ And its usages are as follows:
     ```
     
     ``` default numberLines
-    1993
     ```
 
 ## Config specification
@@ -137,20 +128,31 @@ Also the current options are considered around
 
 ### Short term
 
-  - Create an interface for this package (newly created
-    `fmv1992.scala_cli_parser.conf`) so that other packages might use it
-    **through a well defined interface**.
+*̶ C̶r̶e̶a̶t̶e̶ a̶n̶ i̶n̶t̶e̶r̶f̶a̶c̶e̶ f̶o̶r̶ t̶h̶i̶s̶ p̶a̶c̶k̶a̶g̶e̶
+(̶n̶e̶w̶l̶y̶ c̶r̶e̶a̶t̶e̶d̶
+`̶f̶m̶v̶1̶9̶9̶2̶.̶s̶c̶a̶l̶a̶_̶c̶l̶i̶_̶p̶a̶r̶s̶e̶r̶.̶c̶o̶n̶f̶`̶)̶
+s̶o̶ t̶h̶a̶t̶ o̶t̶h̶e̶r̶ p̶a̶c̶k̶a̶g̶e̶s̶ m̶i̶g̶h̶t̶ u̶s̶e̶ i̶t̶
+*̶*̶t̶h̶r̶o̶u̶g̶h̶ a̶ w̶e̶l̶l̶ d̶e̶f̶i̶n̶e̶d̶
+i̶n̶t̶e̶r̶f̶a̶c̶e̶*̶\*̶.̶
+
+    C̶U̶R̶R̶E̶N̶T̶:̶ n̶e̶e̶d̶s̶ v̶e̶r̶i̶f̶i̶c̶a̶t̶i̶o̶n̶.̶
     
-    CURRENT: needs verification.
+    *̶   R̶e̶v̶i̶e̶w̶ p̶e̶r̶m̶i̶s̶s̶i̶o̶n̶s̶ f̶o̶r̶ u̶t̶i̶l̶ e̶n̶t̶i̶t̶i̶e̶s̶ l̶i̶k̶e̶ `̶P̶a̶r̶s̶e̶r̶W̶i̶t̶h̶T̶r̶y̶`̶.̶
+
+  - Add docs to all exposed entities for in package.
+    
+    CURRENT
 
   - Add config specification (this is somewhat in the docs).
+    
+      - Review it.
+    
+      - Put it at the top level.
 
-  - Add config specification (this is somewhat in the docs).
-
-  - Add a `Main` class to this project. It should check the validity of
-    `.conf` files (by reading the stdin).
-
-  - Review permissions for util entities like `ParserWithTry`.
+\*̶ A̶d̶d̶ a̶ `̶M̶a̶i̶n̶`̶ c̶l̶a̶s̶s̶ t̶o̶ t̶h̶i̶s̶ p̶r̶o̶j̶e̶c̶t̶.̶
+I̶t̶ s̶h̶o̶u̶l̶d̶ c̶h̶e̶c̶k̶ t̶h̶e̶ v̶a̶l̶i̶d̶i̶t̶y̶ o̶f̶
+`̶.̶c̶o̶n̶f̶`̶ f̶i̶l̶e̶s̶ (̶b̶y̶ r̶e̶a̶d̶i̶n̶g̶ t̶h̶e̶
+s̶t̶d̶i̶n̶)̶.̶
 
   - Stop using the:
     

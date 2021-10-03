@@ -5,7 +5,7 @@ import fmv1992.scala_cli_parser.cli.ArgumentCLI
 import fmv1992.scala_cli_parser.conf.ParserConfigFile
 import fmv1992.scala_cli_parser.util.MainTestableConfBased
 
-object Main extends MainTestableConfBased {
+private object Main extends MainTestableConfBased {
 
   val programName: String = "scala_cli_parser"
 
