@@ -76,7 +76,7 @@ Also the current options are considered around [here](https://github.com/fmv1992
 
     *   Review it.
 
-    *   Put it at the top level.
+    *   Put it at the top level (easily discoverable).
 
 *   Stop using the:
 
