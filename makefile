@@ -28,7 +28,7 @@ BASH_TEST_FILES := $(shell find . -name 'tmp' -prune -o -iname '*test*.sh' -prin
 
 # High level actions. --- {{{
 
-all: dev test assembly publishlocal format readme.md doc_build doc_upload coverage
+all: dev assembly test publishlocal format readme.md doc_build doc_upload coverage
 
 format:
 	scalafmt --config ./scala_cli_parser/.scalafmt.conf $(SCALA_FILES) $(SBT_FILES)
