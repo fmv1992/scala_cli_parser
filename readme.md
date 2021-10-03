@@ -55,11 +55,12 @@ It can be configured with the following config file:
 
 ``` default numberLines
 # Well formated cli config file.
+# Used in tests:
+#   1.  Used to test `default`.
 
 name: debug
     n: 0
     description: Turn on debugging.
-
 
 name: version
     n: 0
@@ -71,6 +72,7 @@ name: sum
     description: | Sum arguments.
                  |
                  | Use multiline.
+    default: 0,0
 
 name: help
     n: 0
@@ -108,7 +110,7 @@ And its usages are as follows:
     ```
     
     ``` default numberLines
-    1993
+    0
     ```
 
 ## Config specification
@@ -130,6 +132,25 @@ Also the current options are considered around
     > they also have some weird limitations normal methods do not have.
 
 ## TODO
+
+  - Improve the documentation of this project. Good `scaladoc`
+    references:
+    
+    1.  <https://gist.github.com/JohnStarich/6d8ba934828180cdcc502f571cefecd8>.
+    
+    2.  <https://github.com/scala/docs.scala-lang/blob/main/_style/scaladoc.md>.
+
+  - Stop using the:
+    
+        object Obj {
+        
+        private case class TraitImpl() ⋯
+        
+        def apply ⋯
+        
+        }
+    
+    Pattern. It disallows pattern matching.
 
   - When Scala 2.11 support is dropped: between
     `0022b3e0a0198d4c970531db3a74c25e0b055f98` and
