@@ -116,7 +116,7 @@ compile: $(SBT_FILES) $(SCALA_FILES)
 # Specific targets. --- {{{
 
 $(FINAL_TARGET): $(SCALA_FILES) $(SBT_FILES) .PRECIOUS
-	cd ./scala_cli_parser && sbt '+ assembly'
+	cd ./scala_cli_parser && sbt 'project scala_cli_parserCrossProjectJVM;++2.13.4;assembly'
 	test -f '$(FINAL_TARGET)'
 
 tmp/scala_pandoc.jar:
