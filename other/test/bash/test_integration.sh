@@ -8,7 +8,7 @@ set -euo pipefail
 # Close identation: }
 test -d ./.git
 
-jar_file=$(find ./scala_cli_parser -iname '*.jar' | one --n 1)
+jar_file=$(find ./scala_cli_parser -iname 'scala_cli_parser-assembly-*.jar' | one --n 1)
 
 java -jar ${jar_file} --help | grep -E '[-]-help'
 java -jar ${jar_file} --help | grep -E '[-]-version'

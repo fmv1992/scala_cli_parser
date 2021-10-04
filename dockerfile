@@ -26,7 +26,17 @@ WORKDIR /home/user/bin
 RUN wget -O sbt.zip -- https://github.com/sbt/sbt/releases/download/v1.4.7/sbt-1.4.7.zip
 RUN unzip sbt.zip
 RUN rm sbt.zip
-ENV PATH $PATH:/home/user/bin/sbt/bin
+ENV PATH $PATH:/home/user/bin/:/home/user/bin/sbt/bin
+
+# Install `one`. It is used in the tests.
+RUN cd /tmp/ && \
+    git clone -- https://github.com/fmv1992/one one && \
+    cd ./one && \
+    git checkout 6630a4c && \
+    env --unset PROJECT_NAME make nativelink && \
+    cp "$(env --unset PROJECT_NAME make --silent print_target)" /home/user/bin
+RUN rm --recursive /tmp/one
+RUN one --help
 
 WORKDIR /home/user/
 RUN mkdir ./${PROJECT_NAME}
