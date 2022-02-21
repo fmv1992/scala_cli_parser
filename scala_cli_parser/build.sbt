@@ -2,7 +2,7 @@ import xerial.sbt.Sonatype._
 
 Global / onChangedBuildSource := ReloadOnSourceChanges
 
-lazy val scala213 = "2.13.4"
+lazy val scala213 = "2.13.8"
 
 val versionsJVM = Seq(scala213)
 val versionsNative = Seq(scala213)
@@ -19,7 +19,7 @@ inThisBuild(
     semanticdbEnabled := true,
     semanticdbOptions += "-P:semanticdb:synthetics:on", // make sure to add this
     semanticdbVersion := scalafixSemanticdb.revision,
-    libraryDependencies += "org.scalameta" % "semanticdb-scalac-core" % "4.4.6" cross CrossVersion.full,
+    libraryDependencies += "org.scalameta" % "semanticdb-scalac-core" % "4.5.0" cross CrossVersion.full,
     scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(
       scalaVersion.value
     ),
@@ -137,7 +137,8 @@ lazy val commonSettings = Seq(
 lazy val commonDependencies = Seq(
   libraryDependencies += "io.github.fmv1992" %%% "util" % "2.6.1",
   libraryDependencies += "org.scala-lang.modules" %%% "scala-collection-compat" % "2.4.0",
-  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test
+    // libraryDependencies += "org.scala-native" %%% "nscplugin" % "0.4.3",
+  libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.4-M1" % Test,
 )
 
 lazy val commonSettingsAndDependencies = commonSettings ++ commonDependencies
@@ -149,7 +150,7 @@ lazy val scalaNativeSettings = Seq(
   nativeLinkStubs in runMain := true,
   nativeLinkStubs in Test := true,
   Test / nativeLinkStubs := true,
-  sources in (Compile, doc) := Seq.empty
+  sources in (Compile, doc) := Seq.empty,
 )
 
 lazy val scala_cli_parserCrossProject: sbtcrossproject.CrossProject =
@@ -160,7 +161,7 @@ lazy val scala_cli_parserCrossProject: sbtcrossproject.CrossProject =
       commonSettingsAndDependencies
     )
     .jvmSettings(
-      crossScalaVersions := versionsJVM
+      crossScalaVersions := versionsJVM,
     )
     .nativeSettings(
       scalaNativeSettings
