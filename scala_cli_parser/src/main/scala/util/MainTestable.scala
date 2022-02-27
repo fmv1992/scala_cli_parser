@@ -3,7 +3,7 @@ package fmv1992.scala_cli_parser.util
 import scala.Iterable
 
 import fmv1992.scala_cli_parser.cli.ArgumentCLI
-import fmv1992.scala_cli_parser.cli.Argument
+import fmv1992.fmv1992_scala_utilities.util.Reader
 
 /** Provide a testable main interface: Read lines, process and output lines. */
 trait TestableMain {
@@ -16,22 +16,22 @@ trait TestableMain {
   /** Testable interface for main program. */
   def testableMain(args: Set[ArgumentCLI]): Iterable[String]
 
-  /** Split input [[Argument Arguments]] from other arguments. */
-  def splitInputArgumentFromOthers(
-      args: Seq[Argument]
-  ): (Seq[Argument], Seq[Argument]) =
-    splitArgumentFromOthers(args, "input")
+  /** Split input [[ArgumentCLI ArgumentCLIs]] from other arguments. */
+  def splitInputArgumentCLIFromOthers(
+      args: Seq[ArgumentCLI]
+  ): (Seq[ArgumentCLI], Seq[ArgumentCLI]) =
+    splitArgumentCLIFromOthers(args, "input")
 
-  /** Split input [[Argument Arguments]] from other arguments. */
-  def splitArgumentFromOthers(
-      args: Seq[Argument],
+  /** Split input [[ArgumentCLI ArgumentCLIs]] from other arguments. */
+  def splitArgumentCLIFromOthers(
+      args: Seq[ArgumentCLI],
       name: String
-  ): Tuple2[Seq[Argument], Seq[Argument]] = {
+  ): Tuple2[Seq[ArgumentCLI], Seq[ArgumentCLI]] = {
 
-    def isXArg(x: Argument): Boolean = x.name == name
+    def isXArg(x: ArgumentCLI): Boolean = x.name == name
 
-    val inputArg: Seq[Argument] = args.filter(isXArg)
-    val otherArgs: Seq[Argument] = args.filterNot(isXArg(_))
+    val inputArg: Seq[ArgumentCLI] = args.filter(isXArg)
+    val otherArgs: Seq[ArgumentCLI] = args.filterNot(isXArg(_))
     require(inputArg.length <= 1)
 
     (inputArg, otherArgs)
@@ -39,9 +39,9 @@ trait TestableMain {
   }
 
   /** Read input argument (defaults to stdin). */
-  def readInputArgument(a: Seq[Argument]): Seq[String] = {
-    if (!a.isEmpty && a(0).value(0) != "null") {
-      Reader.readLines(a(0).value(0))
+  def readInputArgument(a: Seq[ArgumentCLI]): Seq[String] = {
+    if (!a.isEmpty && a(0).values(0) != "null") {
+      Reader.readLines(a(0).values(0))
     } else {
       scala.io.Source.stdin.getLines().toSeq
     }
